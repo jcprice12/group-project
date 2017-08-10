@@ -66,7 +66,7 @@ a:hover {
 DASHBOARD
 **********************************/
 
-#search-btn:hover{
+.btn:hover{
   cursor: pointer;
 }
 
@@ -89,6 +89,20 @@ DASHBOARD
   border-bottom: 1px  solid rgba(0, 0, 0, 0.125);
 }
 
+.form-list {
+  list-style:none;
+  margin:0px;
+  padding:0px;
+}
+
+.featured-footer i{
+  color: $main;
+}
+
+.featured-footer > div {
+  display:inline-block;
+}
+
 /************************************
 RECIPE CARDS
 ************************************/
@@ -106,9 +120,6 @@ RECIPE CARDS
   color: $main;
 }
 
-.card-footer .icon-text{
-
-}
 .card-footer {
   padding: 0.75rem 1.25rem;
   background-color: white;
