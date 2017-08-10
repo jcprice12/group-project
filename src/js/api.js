@@ -1,4 +1,4 @@
-const firebase = require('firebase');
+//const firebase = require('firebase');
 
 var config = {
   apiKey: "AIzaSyAo2GM4PjdcCsGq-3detGaqYkG-C6r_4iw",
@@ -9,7 +9,8 @@ var config = {
   messagingSenderId: "364363031540"
 };
 firebase.initializeApp(config);
-
+const authorization = firebase.auth();
+const wholeDb = firebase.database();
 const db = firebase.database().ref('/recipes');
 db.once('value')
   .then((snap) => {
@@ -82,6 +83,6 @@ function eventApi(){
 }
 
 module.exports = {
-  eventApi
+  eventApi, db, wholeDb, authorization,
 };
 

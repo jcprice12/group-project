@@ -1,6 +1,6 @@
+@import "variables";
 @import "../../node_modules/bootstrap/scss/bootstrap";
 @import "../../node_modules/bootstrap/scss/bootstrap-grid";
-@import "variables";
 
 .container {
   @include media-breakpoint-only(xs){
@@ -29,13 +29,85 @@
   }
 }
 
+/***********************************
+GLOBAL
+***********************************/
+
 body{
   background: $background;
 }
 
+nav  {
+  background-color: $main;
+}
+.navbar-brand {
+  color:#fff;
+}
+
+.btn-secondary {
+  color: #FFF;
+  background-color: $secondary;
+  border-color: $secondary;
+}
+
+.btn-secondary:hover, .btn-secondary:focus {
+  color: #FFF;
+  background-color: #f76f4d;
+  border-color: #f76f4d;
+}
+
+.errorMessage{
+  color:#C93838;
+}
+
+a {
+  font-weight: bold;
+}
+a:hover {
+  text-decoration: none;
+}
+
+/**********************************
+DASHBOARD
+**********************************/
+
 #search-btn:hover{
   cursor: pointer;
 }
+
+.card-header {
+  background-color: $main;
+  color: #FFF;
+  border-color: $main;
+}
+
+.card {
+  border-top: none;
+  border-right: none;
+  border-bottom: none;
+  border-left: none;
+}
+
+.dashboard-card {
+  border-right: 1px solid rgba(0, 0, 0, 0.125);
+  border-left: 1px  solid rgba(0, 0, 0, 0.125);
+  border-bottom: 1px  solid rgba(0, 0, 0, 0.125);
+}
+
+#userIdP{
+  margin-top:5px;
+  margin-right:10px;
+  float:left;
+  color:#fff;
+}
+
+#signInOutUpButtonsCont{
+  position:relative;
+}
+
+/************************************
+RECIPE CARDS
+************************************/
 
 .fa-star, .fa-star-half{
   color: $secondary;
@@ -58,6 +130,4 @@ body{
   background-color: white;
   border-top: 0.25px solid rgba(0, 0, 0, 0.125);
 }
-
-
 
