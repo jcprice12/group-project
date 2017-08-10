@@ -55,6 +55,11 @@ nav  {
   background-color: #f76f4d;
   border-color: #f76f4d;
 }
+
+.errorMessage{
+  color:#C93838;
+}
+
 a {
   font-weight: bold;
 }
@@ -89,6 +94,17 @@ DASHBOARD
   border-bottom: 1px  solid rgba(0, 0, 0, 0.125);
 }
 
+#userIdP{
+  margin-top:5px;
+  margin-right:10px;
+  float:left;
+  color:#fff;
+}
+
+#signInOutUpButtonsCont{
+  position:relative;
+}
+
 /************************************
 RECIPE CARDS
 ************************************/
@@ -113,9 +129,5 @@ RECIPE CARDS
   padding: 0.75rem 1.25rem;
   background-color: white;
   border-top: 0.25px solid rgba(0, 0, 0, 0.125);
-}
-
-#signInOutUpButtonsCont{
-  position:relative;
 }
 
