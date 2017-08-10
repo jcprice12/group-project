@@ -1,20 +1,26 @@
-var firebase = require('firebase');
+const firebase = require('firebase');
 
 var config = {
-  apiKey: "AIzaSyCp8HBBqg1G7LsaQ1Lrs8_5ZQsP5gFsKng",
-  authDomain: "employee-project-865d6.firebaseapp.com",
-  databaseURL: "https://employee-project-865d6.firebaseio.com",
-  projectId: "employee-project-865d6",
-  storageBucket: "",
-  messagingSenderId: "727675935476"
+  apiKey: "AIzaSyAo2GM4PjdcCsGq-3detGaqYkG-C6r_4iw",
+  authDomain: "project1-4f221.firebaseapp.com",
+  databaseURL: "https://project1-4f221.firebaseio.com/",
+  projectId: "project1-4f221",
+  storageBucket: "project1-4f221.appspot.com",
+  messagingSenderId: "364363031540"
 };
 firebase.initializeApp(config);
 
-const db = firebase.database().ref('/Employees');
+const db = firebase.database().ref('/recipes');
 db.once('value')
   .then((snap) => {
     console.log(snap);
   });
+
+$.get('https://project1-4f221.firebaseio.com/recipes/recipeKey/recipe.json', (res) => {
+  for(var item in res){
+    console.log(res[item]);
+  }
+});
 
 function getCard(title, cals, servings, img) {
   let card = `<div class="card card-recipe">
