@@ -1,4 +1,34 @@
 @import "variables";
+@import "../../node_modules/bootstrap/scss/variables";
+@import "../../node_modules/bootstrap/scss/mixins/breakpoints";
+
+.container {
+  @include media-breakpoint-only(xs){
+    padding: 0 40px;
+    .card {
+      margin-bottom: 30px;
+    }
+  }
+}
+
+.card-columns {
+  @include media-breakpoint-only(xs) {
+    column-count: 1;
+  }
+  @include media-breakpoint-only(sm) {
+    column-count: 2;
+    .footer-icons {
+      justify-content: space-between !important;
+    }
+    .card .card-footer .mr-3 {
+      font-size: small;
+      margin-right: 1px !important;
+    }
+  }
+  @include media-breakpoint-only(md) {
+    column-count: 2;
+  }
+}
 
 h1 {
     color: $bg-color;
@@ -6,4 +36,30 @@ h1 {
 
 body{
   background: $background;
+}
+
+.input-group div:hover{
+  cursor: pointer;
+}
+
+.fa-star, .fa-star-half{
+  color: $secondary;
+  font-size: 20px;
+}
+
+.card-recipe .card-block{
+  padding-top: 0.5rem;
+}
+
+.card-footer i{
+  color: $main;
+}
+
+.card-footer .icon-text{
+
+}
+.card-footer {
+  padding: 0.75rem 1.25rem;
+  background-color: white;
+  border-top: 0.25px solid rgba(0, 0, 0, 0.125);
 }
