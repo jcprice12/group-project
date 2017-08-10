@@ -36,19 +36,21 @@
           <form>
             <div class="form-group">
               <label for="ingredients">Ingredients</label>
-              <input type="text" class="form-control" id="ingredients" aria-describedby="ingredients" placeholder="Ex: chicken, rice, broccoli">
+              <input type="text" class="form-control" id="ingredients" placeholder="Ex: chicken, rice, broccoli">
+            </div>
+            <div class="form-group">
+              <label for="calories">Calories</label>
+              <input type="number" class="form-control" id="calories" aria-describedby="caloriesHelp">
+              <small id="caloriesHelp">Limit number of calories per serving.</small>
             </div>
             <div id="accordion" role="tablist" aria-multiselectable="true">
-              <p>
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+              <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                   Dietary Restrictions (+)
-                </a>
-              </p>
-
+              </a>
               <div id="collapseOne" class="collapse" role="tabpanel" aria-labelledby="headingOne">
                 hi
               </div>
-
+    
               <p>
                 <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                   Something else (+)
