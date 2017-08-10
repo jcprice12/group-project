@@ -22,7 +22,6 @@
     }
     .card .card-footer .mr-3 {
       font-size: small;
-      margin-right: 1px !important;
     }
   }
   @include media-breakpoint-only(md) {
@@ -30,15 +29,11 @@
   }
 }
 
-h1 {
-    color: $bg-color;
-}
-
 body{
   background: $background;
 }
 
-.input-group div:hover{
+#search-btn:hover{
   cursor: pointer;
 }
 
