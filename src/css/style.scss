@@ -1,6 +1,6 @@
+@import "../../node_modules/bootstrap/scss/bootstrap";
+@import "../../node_modules/bootstrap/scss/bootstrap-grid";
 @import "variables";
-@import "../../node_modules/bootstrap/scss/variables";
-@import "../../node_modules/bootstrap/scss/mixins/breakpoints";
 
 .container {
   @include media-breakpoint-only(xs){
@@ -58,3 +58,6 @@ body{
   background-color: white;
   border-top: 0.25px solid rgba(0, 0, 0, 0.125);
 }
+
+
+
