@@ -59,5 +59,12 @@ body{
   border-top: 0.25px solid rgba(0, 0, 0, 0.125);
 }
 
+#signInOutUpButtonsCont{
+  position:absolute;
+  top:0;
+  left:0;
+  z-index: 9999;
+}
+
 
 

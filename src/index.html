@@ -6,8 +6,87 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Project</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://www.gstatic.com/firebasejs/4.2.0/firebase.js"></script>
 </head>
 <body>
+<!-- ***************************************************** Sign In ******************************************************************************-->
+<div class="modal fade" id="signInModal" tabindex="-1" role="dialog" aria-labelledby="SinInModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="SignInModalLabel">Sign In</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div id="signInContainer">
+          <form id="userSignInForm">
+            <div class="form-group">
+              <div class="input-group userInfoInputGroup">
+                <span class="input-group-addon" id="in-email-add-on">Email</span>
+                <input id="in-email-input" type="email" class="form-control" placeholder="john.doe@example.com" aria-describedby="in-email-add-on">
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="input-group userInfoInputGroup">
+                <span class="input-group-addon" id="in-password-add-on">Password</span>
+                <input id="in-password-input" type="password" class="form-control" aria-describedby="in-password-add-on">
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" id="signInSubmitButton" data-dismiss="modal" class="btn btn-primary">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ***************************************************** End Sign In ******************************************************************************-->
+
+<!-- ***************************************************** Sign Up ******************************************************************************-->
+<div class="modal fade" id="signUpModal" tabindex="-1" role="dialog" aria-labelledby="SignUpModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="SignInModalLabel">Sign Up</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div id="signUpContainer">
+          <form id="userSignUpForm">
+            <div class="form-group">
+              <div class="input-group userInfoInputGroup">
+                <span class="input-group-addon" id="up-email-add-on">Email</span>
+                <input id="up-email-input" type="email" class="form-control" placeholder="john.doe@example.com" aria-describedby="up-email-add-on">
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="input-group userInfoInputGroup">
+                <span class="input-group-addon" id="up-password-add-on">Password</span>
+                <input id="up-password-input" type="password" class="form-control" aria-describedby="up-password-add-on">
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" id="signUpSubmitButton" data-dismiss="modal" class="btn btn-primary">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ***************************************************** End Sign Up ******************************************************************************-->
+<div id="signInOutUpButtonsCont">
+  <button id="signInButton" class="btn btn-default" type="button" data-toggle="modal" data-target="#signInModal">Sign In</button>
+  <button id="signUpButton" class="btn btn-default" type="button" data-toggle="modal" data-target="#signUpModal">Sign Up</button>
+  <button id="signOutButton" class="btn btn-default" type="button">Sign Out</button>
+</div>
 <div class="container">
   <div class="flex-column mb-5 mt-2 mr-sm-2 ">
     <div class="col mr-auto ml-auto mb-2" style="width: 200px">
