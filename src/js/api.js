@@ -1,4 +1,5 @@
 const firebase = require('firebase');
+import axios from 'axios';
 
 var config = {
   apiKey: "AIzaSyAo2GM4PjdcCsGq-3detGaqYkG-C6r_4iw",
@@ -22,7 +23,7 @@ $.get('https://project1-4f221.firebaseio.com/recipes/recipeKey/recipe.json', (re
   }
 });
 
-function getCard(title, cals, servings, img) {
+function getCard(title, servings, img, time) {
   let card = `<div class="card card-recipe">
             <img class="card-img-top img-fluid"
                  src="${img}"
@@ -38,13 +39,9 @@ function getCard(title, cals, servings, img) {
             </div>
             <div class="card-footer">
               <div class="footer-icons d-flex flex-row justify-content-start">
-                <div class="card-calories mr-3 mr-sm-1 ">
-                  <i class="fa fa-bar-chart-o"></i>
-                  <span class="icon-text"><small>${cals} cals</small></span>
-                </div>
                 <div class="card-cooktime mr-3 mr-sm-1 ">
                   <i class="fa fa-clock-o"></i>
-                  <span class="icon-text"><small>45 m</small></span>
+                  <span class="icon-text"><small>${time} m</small></span>
                 </div>
                 <div class="card-yield mr-3 mr-sm-1 ">
                   <i class="fa fa-pie-chart"></i>
@@ -56,32 +53,51 @@ function getCard(title, cals, servings, img) {
   return card;
 }
 
-function getRecipes(url) {
-  $.get(url, (res) => {
-    console.log(res);
-    let html = '';
-    res.hits.forEach(({recipe}) => {
-      console.log(recipe.calories);
-      let title = recipe.label;
-      let servings = recipe.yield;
-      let cals = Math.floor(recipe.calories / servings);
-      let img = recipe.image;
-      html += getCard(title, cals, servings, img);
-    });
-    $('.card-columns').html(html);
-  })
-}
-
 function eventApi(){
   $('#search-btn').on('click', (e) => {
     e.preventDefault();
     let search = $('#search-recipe').val();
-    let url = `https://api.edamam.com/search?q=${search}&app_id=87b25c20&app_key=2c3c60c276ca6dfd0780517fe3244719`;
-    getRecipes(url);
+    var head = {
+      headers: {"X-Mashape-Key": "VftGeJE2qimshoNc94fZxoUiEp04p154Astjsn7Kuggh3FXLVw"}
+    };
+    var obj = {
+      'limitLicence': false,
+      'number': 100,
+      'query': search,
+      'ranking': 1,
+      'addRecipeInformation': true
+    };
+    var url = 'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/searchComplex?';
+    url += '?' + $.param(obj);
+    getRecipes(url,head);
   });
 }
 
+
+
+
+function getRecipes(url, config) {
+  axios.get(url, config)
+    .then((res) => {
+      let arr = res.data.results;
+      let recipes = [];
+      let html = '';
+      arr.forEach((recipe) => {
+        if(recipe.aggregateLikes > 100){
+          let img = recipe.image;
+          let title = recipe.title;
+          let servings = recipe.servings;
+          let time = recipe.preparationMinutes;
+          html += getCard(title, servings, img, time);
+        }
+      });
+      $('.card-columns').html(html);
+    });
+}
+
+
 module.exports = {
-  eventApi
+  eventApi,
+  db
 };
 
