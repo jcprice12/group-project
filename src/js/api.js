@@ -10,7 +10,8 @@ var config = {
   messagingSenderId: "364363031540"
 };
 firebase.initializeApp(config);
-
+const authorization = firebase.auth();
+const wholeDb = firebase.database();
 const db = firebase.database().ref('/recipes');
 db.once('value')
   .then((snap) => {
@@ -97,7 +98,6 @@ function getRecipes(url, config) {
 
 
 module.exports = {
-  eventApi,
-  db
+  eventApi, db, wholeDb, authorization,
 };
 
