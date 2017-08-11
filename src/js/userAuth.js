@@ -1,7 +1,3 @@
-import firebase from 'firebase';
-import {authorization} from './api.js';
-import {wholeDb} from './api.js';
-
 var modalInIsOpen = false;
 $('#signInModal').on('shown.bs.modal', function(e) { modalInIsOpen = true;})
 $('#signInModal').on('hidden.bs.modal', function(e) { modalInIsOpen = false;})
@@ -10,7 +6,7 @@ var modalUpIsOpen = false;
 $('#signUpModal').on('shown.bs.modal', function(e) { modalUpIsOpen = true;})
 $('#signUpModal').on('hidden.bs.modal', function(e) { modalUpIsOpen = false;})
 
-function signUp(){
+function signUp(authorization){
 	$("#signUpSubmitButton").on("click", function(){
 		var email = $("#up-email-input").val();
 		var password = $("#up-password-input").val();
@@ -24,10 +20,10 @@ function signUp(){
         $("#up-error-message").text(error);
 			});
 		}
-	});
+  });
 }
 
-function signIn(){
+function signIn(authorization){
 	$("#signInSubmitButton").on("click", function(){
 		var email = $("#in-email-input").val();
 		var password = $("#in-password-input").val();
@@ -43,15 +39,14 @@ function signIn(){
 	});
 }
 
-function signOut(){
+function signOut(authorization){
 	$("#signOutButton").on("click", function(){
 		authorization.signOut();
 	});
 }
 
-function authStateChanged(){
+function authStateChanged(authorization, wholeDb){
 	authorization.onAuthStateChanged(function(myUser){
-		
 		if(myUser){
 			var usersRef = wholeDb.ref("usersInformation/");
 			console.log("usersRef");
@@ -98,7 +93,9 @@ function authStateChanged(){
 }
 
 module.exports = {
-  signUp, signIn, signOut, authStateChanged
+  signUp,
+  signIn,
+  signOut,
+  authStateChanged
 };
 
-// authorization.currentUser.uid

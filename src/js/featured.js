@@ -1,56 +1,56 @@
 
-import {authorization} from './api.js';
-import {wholeDb} from './api.js';
-const db = wholeDb.ref("/recipes");
-
-db.once('value')
-  .then((snap) => {
-    console.log(snap);
-  });
-
-$.get('https://project1-4f221.firebaseio.com/recipes/recipeKey/recipe.json', (res) => {
-  for(var item in res){
-    console.log(res[item]);
-  }
-});
-
-function getFeaturedCard(title, cals, servings, img) {
-  let card = `<div class="card featured-recipe">
-              <div class="card-block row">
-              <div class="col-4">
-                <img class="img-fluid"
-                 src="${img}"
-                 alt="Card image cap"
-                 style="width: 100%">
-              </div>
-              <div class="col-8">
-                <h4 class="card-title">${title}</h4>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star-half"></i>
-                <hr>
-                <div class="featured-footer">
-                  <div class="card-calories mr-3 mr-sm-1 ">
-                    <i class="fa fa-bar-chart-o"></i>
-                    <span class="icon-text"><small>${cals} cals</small></span>
-                  </div>
-                  <div class="card-cooktime mr-3 mr-sm-1 ">
-                    <i class="fa fa-clock-o"></i>
-                    <span class="icon-text"><small>45 m</small></span>
-                  </div>
-                  <div class="card-yield mr-3 mr-sm-1 ">
-                    <i class="fa fa-pie-chart"></i>
-                    <span class="icon-text"><small>${servings} servings</small></span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-          </div>`;
-  return card;
-}
+// import {authorization} from './api.js';
+// import {wholeDb} from './app.js';
+// const db = wholeDb.ref("/recipes");
+//
+// db.once('value')
+//   .then((snap) => {
+//     console.log(snap);
+//   });
+//
+// $.get('https://project1-4f221.firebaseio.com/recipes/recipeKey/recipe.json', (res) => {
+//   for(var item in res){
+//     console.log(res[item]);
+//   }
+// });
+//
+// function getFeaturedCard(title, cals, servings, img) {
+//   let card = `<div class="card featured-recipe">
+//               <div class="card-block row">
+//               <div class="col-4">
+//                 <img class="img-fluid"
+//                  src="${img}"
+//                  alt="Card image cap"
+//                  style="width: 100%">
+//               </div>
+//               <div class="col-8">
+//                 <h4 class="card-title">${title}</h4>
+//                 <i class="fa fa-star"></i>
+//                 <i class="fa fa-star"></i>
+//                 <i class="fa fa-star"></i>
+//                 <i class="fa fa-star"></i>
+//                 <i class="fa fa-star-half"></i>
+//                 <hr>
+//                 <div class="featured-footer">
+//                   <div class="card-calories mr-3 mr-sm-1 ">
+//                     <i class="fa fa-bar-chart-o"></i>
+//                     <span class="icon-text"><small>${cals} cals</small></span>
+//                   </div>
+//                   <div class="card-cooktime mr-3 mr-sm-1 ">
+//                     <i class="fa fa-clock-o"></i>
+//                     <span class="icon-text"><small>45 m</small></span>
+//                   </div>
+//                   <div class="card-yield mr-3 mr-sm-1 ">
+//                     <i class="fa fa-pie-chart"></i>
+//                     <span class="icon-text"><small>${servings} servings</small></span>
+//                   </div>
+//                 </div>
+//               </div>
+//             </div>
+//
+//           </div>`;
+//   return card;
+// }
 
 // function getRecipes(url) {
 //   $.get(url, (res) => {

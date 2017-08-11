@@ -1,20 +1,10 @@
-// const firebase = require('firebase');
-
 import axios from 'axios';
 
-var config = {
-  apiKey: "AIzaSyAo2GM4PjdcCsGq-3detGaqYkG-C6r_4iw",
-  authDomain: "project1-4f221.firebaseapp.com",
-  databaseURL: "https://project1-4f221.firebaseio.com/",
-  projectId: "project1-4f221",
-  storageBucket: "project1-4f221.appspot.com",
-  messagingSenderId: "364363031540"
-};
-firebase.initializeApp(config);
-const authorization = firebase.auth();
-const wholeDb = firebase.database();
-const db = firebase.database().ref('/recipes');
-const state = firebase.database().ref('/state');
+var authorization;
+
+function passAuth(myAuth) {
+  authorization = myAuth;
+}
 
 function getCard(title, servings, img, time, source) {
   let card = `<div id="${source}" class="card card-recipe">
@@ -22,6 +12,11 @@ function getCard(title, servings, img, time, source) {
                  src="${img}"
                  alt="Card image cap"
                  style="width: 100%">
+            <div class="card-img-overlay flex-row justify-content-end" style="height: 100px">
+              <div class="heart" style="display: inline-block !important;">
+                <i class="fa fa-heart-o"></i>
+              </div>
+            </div>
             <div class="card-block">
               <h4 class="card-title">${title}</h4>
               <i class="fa fa-star"></i>
@@ -46,7 +41,7 @@ function getCard(title, servings, img, time, source) {
   return card;
 }
 
-function cardsEventApi(){
+function cardsEventApi() {
   $('#search-btn').on('click', (e) => {
     e.preventDefault();
     let search = $('#search-recipe').val();
@@ -62,7 +57,7 @@ function cardsEventApi(){
     };
     var url = 'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/searchComplex?';
     url += '?' + $.param(obj);
-    searchRecipes(url,head);
+    searchRecipes(url, head);
   });
 }
 
@@ -73,7 +68,7 @@ function searchRecipes(url, config) {
       let recipes = [];
       let html = '';
       arr.forEach((recipe) => {
-        if(recipe.aggregateLikes > 100){
+        if (recipe.aggregateLikes > 100) {
           console.log(recipe);
           let source = recipe.sourceUrl ? recipe.sourceUrl : 'none';
           let img = recipe.image;
@@ -88,7 +83,7 @@ function searchRecipes(url, config) {
     });
 }
 
-function getRecipe(url, config) {
+function getRecipe(url, config, state) {
   axios.get(url, config)
     .then((res) => {
       let tempState = {};
@@ -103,28 +98,27 @@ function getRecipe(url, config) {
     });
 }
 
-function recipeEventApi(){
-  $('.card-recipe').on('click', function() {
-    let sourceUrl = $(this).attr('id');
-    let head = {
-      headers: {"X-Mashape-Key": "VftGeJE2qimshoNc94fZxoUiEp04p154Astjsn7Kuggh3FXLVw"}
-    };
-    let obj = {
-      'forceExtraction': false,
-      url: sourceUrl
-    };
-    let url = `https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/extract?`;
-    url += '?' + $.param(obj);
-    getRecipe(url,head);
-  })
+function recipeEventApi() {
+  $('.card-recipe').on('click', function () {
+      if (authorization.currentUser) {
+        const state = firebase.database().ref(`usersInfo/state/${authorization.currentUser.uid}`);
+        let sourceUrl = $(this).attr('id');
+        let head = {
+          headers: {"X-Mashape-Key": "VftGeJE2qimshoNc94fZxoUiEp04p154Astjsn7Kuggh3FXLVw"}
+        };
+        let obj = {
+          'forceExtraction': false,
+          url: sourceUrl
+        };
+        let url = `https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/extract?`;
+        url += '?' + $.param(obj);
+        getRecipe(url, head, state);
+      }
+    }
+  )
 }
 
-
-
 module.exports = {
-  cardsEventApi,
-  db,
-  wholeDb,
-  authorization,
+  cardsEventApi, passAuth
 };
 
