@@ -1,70 +1,65 @@
-// //const firebase = require('firebase');
+// // const firebase = require('firebase');
+// // import axios from 'axios';
 
-// import axios from 'axios';
-
-// // var config = {
-// //   apiKey: "AIzaSyAo2GM4PjdcCsGq-3detGaqYkG-C6r_4iw",
-// //   authDomain: "project1-4f221.firebaseapp.com",
-// //   databaseURL: "https://project1-4f221.firebaseio.com/",
-// //   projectId: "project1-4f221",
-// //   storageBucket: "project1-4f221.appspot.com",
-// //   messagingSenderId: "364363031540"
-// // };
-// // firebase.initializeApp(config);
-// // const authorization = firebase.auth();
-// // const wholeDb = firebase.database();
-// // const db = firebase.database().ref('/recipes');
-// // const state = firebase.database().ref('/state');
+// var config = {
+//   apiKey: "AIzaSyAo2GM4PjdcCsGq-3detGaqYkG-C6r_4iw",
+//   authDomain: "project1-4f221.firebaseapp.com",
+//   databaseURL: "https://project1-4f221.firebaseio.com/",
+//   projectId: "project1-4f221",
+//   storageBucket: "project1-4f221.appspot.com",
+//   messagingSenderId: "364363031540"
+// };
+// firebase.initializeApp(config);
+// const authorization = firebase.auth();
+// const wholeDb = firebase.database();
+// const db = firebase.database().ref('/recipes');
+// const state = firebase.database().ref('/state');
 
 // function getCard(title, servings, img, time, source) {
-//   let card = `<div class="card featured-recipe">
-//               <div class="card-block row">
-//               <div class="col-4">
-//                 <img class="img-fluid"
+//   let card = `<div id="${source}" class="card card-recipe">
+//             <img class="card-img-top img-fluid"
 //                  src="${img}"
 //                  alt="Card image cap"
 //                  style="width: 100%">
-//               </div>
-//               <div class="col-8">
-//                 <h4 class="card-title">${title}</h4>
-//                 <i class="fa fa-star"></i>
-//                 <i class="fa fa-star"></i>
-//                 <i class="fa fa-star"></i>
-//                 <i class="fa fa-star"></i>
-//                 <i class="fa fa-star-half"></i>
-//                 <hr>
-//                 <div class="featured-footer">
-//                   <div class="card-calories mr-3 mr-sm-1 ">
-//                     <i class="fa fa-bar-chart-o"></i>
-//                     <span class="icon-text"><small>${cals} cals</small></span>
-//                   </div>
-//                   <div class="card-cooktime mr-3 mr-sm-1 ">
-//                     <i class="fa fa-clock-o"></i>
-//                     <span class="icon-text"><small>45 m</small></span>
-//                   </div>
-//                   <div class="card-yield mr-3 mr-sm-1 ">
-//                     <i class="fa fa-pie-chart"></i>
-//                     <span class="icon-text"><small>${servings} servings</small></span>
-//                   </div>
+//             <div class="card-block">
+//               <h4 class="card-title">${title}</h4>
+//               <i class="fa fa-star"></i>
+//               <i class="fa fa-star"></i>
+//               <i class="fa fa-star"></i>
+//               <i class="fa fa-star"></i>
+//               <i class="fa fa-star-half"></i>
+//             </div>
+//             <div class="card-footer">
+//               <div class="footer-icons d-flex flex-row justify-content-start">
+//                 <div class="card-cooktime mr-3 mr-sm-1 ">
+//                   <i class="fa fa-clock-o"></i>
+//                   <span class="icon-text"><small>${time} m</small></span>
+//                 </div>
+//                 <div class="card-yield mr-3 mr-sm-1 ">
+//                   <i class="fa fa-pie-chart"></i>
+//                   <span class="icon-text"><small>${servings} servings</small></span>
 //                 </div>
 //               </div>
 //             </div>
-            
 //           </div>`;
-//    return card;
+//   return card;
 // }
 
 // function cardsEventApi(){
-//   $('#see-more-popular').on('click', (e) => {
+//   $('#search').on('click', (e) => {
 //     e.preventDefault();
-//     let search = 'chicken'; //Can search without a search term?
+//     //var excludeIngredients = $('#exclude-ingredients').val();
+//     var ingredients = $('#ingredients') .val();
+//     console.log("hi " + ingredients);
+
 //     var head = {
 //       headers: {"X-Mashape-Key": "VftGeJE2qimshoNc94fZxoUiEp04p154Astjsn7Kuggh3FXLVw"}
 //     };
 //     var obj = {
 //       'limitLicence': false,
 //       'number': 100,
-//       'query': search,
+//       'query': ingredients,
+//       //'excludeIngredients': excludeIngredients,
 //       'ranking': 1,
 //       'addRecipeInformation': true
 //     };
@@ -126,6 +121,7 @@
 //     getRecipe(url,head);
 //   })
 // }
+
 
 
 // module.exports = {

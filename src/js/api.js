@@ -46,9 +46,19 @@ function getCard(title, servings, img, time, source) {
 }
 
 function cardsEventApi(){
-  $('#search-btn').on('click', (e) => {
+  $('#search').on('click', (e) => {
     e.preventDefault();
-    let search = $('#search-recipe').val();
+    let search = $('#ingredients').val();
+    let excludeIngredients = $('#exclude-ingredients').val();
+    let maxCalories = $('#max-calories').val();
+    let minCalories = $('#min-calories').val();
+    let diet = $(".diet:checked").attr("id");
+    let allIntolerances = ""
+    $(".intolerance:checked").each(function() { 
+      allIntolerances += ($(this).attr("id") + " "); 
+    });
+    allIntolerances = allIntolerances.trim();
+
     var head = {
       headers: {"X-Mashape-Key": "VftGeJE2qimshoNc94fZxoUiEp04p154Astjsn7Kuggh3FXLVw"}
     };
@@ -56,11 +66,28 @@ function cardsEventApi(){
       'limitLicence': false,
       'number': 100,
       'query': search,
+      'excludeIngredients': excludeIngredients,
+      'maxCalories': maxCalories,
+      'minCalories': minCalories,
+      'diet': diet,
+      'intolerances' : allIntolerances,
       'ranking': 1,
       'addRecipeInformation': true
     };
+
+    function isEmpty(value){
+      return value == null || value == "";
+    }
+
+    for(key in queryParams) {
+      if(isEmpty(queryParams[key])) {
+         delete queryParams[key]; 
+       };
+    };
+
     var url = 'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/searchComplex?';
     url += '?' + $.param(obj);
+    console.log(url);
     searchRecipes(url,head);
   });
 }
