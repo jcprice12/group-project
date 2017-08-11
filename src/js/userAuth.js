@@ -1,8 +1,8 @@
-//const firebase = require('firebase');
+import firebase from 'firebase';
 import {authorization} from './api.js';
 import {wholeDb} from './api.js';
 
-var modalInIsOpen = false
+var modalInIsOpen = false;
 $('#signInModal').on('shown.bs.modal', function(e) { modalInIsOpen = true;})
 $('#signInModal').on('hidden.bs.modal', function(e) { modalInIsOpen = false;})
 
@@ -20,7 +20,8 @@ function signUp(){
 		} else{
 			authorization.createUserWithEmailAndPassword(email, password).catch(function(error) {
 				console.log("Could not sign up");
-				$("#up-error-message").text(error.message);
+        console.log(error);
+        $("#up-error-message").text(error);
 			});
 		}
 	});
@@ -89,3 +90,5 @@ function authStateChanged(){
 module.exports = {
   signUp, signIn, signOut, authStateChanged
 };
+
+// authorization.currentUser.uid
