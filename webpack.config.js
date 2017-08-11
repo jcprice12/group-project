@@ -66,11 +66,6 @@ module.exports = {
       inject: true
     }),
     new HtmlWebpackPlugin({
-      filename: 'modal.html',
-      template: 'src/modal.html',
-      inject: true
-    }),
-    new HtmlWebpackPlugin({
       filename: 'recipe.html',
       template: 'src/recipe.html',
       inject: true
