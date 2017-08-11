@@ -6,8 +6,99 @@
         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Dashboard</title>
+  <script src="https://www.gstatic.com/firebasejs/4.2.0/firebase.js"></script>
 </head>
 <body>
+
+<!-- ***************************************************** Sign In ******************************************************************************-->
+<div class="modal fade signInUpModal signInModal" id="signInModal-dash" tabindex="-1" role="dialog" aria-labelledby="SignInModalLabelDash"
+     aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title SignInModalLabel" id="SignInModalLabelDash">Sign In</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div id="signInContainerDash" class="signInContainer">
+          <form id="userSignInFormDash" class="userSignInForm">
+            <div class="form-group">
+              <div class="input-group userInfoInputGroup">
+                <span class="input-group-addon in-email-add-on" id="in-email-add-on-dash">Email</span>
+                <input id="in-email-input-dash" type="email" class="form-control modalInput in-email-input"
+                       placeholder="john.doe@example.com" aria-describedby="in-email-add-on-dash">
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="input-group userInfoInputGroup">
+                <span class="input-group-addon in-password-add-on" id="in-password-add-on-dash">Password</span>
+                <input id="in-password-input-dash" type="password" class="form-control modalInput in-password-input"
+                       aria-describedby="in-password-add-on-dash">
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div id="in-error-message-container-dash" class="in-error-message-container">
+          <p class="errorMessage in-error-message" id="in-error-message-dash">
+            <!-- error message goes here -->
+          </p>
+        </div>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" id="signInSubmitButtonDash" data-file-id="dash" class="btn btn-primary signInSubmitButton">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ***************************************************** End Sign In ******************************************************************************-->
+
+<!-- ***************************************************** Sign Up ******************************************************************************-->
+<div class="modal fade signInUpModal signUpModal" id="signUpModal-dash" tabindex="-1" role="dialog" aria-labelledby="SignUpModalLabelDash"
+     aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title SignUpModalLabel" id="SignUnModalLabelDash">Sign Up</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div id="signUpContainerDash" class="signUpContainer">
+          <form id="userSignUpFormDash" class="userSignUpForm">
+            <div class="form-group">
+              <div class="input-group userInfoInputGroup">
+                <span class="input-group-addon up-email-add-on" id="up-email-add-on-dash">Email</span>
+                <input id="up-email-input-dash" type="email" class="form-control modalInput up-email-input"
+                       placeholder="john.doe@example.com" aria-describedby="up-email-add-on-dash">
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="input-group userInfoInputGroup">
+                <span class="input-group-addon up-password-add-on" id="up-password-add-on-dash">Password</span>
+                <input id="up-password-input-dash" type="password" class="up-password-input form-control modalInput"
+                       aria-describedby="up-password-add-on-dash">
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div id="up-error-message-container-dash" class="up-error-message-container">
+          <p class="errorMessage up-error-message" id="up-error-message-dash">
+            <!-- error message goes here -->
+          </p>
+        </div>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" id="signUpSubmitButtonDash" data-file-id="dash" class="signUpSubmitButton btn btn-primary">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ***************************************************** End Sign Up ******************************************************************************-->
 
 <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
   <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -31,6 +122,16 @@
       <input class="form-control mr-sm-2" type="text" placeholder="Search">
       <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
     </form>
+    <div class="signInOutUpButtonsCont" id="signInOutUpButtonsContDash">
+      <p class="userIdP blackText"></p>
+      <button id="signInButtonDash" class="btn btn-secondary signInButton" type="button" data-toggle="modal"
+              data-target="#signInModal-dash">Sign In
+      </button>
+      <button id="signUpButtonDash" class="btn btn-secondary signUpButton" type="button" data-toggle="modal"
+              data-target="#signUpModal-dash">Sign Up
+      </button>
+      <button id="signOutButtonDash" class="btn btn-secondary signOutButton" type="button">Sign Out</button>
+    </div>
   </div>
 </nav>
 

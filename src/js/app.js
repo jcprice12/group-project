@@ -1,12 +1,28 @@
+//const firebase = require('firebase');
+
 import '../css/style.scss';
 import 'jquery';
 import 'tether'
 import 'bootstrap';
 import axios from 'axios';
-
 //import eventApi function from './api.js' file
 import {cardsEventApi} from './api.js';
 import {signIn, signUp, signOut, authStateChanged} from './userAuth.js';
+
+var config = {
+  apiKey: "AIzaSyAo2GM4PjdcCsGq-3detGaqYkG-C6r_4iw",
+  authDomain: "project1-4f221.firebaseapp.com",
+  databaseURL: "https://project1-4f221.firebaseio.com/",
+  projectId: "project1-4f221",
+  storageBucket: "project1-4f221.appspot.com",
+  messagingSenderId: "364363031540"
+};
+
+firebase.initializeApp(config);
+const authorization = firebase.auth();
+const wholeDb = firebase.database();
+const db = firebase.database().ref('/recipes');
+const state = firebase.database().ref('/state');
 
 
 // 
@@ -34,22 +50,34 @@ function callState() {
     })
 }
 
-//call event api
+//initialize page
 function init() {
   if (window.location.pathname == '/dashboard.html') {
-    return;
+    signUp(authorization);
+    signIn(authorization);
+    signOut(authorization);
+    authStateChanged(authorization,wholeDb);
+    authStateChanged(authorization,wholeDb);
   } else if (window.location.pathname == '/recipe.html') {
     console.log(`You're in the ${window.location.pathname}`);
+    signUp(authorization);
+    signIn(authorization);
+    signOut(authorization);
+    authStateChanged(authorization,wholeDb);
     callState();
-
-    return;
   } else {
     cardsEventApi();
-    signUp();
-    signIn();
-    signOut();
-    authStateChanged();
+    signUp(authorization);
+    signIn(authorization);
+    signOut(authorization);
+    authStateChanged(authorization,wholeDb);
   }
 }
 
 init();
+
+module.exports = {
+  db,
+  wholeDb,
+  authorization,
+};

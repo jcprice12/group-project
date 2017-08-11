@@ -1,20 +1,7 @@
-// const firebase = require('firebase');
+//const firebase = require('firebase');
 
 import axios from 'axios';
-
-var config = {
-  apiKey: "AIzaSyAo2GM4PjdcCsGq-3detGaqYkG-C6r_4iw",
-  authDomain: "project1-4f221.firebaseapp.com",
-  databaseURL: "https://project1-4f221.firebaseio.com/",
-  projectId: "project1-4f221",
-  storageBucket: "project1-4f221.appspot.com",
-  messagingSenderId: "364363031540"
-};
-firebase.initializeApp(config);
-const authorization = firebase.auth();
-const wholeDb = firebase.database();
-const db = firebase.database().ref('/recipes');
-const state = firebase.database().ref('/state');
+import {state} from './app.js'
 
 function getCard(title, servings, img, time, source) {
   let card = `<div id="${source}" class="card card-recipe">
@@ -123,8 +110,5 @@ function recipeEventApi(){
 
 module.exports = {
   cardsEventApi,
-  db,
-  wholeDb,
-  authorization,
 };
 

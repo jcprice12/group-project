@@ -23,59 +23,59 @@
       <ul class="navbar-nav mr-auto">
 
       </ul>
-      <div id="signInOutUpButtonsCont">
-        <p id="userIdP"></p>
-        <button id="signInButton" class="btn btn-secondary" type="button" data-toggle="modal"
-                data-target="#signInModal">Sign In
+      <div class="signInOutUpButtonsCont" id="signInOutUpButtonsContIndex">
+        <p class="userIdP whiteText"></p>
+        <button id="signInButtonIndex" class="btn btn-secondary signInButton" type="button" data-toggle="modal"
+                data-target="#signInModal-index">Sign In
         </button>
-        <button id="signUpButton" class="btn btn-secondary" type="button" data-toggle="modal"
-                data-target="#signUpModal">Sign Up
+        <button id="signUpButtonIndex" class="btn btn-secondary signUpButton" type="button" data-toggle="modal"
+                data-target="#signUpModal-index">Sign Up
         </button>
-        <button id="signOutButton" class="btn btn-secondary" type="button">Sign Out</button>
+        <button id="signOutButtonIndex" class="btn btn-secondary signOutButton" type="button">Sign Out</button>
       </div>
     </div>
   </div>
 </nav>
 
 <!-- ***************************************************** Sign In ******************************************************************************-->
-<div class="modal fade signInUpModal" id="signInModal" tabindex="-1" role="dialog" aria-labelledby="SinInModalLabel"
+<div class="modal fade signInUpModal signInModal" id="signInModal-index" tabindex="-1" role="dialog" aria-labelledby="SignInModalLabelIndex"
      aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="SignInModalLabel">Sign In</h5>
+        <h5 class="modal-title SignInModalLabel" id="SignInModalLabelIndex">Sign In</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <div id="signInContainer">
-          <form id="userSignInForm">
+        <div id="signInContainerIndex" class="signInContainer">
+          <form id="userSignInFormIndex" class="userSignInForm">
             <div class="form-group">
               <div class="input-group userInfoInputGroup">
-                <span class="input-group-addon" id="in-email-add-on">Email</span>
-                <input id="in-email-input" type="email" class="form-control modalInput"
-                       placeholder="john.doe@example.com" aria-describedby="in-email-add-on">
+                <span class="input-group-addon in-email-add-on" id="in-email-add-on-index">Email</span>
+                <input id="in-email-input-index" type="email" class="form-control modalInput in-email-input"
+                       placeholder="john.doe@example.com" aria-describedby="in-email-add-on-index">
               </div>
             </div>
             <div class="form-group">
               <div class="input-group userInfoInputGroup">
-                <span class="input-group-addon" id="in-password-add-on">Password</span>
-                <input id="in-password-input" type="password" class="form-control modalInput"
-                       aria-describedby="in-password-add-on">
+                <span class="input-group-addon in-password-add-on" id="in-password-add-on-index">Password</span>
+                <input id="in-password-input-index" type="password" class="form-control modalInput in-password-input"
+                       aria-describedby="in-password-add-on-index">
               </div>
             </div>
           </form>
         </div>
       </div>
       <div class="modal-footer">
-        <div id="in-error-message-container">
-          <p class="errorMessage" id="in-error-message">
+        <div id="in-error-message-container-index" class="in-error-message-container">
+          <p class="errorMessage in-error-message" id="in-error-message-index">
             <!-- error message goes here -->
           </p>
         </div>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" id="signInSubmitButton" class="btn btn-primary">Submit</button>
+        <button type="button" id="signInSubmitButtonIndex" data-file-id="index" class="btn btn-primary signInSubmitButton">Submit</button>
       </div>
     </div>
   </div>
@@ -83,44 +83,44 @@
 <!-- ***************************************************** End Sign In ******************************************************************************-->
 
 <!-- ***************************************************** Sign Up ******************************************************************************-->
-<div class="modal fade signInUpModal" id="signUpModal" tabindex="-1" role="dialog" aria-labelledby="SignUpModalLabel"
+<div class="modal fade signInUpModal signUpModal" id="signUpModal-index" tabindex="-1" role="dialog" aria-labelledby="SignUpModalLabelIndex"
      aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="SignUnModalLabel">Sign Up</h5>
+        <h5 class="modal-title SignUpModalLabel" id="SignUnModalLabelIndex">Sign Up</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <div id="signUpContainer">
-          <form id="userSignUpForm">
+        <div id="signUpContainerIndex" class="signUpContainer">
+          <form id="userSignUpFormIndex" class="userSignUpForm">
             <div class="form-group">
               <div class="input-group userInfoInputGroup">
-                <span class="input-group-addon" id="up-email-add-on">Email</span>
-                <input id="up-email-input" type="email" class="form-control modalInput"
-                       placeholder="john.doe@example.com" aria-describedby="up-email-add-on">
+                <span class="input-group-addon up-email-add-on" id="up-email-add-on-index">Email</span>
+                <input id="up-email-input-index" type="email" class="form-control modalInput up-email-input"
+                       placeholder="john.doe@example.com" aria-describedby="up-email-add-on-index">
               </div>
             </div>
             <div class="form-group">
               <div class="input-group userInfoInputGroup">
-                <span class="input-group-addon" id="up-password-add-on">Password</span>
-                <input id="up-password-input" type="password" class="form-control modalInput"
-                       aria-describedby="up-password-add-on">
+                <span class="input-group-addon up-password-add-on" id="up-password-add-on-index">Password</span>
+                <input id="up-password-input-index" type="password" class="up-password-input form-control modalInput"
+                       aria-describedby="up-password-add-on-index">
               </div>
             </div>
           </form>
         </div>
       </div>
       <div class="modal-footer">
-        <div id="up-error-message-container">
-          <p class="errorMessage" id="up-error-message">
+        <div id="up-error-message-container-index" class="up-error-message-container">
+          <p class="errorMessage up-error-message" id="up-error-message-index">
             <!-- error message goes here -->
           </p>
         </div>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" id="signUpSubmitButton" class="btn btn-primary">Submit</button>
+        <button type="button" id="signUpSubmitButtonIndex" data-file-id="index" class="signUpSubmitButton btn btn-primary">Submit</button>
       </div>
     </div>
   </div>
