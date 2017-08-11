@@ -14,6 +14,7 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js'
   },
+  devtool: 'source-map',
   devtool : "source-map",
   module: {
     rules: [
@@ -39,16 +40,10 @@ module.exports = {
         use: ['html-loader']
       },
       {
-        test: /\.(jpe?g|png|gif|svg)$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              name: '[name].[ext]',
-              outputPath: 'img/',
-              publicPath: 'img/'
-            }
-          }
+        test: /\.(jpe?g|png|gif|svg)$/i,
+        loaders: [
+          'file-loader?hash=sha512&digest=hex&name=[hash].[ext]',
+          'image-webpack-loader?bypassOnDebug&optimizationLevel=7&interlaced=false'
         ]
       }
     ]
@@ -68,6 +63,16 @@ module.exports = {
     new HtmlWebpackPlugin({
       filename: 'dashboard.html',
       template: 'src/dashboard.html',
+      inject: true
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'modal.html',
+      template: 'src/modal.html',
+      inject: true
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'recipe.html',
+      template: 'src/recipe.html',
       inject: true
     }),
     new CleanWebpackPlugin(['dist'])

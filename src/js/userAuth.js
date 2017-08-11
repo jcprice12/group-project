@@ -1,12 +1,12 @@
 //const firebase = require('firebase');
 import {authorization} from './api.js';
-import {wholeDB} from './api.js';
+import {wholeDb} from './api.js';
 
 var modalInIsOpen = false
 $('#signInModal').on('shown.bs.modal', function(e) { modalInIsOpen = true;})
 $('#signInModal').on('hidden.bs.modal', function(e) { modalInIsOpen = false;})
 
-var modalUpIsOpen = false
+var modalUpIsOpen = false;
 $('#signUpModal').on('shown.bs.modal', function(e) { modalUpIsOpen = true;})
 $('#signUpModal').on('hidden.bs.modal', function(e) { modalUpIsOpen = false;})
 
