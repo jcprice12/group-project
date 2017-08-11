@@ -9,7 +9,7 @@ import {cardsEventApi} from './api.js';
 import {signIn, signUp, signOut, authStateChanged} from './userAuth.js';
 
 
-//
+// 
 function callState() {
   axios.get('https://project1-4f221.firebaseio.com/state.json')
     .then((res) => {
