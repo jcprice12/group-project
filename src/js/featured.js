@@ -1,17 +1,8 @@
-//const firebase = require('firebase');
 
-var config = {
-  apiKey: "AIzaSyAo2GM4PjdcCsGq-3detGaqYkG-C6r_4iw",
-  authDomain: "project1-4f221.firebaseapp.com",
-  databaseURL: "https://project1-4f221.firebaseio.com/",
-  projectId: "project1-4f221",
-  storageBucket: "project1-4f221.appspot.com",
-  messagingSenderId: "364363031540"
-};
-firebase.initializeApp(config);
-const authorization = firebase.auth();
-const wholeDb = firebase.database();
-const db = firebase.database().ref('/recipes');
+import {authorization} from './api.js';
+import {wholeDb} from './api.js';
+const db = wholeDb.ref("/recipes");
+
 db.once('value')
   .then((snap) => {
     console.log(snap);
@@ -61,32 +52,32 @@ function getFeaturedCard(title, cals, servings, img) {
   return card;
 }
 
-function getRecipes(url) {
-  $.get(url, (res) => {
-    console.log(res);
-    let html = '';
-    res.hits.forEach(({recipe}) => {
-      console.log(recipe.calories);
-      let title = recipe.label;
-      let servings = recipe.yield;
-      let cals = Math.floor(recipe.calories / servings);
-      let img = recipe.image;
-      html += getFeaturedCard(title, cals, servings, img);
-    });
-    $('#featured-recipes').html(html);
-  })
-}
+// function getRecipes(url) {
+//   $.get(url, (res) => {
+//     console.log(res);
+//     let html = '';
+//     res.hits.forEach(({recipe}) => {
+//       console.log(recipe.calories);
+//       let title = recipe.label;
+//       let servings = recipe.yield;
+//       let cals = Math.floor(recipe.calories / servings);
+//       let img = recipe.image;
+//       html += getFeaturedCard(title, cals, servings, img);
+//     });
+//     $('#featured-recipes').html(html);
+//   })
+// }
 
-function eventApi(){
-  $('#see-more-featured').on('click', (e) => {
-    e.preventDefault();
-    let search = $('#search-recipe').val();
-    let url = `https://api.edamam.com/search?q=${search}&app_id=87b25c20&app_key=2c3c60c276ca6dfd0780517fe3244719`;
-    getRecipes(url);
-  });
-}
+// function eventApi(){
+//   $('#see-more-featured').on('click', (e) => {
+//     e.preventDefault();
+//     let search = $('#search-recipe').val();
+//     let url = `https://api.edamam.com/search?q=${search}&app_id=87b25c20&app_key=2c3c60c276ca6dfd0780517fe3244719`;
+//     getRecipes(url);
+//   });
+// }
 
-module.exports = {
-  eventApi, db, wholeDb, authorization,
-};
+// module.exports = {
+//   eventApi, db, wholeDb, authorization,
+// };
 
