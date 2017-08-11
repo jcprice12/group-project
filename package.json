@@ -9,12 +9,14 @@
     "build:prod": "webpack -p"
   },
   "dependencies": {
+    "axios": "^0.16.2",
     "bootstrap": "^4.0.0-alpha.6",
     "firebase": "^4.2.0",
     "font-awesome": "^4.7.0",
     "jquery": "^3.2.1",
     "lodash": "^4.17.4",
-    "tether": "^1.4.0"
+    "tether": "^1.4.0",
+    "unirest": "^0.5.1"
   },
   "devDependencies": {
     "babel-core": "^6.25.0",
@@ -27,6 +29,7 @@
     "file-loader": "^0.11.2",
     "html-loader": "^0.5.1",
     "html-webpack-plugin": "^2.30.1",
+    "image-webpack-loader": "^3.3.1",
     "node-sass": "^4.5.3",
     "sass-loader": "^6.0.6",
     "webpack": "^3.5.2",
