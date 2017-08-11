@@ -1,20 +1,8 @@
 
-// import {authorization} from './api.js';
-// import {wholeDb} from './app.js';
-// const db = wholeDb.ref("/recipes");
-//
-// db.once('value')
-//   .then((snap) => {
-//     console.log(snap);
-//   });
-//
-// $.get('https://project1-4f221.firebaseio.com/recipes/recipeKey/recipe.json', (res) => {
-//   for(var item in res){
-//     console.log(res[item]);
-//   }
-// });
-//
-// function getFeaturedCard(title, cals, servings, img) {
+
+// import axios from 'axios';
+
+// function getPopularCard(title, servings, img, time, source) {
 //   let card = `<div class="card featured-recipe">
 //               <div class="card-block row">
 //               <div class="col-4">
@@ -47,37 +35,41 @@
 //                 </div>
 //               </div>
 //             </div>
-//
+            
 //           </div>`;
-//   return card;
+//    return card;
 // }
 
-// function getRecipes(url) {
-//   $.get(url, (res) => {
-//     console.log(res);
-//     let html = '';
-//     res.hits.forEach(({recipe}) => {
-//       console.log(recipe.calories);
-//       let title = recipe.label;
-//       let servings = recipe.yield;
-//       let cals = Math.floor(recipe.calories / servings);
-//       let img = recipe.image;
-//       html += getFeaturedCard(title, cals, servings, img);
-//     });
-//     $('#featured-recipes').html(html);
-//   })
-// }
+// function popularApi() {
+//   let search = $('#ingredients').val();
+  
 
-// function eventApi(){
-//   $('#see-more-featured').on('click', (e) => {
-//     e.preventDefault();
-//     let search = $('#search-recipe').val();
-//     let url = `https://api.edamam.com/search?q=${search}&app_id=87b25c20&app_key=2c3c60c276ca6dfd0780517fe3244719`;
-//     getRecipes(url);
-//   });
-// }
+//     var head = {
+//       headers: {"X-Mashape-Key": "VftGeJE2qimshoNc94fZxoUiEp04p154Astjsn7Kuggh3FXLVw"}
+//     };
+//     var obj = {
+//       'limitLicence': false,
+//       'number': 300,
+//       'query': search,
+//       'ingredients': search,
+//       'excludeIngredients': excludeIngredients,
+//       'maxCalories': maxCalories,
+//       'minCalories': minCalories,
+//       'diet': diet,
+//       'intolerances' : allIntolerances,
+//       'ranking': 1,
+//       'addRecipeInformation': true
+//     };
 
-// module.exports = {
-//   eventApi, db, wholeDb, authorization,
-// };
+//     for(var key in obj) {
+//       if(obj[key] === "") {
+//          delete obj[key]; 
+//        };
+//     };
+
+//     var url = 'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/searchComplex?';
+//     url += '?' + $.param(obj);
+//     console.log(url);
+//     searchRecipes(url,head);
+// }
 

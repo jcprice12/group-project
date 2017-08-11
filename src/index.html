@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Project</title>
+  <title>Hungry Hippo</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="https://www.gstatic.com/firebasejs/4.2.0/firebase.js"></script>
 </head>
@@ -17,7 +17,7 @@
             aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <a class="navbar-brand" href="#">Recipes Galore</a>
+    <a class="navbar-brand" href="#">Hungry Hippo</a>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
@@ -130,7 +130,7 @@
 <div class="container">
 
   <div class="row mt-5">
-    <div class="col-6">
+    <div class="col-lg-6 col-md-12">
       <div class="card dashboard-card">
         <h4 class="card-header">Search</h4>
         <div class="card-block">
@@ -140,30 +140,149 @@
               <input type="text" class="form-control" id="ingredients" placeholder="Ex: chicken, rice, broccoli">
             </div>
             <div class="form-group">
-              <label for="calories">Calories</label>
-              <input type="number" class="form-control" id="calories" aria-describedby="caloriesHelp">
-              <small id="caloriesHelp">Limit number of calories per serving.</small>
+              <label for="ingredients">Exclude ingredients</label>
+              <input type="text" class="form-control" id="exclude-ingredients" placeholder="Ex: mushrooms, sugar, walnuts">
             </div>
-            <div id="accordion" role="tablist" aria-multiselectable="true">
-              <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true"
-                 aria-controls="collapseOne">
-                Dietary Restrictions (+)
-              </a>
-              <div id="collapseOne" class="collapse" role="tabpanel" aria-labelledby="headingOne">
-                hi
-              </div>
-
-              <p>
-                <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"
-                   aria-expanded="false" aria-controls="collapseTwo">
-                  Something else (+)
+            <div class="form-group">
+              <label for="min-calories" style="display:block;">Calories</label>
+              <input type="number" class="form-control" style="display:inline-block; width:45%" min="0" id="min-calories" aria-describedby="caloriesHelp" placeholder="Min">
+              &nbsp;-&nbsp;
+              <input type="number" class="form-control" style="display:inline-block; width:45%" min="0" id="max-calories" aria-describedby="caloriesHelp" placeholder="Max">
+            </div>
+            <div id="accordion2" role="tablist" aria-multiselectable="true">
+              <div class="mb-2">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                  Special Diet (+)
                 </a>
-              </p>
-              <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
-                hi2
+              </div>
+              <div id="collapseOne" class="collapse" role="tabpanel" aria-labelledby="headingOne">
+               <div class="row mb-2">
+                 <div class="col-6">
+                   <ul class="form-list">
+                     <li>
+                       <label class="form-check-label">
+                           <input type="radio"  name="diet" value="pescetarian" class="form-check-input mr-1 diet" id="pescetarian">Pescetarian
+                       </label>
+                      </li>
+                      <li>
+                       <label class="form-check-label">
+                           <input type="radio"  name="diet" value="ovo-vegetarian" class="form-check-input mr-1 diet" id="ovo vegetarian">Ovo vegetarian
+                       </label>
+                     </li>
+                     <li>
+                       <label class="form-check-label">
+                           <input type="radio"  name="diet" value="vegan" class="form-check-input mr-1 diet" id="vegan">Vegan
+                       </label>
+                     </li>
+                     <li>
+                       <label class="form-check-label">
+                           <input type="radio"  name="diet" value="lacto-vegetarian"class="form-check-input mr-1 diet" id="lacto vegetarian">Lacto vegetarian
+                       </label>
+                     </li>
+                    </ul>
+                 </div>
+
+                 <div class="col-6">
+                    <ul class="form-list">
+                      <li> 
+                        <label class="form-check-label">
+                          <input type="radio" name="diet" value="paleo" class="form-check-input mr-1 diet" id="paleo">Paleo
+                        </label>
+                      </li>
+                      <li>
+                        <label class="form-check-label">
+                          <input type="radio" name="diet" value="primal" class="form-check-input mr-1 diet" id="primal">Primal
+                        </label>
+                      </li>
+                      <li>
+                        <label class="form-check-label">
+                          <input type="radio" name="diet" value="vegetarian" class="form-check-input mr-1 diet" id="vegetarian">Vegetarian
+                        </label>
+                      </li>
+                    </ul>
+                 </div>
+
+               </div>
               </div>
             </div>
-            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+
+            <div id="accordion" role="tablist" aria-multiselectable="true">
+              <div class="mb-2">
+                <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                  Dietary Restrictions (+)
+                </a>
+              </div>
+              <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
+                <div class="row mb-2">
+                  <div class="col-6">
+                    <ul class="form-list">
+                      <li>
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input mr-1 intolerance" id="dairy">Dairy
+                        </label>
+                       </li>
+                       <li>
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input mr-1 intolerance" id="egg">Egg
+                        </label>
+                      </li>
+                      <li>
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input mr-1 intolerance" id="gluten">Gluten
+                        </label>
+                      </li>
+                      <li>
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input mr-1 intolerance" id="peanut">Peanut
+                        </label>
+                      </li>
+                      <li>
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input mr-1 intolerance" id="tree  nut">Tree nuts
+                        </label>
+                      </li>
+                      <li>
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input mr-1 intolerance" id="wheat">Wheat
+                        </label>
+                      </li>
+                    </ul>
+
+                  </div>
+                  <div class="col-6">
+                    <ul class="form-list">
+                      <li></li>
+                      <li>
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input mr-1 intolerance" id="sesame">Sesame
+                        </label>
+                       </li>
+                       <li>
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input mr-1 intolerance" id="seafood">Seafood
+                        </label>
+                       </li>
+                       <li>
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input mr-1 intolerance" id="shellfish">Shellfish
+                        </label>
+                       </li>
+                       <li>
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input mr-1 intolerance" id="soy">Soy
+                        </label>
+                      </li>
+                      <li>
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input mr-1 intolerance" id="sulfite">Sulfite
+                        </label>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button class="btn btn-secondary my-2 my-sm-0" type="submit" id="search">Search</button>
           </form>
 
 
@@ -172,18 +291,43 @@
       </div>
     </div>
 
-    <div class="col-6">
+    <div class="col-lg-6 mt-lg-0 col-md-12 mt-sm-5">
       <div class="card">
-        <h4 class="card-header">Featured</h4>
+        <h4 class="card-header">Popular Recipes</h4>
         <div class="card-block dashboard-card">
-          <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-          <a href="#" class="btn btn-secondary">Go somewhere</a>
+          <div id="popular-recipes">
+          </div>
+          <a href="#" id="see-more-popular">See more...</a>
         </div>
       </div>
     </div>
   </div>
+
+  <!--<div class="flex-column mb-5 mt-2 mr-sm-2 ">-->
+    <!--<div class="col mr-auto ml-auto mb-2" style="width: 200px">-->
+
+      <!--&lt;!&ndash;<img style="width: 100%" id="hippo" src="img/hippo.png" alt="hippo">&ndash;&gt;-->
+    <!---->
+    <!--</div>-->
+    <!--<div class="col mr-auto ml-auto mb-3" style="width: 200px;">-->
+      <!--<a style="width: 100%" href="/dashboard.html" class="btn btn-secondary">Go to Dashboard</a>-->
+    <!--</div>-->
+    <!--<div class="col-lg-6 mr-auto ml-auto">-->
+      <!--<form>-->
+        <!--<div class="input-group">-->
+          <!--<span class="input-group-btn">-->
+            <!--<button id="search-btn" class="btn btn-primary" type="button"><i class="fa fa-search"></i></button>-->
+          <!--</span>-->
+          <!--<input onkeydown="if (event.keyCode == 13) event.preventDefault()" type="text" id="search-recipe"-->
+                 <!--class="form-control"-->
+                 <!--placeholder="Search Recipes">-->
+        <!--</div>-->
+      <!--</form>-->
+    <!--</div>-->
+  <!--</div>-->
   <div class="card-columns"></div>
 
 </div>
+
 </body>
 </html>

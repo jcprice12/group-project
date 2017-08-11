@@ -41,20 +41,43 @@ function getCard(title, servings, img, time, source) {
   return card;
 }
 
-function cardsEventApi() {
-  $('#search-btn').on('click', (e) => {
+function cardsEventApi(){
+  $('#search').on('click', (e) => {
     e.preventDefault();
-    let search = $('#search-recipe').val();
+    let search = $('#ingredients').val();
+    let excludeIngredients = $('#exclude-ingredients').val();
+    let maxCalories = $('#max-calories').val();
+    let minCalories = $('#min-calories').val();
+    let diet = $(".diet:checked").attr("id");
+    let allIntolerances = ""
+    $(".intolerance:checked").each(function() {
+      allIntolerances += ($(this).attr("id") + " ");
+    });
+    allIntolerances = allIntolerances.trim();
+
     var head = {
       headers: {"X-Mashape-Key": "VftGeJE2qimshoNc94fZxoUiEp04p154Astjsn7Kuggh3FXLVw"}
     };
     var obj = {
       'limitLicence': false,
-      'number': 100,
+      'number': 300,
       'query': search,
+      'ingredients': search,
+      'excludeIngredients': excludeIngredients,
+      'maxCalories': maxCalories,
+      'minCalories': minCalories,
+      'diet': diet,
+      'intolerances' : allIntolerances,
       'ranking': 1,
       'addRecipeInformation': true
     };
+
+    for(var key in obj) {
+      if(obj[key] === "") {
+         delete obj[key];
+       };
+    };
+
     var url = 'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/searchComplex?';
     url += '?' + $.param(obj);
     searchRecipes(url, head);
