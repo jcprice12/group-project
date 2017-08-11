@@ -1,5 +1,6 @@
 
 import axios from 'axios';
+import {MyLoadAnimation1} from './MyLoadAnimation1.js';
 
 var authorization;
 
@@ -86,6 +87,9 @@ function cardsEventApi(){
 }
 
 function searchRecipes(url, config) {
+  var parentContainer = document.getElementById("cardsLoadContainer");
+  $(parentContainer).css("display", "block");
+  var loadAnimation1 = new MyLoadAnimation1(parentContainer,75,12,4,["#2ECC71","#fdcb4e","#ff6876","#666ffd",]);
   axios.get(url, config)
     .then((res) => {
       let arr = res.data.results;
@@ -102,9 +106,12 @@ function searchRecipes(url, config) {
           html += getCard(title, servings, img, time, source);
         }
       });
+      $(parentContainer).css("display", "none");
+      loadAnimation1.stopAndRemove();
       $('.card-columns').html(html);
       recipeEventApi();
     });
+  loadAnimation1.startAll();
 }
 
 function getRecipe(url, config, state) {
