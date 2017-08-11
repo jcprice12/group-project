@@ -21,21 +21,6 @@ const wholeDb = firebase.database();
 import {cardsEventApi, passAuth} from './api.js';
 import {signIn, signUp, signOut, authStateChanged} from './userAuth.js';
 
-var config = {
-  apiKey: "AIzaSyAo2GM4PjdcCsGq-3detGaqYkG-C6r_4iw",
-  authDomain: "project1-4f221.firebaseapp.com",
-  databaseURL: "https://project1-4f221.firebaseio.com/",
-  projectId: "project1-4f221",
-  storageBucket: "project1-4f221.appspot.com",
-  messagingSenderId: "364363031540"
-};
-
-firebase.initializeApp(config);
-const authorization = firebase.auth();
-const wholeDb = firebase.database();
-const db = firebase.database().ref('/recipes');
-const state = firebase.database().ref('/state');
-
 
 // 
 function callState() {
@@ -77,33 +62,19 @@ function init() {
     signOut(authorization);
     authStateChanged(authorization,wholeDb);
     callState();
-<<<<<<< HEAD
-=======
-    return;
->>>>>>> b0bc79176ab4eccf7556a48aa9743ffdcd6d0707
   } else {
     passAuth(authorization);
     cardsEventApi();
     signUp(authorization);
     signIn(authorization);
     signOut(authorization);
-<<<<<<< HEAD
-    authStateChanged(authorization,wholeDb);
-=======
     authStateChanged(authorization, wholeDb);
->>>>>>> b0bc79176ab4eccf7556a48aa9743ffdcd6d0707
   }
 }
 
 init();
 
 module.exports = {
-<<<<<<< HEAD
-  db,
-  wholeDb,
-  authorization,
-=======
   authorization,
   wholeDb
->>>>>>> b0bc79176ab4eccf7556a48aa9743ffdcd6d0707
 };
