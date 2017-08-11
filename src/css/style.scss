@@ -50,10 +50,16 @@ nav  {
   border-color: $secondary;
 }
 
-.btn-secondary:hover, .btn-secondary:focus {
+.btn-secondary:hover {
   color: #FFF;
-  background-color: #f76f4d;
-  border-color: #f76f4d;
+  background-color: #de6345;
+  border-color: #de6345;
+}
+
+.btn-secondary:focus {
+  color: #FFF;
+  background-color: #de6345;
+  border-color: #de6345;
 }
 
 .errorMessage{
@@ -79,6 +85,7 @@ DASHBOARD
   background-color: $main;
   color: #FFF;
   border-color: $main;
+  font-weight: normal;
 }
 
 .card {
