@@ -53,6 +53,16 @@ function authStateChanged(){
 	authorization.onAuthStateChanged(function(myUser){
 		
 		if(myUser){
+			var usersRef = wholeDb.ref("usersInformation/");
+			console.log("usersRef");
+			usersRef.once("value", function(snap){
+				if(!(snap.hasChild(myUser.uid))){
+					var userRef = wholeDb.ref("usersInformation").child(myUser.uid);
+					userRef.set({
+						iExist: true,
+					});
+				}
+			});
 			console.log(myUser);
 			console.log(myUser.uid + " is signed in ");
 			if(modalInIsOpen){
