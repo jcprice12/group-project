@@ -130,7 +130,7 @@
 <div class="container">
 
   <div class="row mt-5">
-    <div class="col-6-lg col-12-md">
+    <div class="col-lg-6 col-md-12">
       <div class="card dashboard-card">
         <h4 class="card-header">Search</h4>
         <div class="card-block">
@@ -144,12 +144,12 @@
               <input type="text" class="form-control" id="exclude-ingredients" placeholder="Ex: mushrooms, sugar, walnuts">
             </div>
             <div class="form-group">
-              <label for="calories" style="display:block;">Calories</label>
+              <label for="min-calories" style="display:block;">Calories</label>
               <input type="number" class="form-control" style="display:inline-block; width:45%" min="0" id="min-calories" aria-describedby="caloriesHelp" placeholder="Min">
               &nbsp;-&nbsp;
               <input type="number" class="form-control" style="display:inline-block; width:45%" min="0" id="max-calories" aria-describedby="caloriesHelp" placeholder="Max">
             </div>
-            <div id="accordion" role="tablist" aria-multiselectable="true">
+            <div id="accordion2" role="tablist" aria-multiselectable="true">
               <div class="mb-2">
                 <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                   Special Diet (+)
@@ -161,22 +161,22 @@
                    <ul class="form-list">
                      <li>
                        <label class="form-check-label">
-                           <input type="checkbox" class="form-check-input mr-1" id="pescetarian">Pescetarian
+                           <input type="radio"  name="diet" value="pescetarian" class="form-check-input mr-1 diet" id="pescetarian">Pescetarian
                        </label>
                       </li>
-                      <li> 
+                      <li>
                        <label class="form-check-label">
-                           <input type="checkbox" class="form-check-input mr-1" id="ovo-vegetarian">Ovo vegetarian
+                           <input type="radio"  name="diet" value="ovo-vegetarian" class="form-check-input mr-1 diet" id="ovo vegetarian">Ovo vegetarian
                        </label>
                      </li>
-                     <li>  
+                     <li>
                        <label class="form-check-label">
-                           <input type="checkbox" class="form-check-input mr-1" id="vegan">Vegan
+                           <input type="radio"  name="diet" value="vegan" class="form-check-input mr-1 diet" id="vegan">Vegan
                        </label>
                      </li>
-                     <li>  
+                     <li>
                        <label class="form-check-label">
-                           <input type="checkbox" class="form-check-input mr-1" id="lacto-vegetarian">Lacto vegetarian
+                           <input type="radio"  name="diet" value="lacto-vegetarian"class="form-check-input mr-1 diet" id="lacto vegetarian">Lacto vegetarian
                        </label>
                      </li>
                     </ul>
@@ -186,17 +186,17 @@
                     <ul class="form-list">
                       <li> 
                         <label class="form-check-label">
-                          <input type="checkbox" class="form-check-input mr-1" id="paleo">Paleo
+                          <input type="radio" name="diet" value="paleo" class="form-check-input mr-1 diet" id="paleo">Paleo
                         </label>
                       </li>
-                      <li> 
+                      <li>
                         <label class="form-check-label">
-                          <input type="checkbox" class="form-check-input mr-1" id="primal">Primal
+                          <input type="radio" name="diet" value="primal" class="form-check-input mr-1 diet" id="primal">Primal
                         </label>
                       </li>
-                      <li> 
+                      <li>
                         <label class="form-check-label">
-                          <input type="checkbox" class="form-check-input mr-1" id="vegetarian">Vegetarian
+                          <input type="radio" name="diet" value="vegetarian" class="form-check-input mr-1 diet" id="vegetarian">Vegetarian
                         </label>
                       </li>
                     </ul>
@@ -205,7 +205,7 @@
                </div>
               </div>
             </div>
-            
+
             <div id="accordion" role="tablist" aria-multiselectable="true">
               <div class="mb-2">
                 <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
@@ -218,32 +218,32 @@
                     <ul class="form-list">
                       <li>
                         <label class="form-check-label">
-                            <input type="checkbox" class="form-check-input mr-1" id="dairy">Dairy
+                            <input type="checkbox" class="form-check-input mr-1 intolerance" id="dairy">Dairy
                         </label>
                        </li>
-                       <li> 
+                       <li>
                         <label class="form-check-label">
-                            <input type="checkbox" class="form-check-input mr-1" id="egg">Egg
-                        </label>
-                      </li>
-                      <li>  
-                        <label class="form-check-label">
-                            <input type="checkbox" class="form-check-input mr-1" id="gluten">Gluten
-                        </label>
-                      </li>
-                      <li>  
-                        <label class="form-check-label">
-                            <input type="checkbox" class="form-check-input mr-1" id="peanut">Peanut
+                            <input type="checkbox" class="form-check-input mr-1 intolerance" id="egg">Egg
                         </label>
                       </li>
                       <li>
                         <label class="form-check-label">
-                            <input type="checkbox" class="form-check-input mr-1" id="tree-nut">Tree nuts
+                            <input type="checkbox" class="form-check-input mr-1 intolerance" id="gluten">Gluten
                         </label>
                       </li>
                       <li>
                         <label class="form-check-label">
-                            <input type="checkbox" class="form-check-input mr-1" id="wheat">Wheat
+                            <input type="checkbox" class="form-check-input mr-1 intolerance" id="peanut">Peanut
+                        </label>
+                      </li>
+                      <li>
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input mr-1 intolerance" id="tree  nut">Tree nuts
+                        </label>
+                      </li>
+                      <li>
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input mr-1 intolerance" id="wheat">Wheat
                         </label>
                       </li>
                     </ul>
@@ -254,27 +254,27 @@
                       <li></li>
                       <li>
                         <label class="form-check-label">
-                            <input type="checkbox" class="form-check-input mr-1" id="sesame">Sesame
+                            <input type="checkbox" class="form-check-input mr-1 intolerance" id="sesame">Sesame
                         </label>
                        </li>
-                       <li> 
+                       <li>
                         <label class="form-check-label">
-                            <input type="checkbox" class="form-check-input mr-1" id="seafood">Seafood
+                            <input type="checkbox" class="form-check-input mr-1 intolerance" id="seafood">Seafood
                         </label>
                        </li>
-                       <li> 
+                       <li>
                         <label class="form-check-label">
-                            <input type="checkbox" class="form-check-input mr-1" id="shellfish">Shellfish
+                            <input type="checkbox" class="form-check-input mr-1 intolerance" id="shellfish">Shellfish
                         </label>
                        </li>
-                       <li> 
+                       <li>
                         <label class="form-check-label">
-                            <input type="checkbox" class="form-check-input mr-1" id="soy">Soy
+                            <input type="checkbox" class="form-check-input mr-1 intolerance" id="soy">Soy
                         </label>
                       </li>
                       <li>
                         <label class="form-check-label">
-                            <input type="checkbox" class="form-check-input mr-1" id="sulfite">Sulfite
+                            <input type="checkbox" class="form-check-input mr-1 intolerance" id="sulfite">Sulfite
                         </label>
                       </li>
                     </ul>
@@ -282,7 +282,7 @@
                 </div>
               </div>
             </div>
-            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+            <button class="btn btn-secondary my-2 my-sm-0" type="submit" id="search">Search</button>
           </form>
 
 
@@ -291,42 +291,43 @@
       </div>
     </div>
 
-    <div class="col-6-lg col-12-md">
+    <div class="col-lg-6 mt-lg-0 col-md-12 mt-sm-5">
       <div class="card">
-        <h4 class="card-header">Featured</h4>
+        <h4 class="card-header">Popular Recipes</h4>
         <div class="card-block dashboard-card">
-          <div id="featured-recipes">
+          <div id="popular-recipes">
           </div>
-          <a href="#" id="see-more-featured">See more...</a>
+          <a href="#" id="see-more-popular">See more...</a>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="flex-column mb-5 mt-2 mr-sm-2 ">
-    <div class="col mr-auto ml-auto mb-2" style="width: 200px">
+  <!--<div class="flex-column mb-5 mt-2 mr-sm-2 ">-->
+    <!--<div class="col mr-auto ml-auto mb-2" style="width: 200px">-->
 
-      <!-- <img style="width: 100%" id="hippo" src="img/hippo.png" alt="hippo"> -->
-    
-    </div>
-    <div class="col mr-auto ml-auto mb-3" style="width: 200px;">
-      <a style="width: 100%" href="/dashboard.html" class="btn btn-secondary">Go to Dashboard</a>
-    </div>
-    <div class="col-lg-6 mr-auto ml-auto">
-      <form>
-        <div class="input-group">
-          <span class="input-group-btn">
-            <button id="search-btn" class="btn btn-primary" type="button"><i class="fa fa-search"></i></button>
-          </span>
-          <input onkeydown="if (event.keyCode == 13) event.preventDefault()" type="text" id="search-recipe"
-                 class="form-control"
-                 placeholder="Search Recipes">
-        </div>
-      </form>
-    </div>
-  </div>
+      <!--&lt;!&ndash;<img style="width: 100%" id="hippo" src="img/hippo.png" alt="hippo">&ndash;&gt;-->
+    <!---->
+    <!--</div>-->
+    <!--<div class="col mr-auto ml-auto mb-3" style="width: 200px;">-->
+      <!--<a style="width: 100%" href="/dashboard.html" class="btn btn-secondary">Go to Dashboard</a>-->
+    <!--</div>-->
+    <!--<div class="col-lg-6 mr-auto ml-auto">-->
+      <!--<form>-->
+        <!--<div class="input-group">-->
+          <!--<span class="input-group-btn">-->
+            <!--<button id="search-btn" class="btn btn-primary" type="button"><i class="fa fa-search"></i></button>-->
+          <!--</span>-->
+          <!--<input onkeydown="if (event.keyCode == 13) event.preventDefault()" type="text" id="search-recipe"-->
+                 <!--class="form-control"-->
+                 <!--placeholder="Search Recipes">-->
+        <!--</div>-->
+      <!--</form>-->
+    <!--</div>-->
+  <!--</div>-->
   <div class="card-columns"></div>
 
 </div>
+
 </body>
 </html>

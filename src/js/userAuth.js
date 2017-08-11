@@ -42,10 +42,11 @@ function signUp(authorization){
 				$("#up-error-message-" + file_id).text(error.message);
 			});
 		}
-	});
+  });
 }
 
 function signIn(authorization){
+
 	$(".signInSubmitButton").on("click", function(){
 		file_id = $(this).data("file-id");
 		var email = $("#in-email-input-" + file_id).val();
@@ -68,9 +69,8 @@ function signOut(authorization){
 	});
 }
 
-function authStateChanged(authorization,wholeDb){
+function authStateChanged(authorization, wholeDb){
 	authorization.onAuthStateChanged(function(myUser){
-		
 		if(myUser){
 			var usersRef = wholeDb.ref("usersInformation/");
 			console.log("usersRef");
@@ -113,5 +113,9 @@ function authStateChanged(authorization,wholeDb){
 }
 
 module.exports = {
-  signUp, signIn, signOut, authStateChanged
+  signUp,
+  signIn,
+  signOut,
+  authStateChanged
 };
+
