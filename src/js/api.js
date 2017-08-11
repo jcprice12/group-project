@@ -64,8 +64,9 @@ function cardsEventApi(){
     };
     var obj = {
       'limitLicence': false,
-      'number': 100,
+      'number': 300,
       'query': search,
+      'ingredients': search,
       'excludeIngredients': excludeIngredients,
       'maxCalories': maxCalories,
       'minCalories': minCalories,
@@ -75,13 +76,9 @@ function cardsEventApi(){
       'addRecipeInformation': true
     };
 
-    function isEmpty(value){
-      return value == null || value == "";
-    }
-
-    for(key in queryParams) {
-      if(isEmpty(queryParams[key])) {
-         delete queryParams[key]; 
+    for(var key in obj) {
+      if(obj[key] === "") {
+         delete obj[key]; 
        };
     };
 

@@ -6,7 +6,6 @@ import axios from 'axios';
 
 //import eventApi function from './api.js' file
 import {cardsEventApi} from './api.js';
-import {cardsEventApiSearch} from './search.js';
 import {signIn, signUp, signOut, authStateChanged} from './userAuth.js';
 
 
