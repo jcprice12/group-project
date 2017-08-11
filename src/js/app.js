@@ -2,17 +2,54 @@ import '../css/style.scss';
 import 'jquery';
 import 'tether'
 import 'bootstrap';
+import axios from 'axios';
 
 //import eventApi function from './api.js' file
-import {eventApi} from './api.js';
-import {signIn} from './userAuth.js';
-import {signUp} from './userAuth.js';
-import {signOut} from './userAuth.js';
-import {authStateChanged} from './userAuth.js';
+import {cardsEventApi} from './api.js';
+import {signIn, signUp, signOut, authStateChanged} from './userAuth.js';
+
+
+//
+function callState() {
+  axios.get('https://project1-4f221.firebaseio.com/state.json')
+    .then((res) => {
+      let recipe = res.data.directions;
+      console.log(recipe);
+      $('.recipe-container').html(recipe);
+      $('.recipeInstructions').addClass('mt-5');
+      $('.recipeInstructions ol').addClass('list-group');
+      $('.recipeInstructions ol li').addClass('list-group-item list-group-item-info justify-content-between');
+      return axios.get('https://project1-4f221.firebaseio.com/state/length.json')
+    })
+    .then((res) => {
+      let length = res.data;
+      console.log(res);
+      for (let i = 0; i < length; i++) {
+        let inner = $(`.list-group-item:nth-child(${i + 1})`).html();
+        $(`.list-group-item:nth-child(${i + 1})`).html('');
+        let p = `<p class="mb-0 col-10">${inner}</p>`;
+        p += `<span class="badge badge-success badge-pill">${i + 1}</span>`;
+        $(`.list-group-item:nth-child(${i + 1})`).html(p);
+      }
+    })
+}
 
 //call event api
-eventApi();
-signUp();
-signIn();
-signOut();
-authStateChanged();
+function init() {
+  if (window.location.pathname == '/dashboard.html') {
+    return;
+  } else if (window.location.pathname == '/recipe.html') {
+    console.log(`You're in the ${window.location.pathname}`);
+    callState();
+
+    return;
+  } else {
+    cardsEventApi();
+    signUp();
+    signIn();
+    signOut();
+    authStateChanged();
+  }
+}
+
+init();

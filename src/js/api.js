@@ -13,19 +13,10 @@ firebase.initializeApp(config);
 const authorization = firebase.auth();
 const wholeDb = firebase.database();
 const db = firebase.database().ref('/recipes');
-db.once('value')
-  .then((snap) => {
-    console.log(snap);
-  });
+const state = firebase.database().ref('/state');
 
-$.get('https://project1-4f221.firebaseio.com/recipes/recipeKey/recipe.json', (res) => {
-  for(var item in res){
-    console.log(res[item]);
-  }
-});
-
-function getCard(title, servings, img, time) {
-  let card = `<div class="card card-recipe">
+function getCard(title, servings, img, time, source) {
+  let card = `<div id="${source}" class="card card-recipe">
             <img class="card-img-top img-fluid"
                  src="${img}"
                  alt="Card image cap"
@@ -54,7 +45,7 @@ function getCard(title, servings, img, time) {
   return card;
 }
 
-function eventApi(){
+function cardsEventApi(){
   $('#search-btn').on('click', (e) => {
     e.preventDefault();
     let search = $('#search-recipe').val();
@@ -70,14 +61,11 @@ function eventApi(){
     };
     var url = 'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/searchComplex?';
     url += '?' + $.param(obj);
-    getRecipes(url,head);
+    searchRecipes(url,head);
   });
 }
 
-
-
-
-function getRecipes(url, config) {
+function searchRecipes(url, config) {
   axios.get(url, config)
     .then((res) => {
       let arr = res.data.results;
@@ -85,19 +73,57 @@ function getRecipes(url, config) {
       let html = '';
       arr.forEach((recipe) => {
         if(recipe.aggregateLikes > 100){
+          console.log(recipe);
+          let source = recipe.sourceUrl ? recipe.sourceUrl : 'none';
           let img = recipe.image;
           let title = recipe.title;
           let servings = recipe.servings;
           let time = recipe.preparationMinutes;
-          html += getCard(title, servings, img, time);
+          html += getCard(title, servings, img, time, source);
         }
       });
       $('.card-columns').html(html);
+      recipeEventApi();
     });
 }
 
+function getRecipe(url, config) {
+  axios.get(url, config)
+    .then((res) => {
+      let tempState = {};
+      let str = res.data.instructions;
+      str = str.replace(/[\uE000-\uF8FF]/g, '');
+      console.log($(str).find('li').length);
+      console.log(str);
+      tempState.length = $(str).find('li').length;
+      tempState.directions = str;
+      state.set(tempState);
+      window.location = "/recipe.html";
+    });
+}
+
+function recipeEventApi(){
+  $('.card-recipe').on('click', function() {
+    let sourceUrl = $(this).attr('id');
+    let head = {
+      headers: {"X-Mashape-Key": "VftGeJE2qimshoNc94fZxoUiEp04p154Astjsn7Kuggh3FXLVw"}
+    };
+    let obj = {
+      'forceExtraction': false,
+      url: sourceUrl
+    };
+    let url = `https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/extract?`;
+    url += '?' + $.param(obj);
+    getRecipe(url,head);
+  })
+}
+
+
 
 module.exports = {
-  eventApi, db, wholeDb, authorization,
+  cardsEventApi,
+  db,
+  wholeDb,
+  authorization,
 };
 

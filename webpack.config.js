@@ -15,6 +15,7 @@ module.exports = {
     filename: 'bundle.js'
   },
   devtool: 'source-map',
+  devtool : "source-map",
   module: {
     rules: [
       {
@@ -67,6 +68,11 @@ module.exports = {
     new HtmlWebpackPlugin({
       filename: 'modal.html',
       template: 'src/modal.html',
+      inject: true
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'recipe.html',
+      template: 'src/recipe.html',
       inject: true
     }),
     new CleanWebpackPlugin(['dist'])
