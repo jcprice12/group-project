@@ -12,8 +12,8 @@ function getCard(title, servings, img, time, source) {
                  src="${img}"
                  alt="Card image cap"
                  style="width: 100%">
-            <div class="card-img-overlay flex-row justify-content-end" style="height: 100px">
-              <div class="heart" style="display: inline-block !important;">
+            <div class="card-img-overlay" >
+              <div class="heart">
                 <i class="fa fa-heart-o"></i>
               </div>
             </div>

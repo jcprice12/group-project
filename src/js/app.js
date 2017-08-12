@@ -3,6 +3,7 @@ import 'jquery';
 import 'tether'
 import 'bootstrap';
 import axios from 'axios';
+import page from 'page';
 var config = {
   apiKey: "AIzaSyAo2GM4PjdcCsGq-3detGaqYkG-C6r_4iw",
   authDomain: "project1-4f221.firebaseapp.com",
@@ -18,8 +19,22 @@ const wholeDb = firebase.database();
 import {cardsEventApi, passAuth} from './api.js';
 import {signIn, signUp, signOut, authStateChanged} from './userAuth.js';
 
+page('/test', test);
+page('/home', display);
+page();
 
-// 
+function friend() {
+  alert('not Found')
+}
+
+function display() {
+  $('.index').css('display', 'block');
+}
+
+function test() {
+  $('.index').css('display', 'none');
+}
+
 function callState() {
   axios.get('https://project1-4f221.firebaseio.com/state.json')
     .then((res) => {
@@ -44,7 +59,6 @@ function callState() {
     })
 }
 
-//call event api
 function init() {
   if (window.location.pathname == '/dashboard.html') {
     return;
@@ -61,9 +75,7 @@ function init() {
     authStateChanged(authorization, wholeDb);
   }
 }
-
 init();
-
 module.exports = {
   authorization,
   wholeDb
