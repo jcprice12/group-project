@@ -4,6 +4,16 @@ import {MyLoadAnimation1} from './MyLoadAnimation1.js';
 
 var authorization;
 
+/***** Collapse Animation ********/
+$(".collapse-menu").on("click", function(){
+  if ($(this).find(".plus-minus").text() === "(-)") {
+    $(this).find(".plus-minus").text("(+)")
+  }
+  else{
+    $(this).find(".plus-minus").text("(-)");
+  }
+})
+
 function passAuth(myAuth) {
   authorization = myAuth;
 }
