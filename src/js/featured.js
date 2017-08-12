@@ -72,4 +72,3 @@
 //     console.log(url);
 //     searchRecipes(url,head);
 // }
-

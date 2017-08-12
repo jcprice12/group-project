@@ -12,6 +12,8 @@
 }
 
 .card-columns {
+  display: none;
+  margin-top: 20px;
   @include media-breakpoint-only(xs) {
     column-count: 1;
   }
@@ -27,6 +29,14 @@
   @include media-breakpoint-only(md) {
     column-count: 2;
   }
+}
+
+#cardsLoadContainer{
+  position:relative;
+  margin-top: 20px;
+  width:100%;
+  height:300px;
+  display: none;
 }
 
 /***********************************
@@ -76,6 +86,9 @@ a:hover {
 /**********************************
 DASHBOARD
 **********************************/
+.blacktext{
+  color:#000;
+}
 
 .btn:hover{
   cursor: pointer;
@@ -101,16 +114,26 @@ DASHBOARD
   border-bottom: 1px  solid rgba(0, 0, 0, 0.125);
 }
 
-#userIdP {
+.userIdP {
+  margin-right: 10px;
   margin-top:5px;
   margin-right:10px;
   float:left;
-  color:#fff;
+  display: none;
 }
 
-#signInOutUpButtonsCont{
+.signInOutUpButtonsCont{
+  margin-left: 10px;
   position:relative;
 }
+
+.signInButton,
+.signOutButton,
+.signUpButton{
+  display: none;
+}
+
+
 .form-list {
   list-style:none;
   margin:0px;
@@ -123,6 +146,10 @@ DASHBOARD
 
 .featured-footer > div {
   display:inline-block;
+}
+
+.whiteText{
+  color:#fff;
 }
 
 /************************************
@@ -152,9 +179,61 @@ RECIPE CARDS
 /************************************
 RECIPE PROCEDURES
 ************************************/
+.recipe-container{
+  display: none;
+}
 
 .recipeInstructions{
   list-style: none;
+}
+
+/*********************************************************
+GOOGLE MAPS
+*********************************************************/
+
+#googleMapContainer{
+  position: relative;
+  left:0;
+  right:0;
+  margin-left: auto;
+  margin-right: auto;
+  width:100%;
+  height:500px;
+  background:#ccc;
+}
+
+#map {
+  position:absolute;
+  left:0;
+  right:0;
+  top:0;
+  bottom:0;
+  margin:auto;
+  height: 100%;
+  width:100%;
+}
+
+.placeContainer{
+  width:400px;
+  line-height: 2.0;
+}
+
+.placeNameContainer{
+  font-size: 150%;
+  font-weight: bold;
+  line-height: 2.0;
+}
+
+.placeAddress {
+  line-height: 2.0;
+}
+
+.placeOpenStatus {
+  line-height: 2.0;
+}
+
+.placeImage{
+  border-radius:4px;
 }
 
 .heart {
