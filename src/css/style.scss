@@ -173,3 +173,52 @@ RECIPE PROCEDURES
 .recipeInstructions{
   list-style: none;
 }
+
+/*********************************************************
+GOOGLE MAPS
+*********************************************************/
+
+#googleMapContainer{
+  position: relative;
+  left:0;
+  right:0;
+  margin-left: auto;
+  margin-right: auto;
+  width:100%;
+  height:500px;
+  background:#ccc;
+}
+
+#map {
+  position:absolute;
+  left:0;
+  right:0;
+  top:0;
+  bottom:0;
+  margin:auto;
+  height: 100%;
+  width:100%;
+}
+
+.placeContainer{
+  width:400px;
+  line-height: 2.0;
+}
+
+.placeNameContainer{
+  font-size: 150%;
+  font-weight: bold;
+  line-height: 2.0;
+}
+
+.placeAddress {
+  line-height: 2.0;
+}
+
+.placeOpenStatus {
+  line-height: 2.0;
+}
+
+.placeImage{
+  border-radius:4px;
+}

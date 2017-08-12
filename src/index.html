@@ -325,10 +325,29 @@
       <!--</form>-->
     <!--</div>-->
   <!--</div>-->
+
+  <div class="row mt-5">
+    <div class="col-md-12">
+      <div class="card dashboard-card">
+        <h4 class="card-header">
+          <p>Nearby Grocery Stores</p>
+          <button id="findStoresButton" class="btn btn-secondary" type="button">Refresh</button>
+        </h4>
+        <div class="card-block">
+          <div id="googleMapContainer">
+            <div id="map"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="card-columns"></div>
   <div id="cardsLoadContainer"></div>
 
 </div>
-
+<script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBggUAvADsZsmy3v3WrWv2HAb_DlSkdF7Y&libraries=places">
+</script>
 </body>
 </html>

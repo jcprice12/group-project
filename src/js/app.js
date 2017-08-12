@@ -5,6 +5,9 @@ import 'jquery';
 import 'tether'
 import 'bootstrap';
 import axios from 'axios';
+import {cardsEventApi, passAuth} from './api.js';
+import {signIn, signUp, signOut, authStateChanged} from './userAuth.js';
+import {initMap} from './googleMaps.js';
 
 var config = {
   apiKey: "AIzaSyAo2GM4PjdcCsGq-3detGaqYkG-C6r_4iw",
@@ -17,10 +20,6 @@ var config = {
 firebase.initializeApp(config);
 const authorization = firebase.auth();
 const wholeDb = firebase.database();
-
-import {cardsEventApi, passAuth} from './api.js';
-import {signIn, signUp, signOut, authStateChanged} from './userAuth.js';
-
 
 // 
 function callState() {
@@ -63,6 +62,7 @@ function init() {
     authStateChanged(authorization,wholeDb);
     callState();
   } else {
+    initMap();
     passAuth(authorization);
     cardsEventApi();
     signUp(authorization);

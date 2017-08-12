@@ -30,7 +30,6 @@ var file_id;
 function signUp(authorization){
 	$(".signUpSubmitButton").on("click", function(){
 		file_id = $(this).data("file-id");
-		console.log(file_id);
 		var email = $("#up-email-input-" + file_id).val();
 		var password = $("#up-password-input-" + file_id).val();
 		if(authorization.currentUser){
@@ -73,7 +72,6 @@ function authStateChanged(authorization, wholeDb){
 	authorization.onAuthStateChanged(function(myUser){
 		if(myUser){
 			var usersRef = wholeDb.ref("usersInformation/");
-			console.log("usersRef");
 			usersRef.once("value", function(snap){
 				if(!(snap.hasChild(myUser.uid))){
 					var userRef = wholeDb.ref("usersInformation").child(myUser.uid);
@@ -82,8 +80,7 @@ function authStateChanged(authorization, wholeDb){
 					});
 				}
 			});
-			console.log(myUser);
-			console.log(myUser.uid + " is signed in ");
+			console.log(myUser.email + " is signed in ");
 			if(modalInIsOpen){
 				clearUserInput();
 				$("#signInModal-" + file_id).modal("hide");
