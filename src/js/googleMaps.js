@@ -1,13 +1,16 @@
 var map;
 var storeInfoWindow;
 var myInfoWindow;
-var findStoresButton = document.getElementById("findStoresButton");
-findStoresButton.addEventListener("click", function(event){
-	initMap();
-});
+var findStoresButton;
 
 function initMap() {
 	if(navigator.geolocation){
+
+		findStoresButton = document.getElementById("findStoresButton");
+		findStoresButton.addEventListener("click", function(event){
+			initMap();
+		});
+
 		navigator.geolocation.getCurrentPosition(function(position) {
 
             var myPos = {

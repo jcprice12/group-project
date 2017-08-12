@@ -80,6 +80,7 @@ function authStateChanged(authorization, wholeDb){
 					});
 				}
 			});
+			console.log(myUser);
 			console.log(myUser.email + " is signed in ");
 			if(modalInIsOpen){
 				clearUserInput();

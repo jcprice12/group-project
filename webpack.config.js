@@ -60,16 +60,6 @@ module.exports = {
       filename: 'index.html',
       template: 'src/index.html'
     }),
-    new HtmlWebpackPlugin({
-      filename: 'dashboard.html',
-      template: 'src/dashboard.html',
-      inject: true
-    }),
-    new HtmlWebpackPlugin({
-      filename: 'recipe.html',
-      template: 'src/recipe.html',
-      inject: true
-    }),
     new CleanWebpackPlugin(['dist'])
   ]
 };

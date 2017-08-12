@@ -21,55 +21,15 @@ firebase.initializeApp(config);
 const authorization = firebase.auth();
 const wholeDb = firebase.database();
 
-// 
-function callState() {
-  axios.get('https://project1-4f221.firebaseio.com/state.json')
-    .then((res) => {
-      let recipe = res.data.directions;
-      console.log(recipe);
-      $('.recipe-container').html(recipe);
-      $('.recipeInstructions').addClass('mt-5');
-      $('.recipeInstructions ol').addClass('list-group');
-      $('.recipeInstructions ol li').addClass('list-group-item list-group-item-info justify-content-between');
-      return axios.get('https://project1-4f221.firebaseio.com/state/length.json')
-    })
-    .then((res) => {
-      let length = res.data;
-      console.log(res);
-      for (let i = 0; i < length; i++) {
-        let inner = $(`.list-group-item:nth-child(${i + 1})`).html();
-        $(`.list-group-item:nth-child(${i + 1})`).html('');
-        let p = `<p class="mb-0 col-10">${inner}</p>`;
-        p += `<span class="badge badge-success badge-pill">${i + 1}</span>`;
-        $(`.list-group-item:nth-child(${i + 1})`).html(p);
-      }
-    })
-}
-
 //initialize page
 function init() {
-  if (window.location.pathname == '/dashboard.html') {
-    signUp(authorization);
-    signIn(authorization);
-    signOut(authorization);
-    authStateChanged(authorization,wholeDb);
-    authStateChanged(authorization,wholeDb);
-  } else if (window.location.pathname == '/recipe.html') {
-    console.log(`You're in the ${window.location.pathname}`);
-    signUp(authorization);
-    signIn(authorization);
-    signOut(authorization);
-    authStateChanged(authorization,wholeDb);
-    callState();
-  } else {
-    initMap();
-    passAuth(authorization);
-    cardsEventApi();
-    signUp(authorization);
-    signIn(authorization);
-    signOut(authorization);
-    authStateChanged(authorization, wholeDb);
-  }
+  initMap();
+  passAuth(authorization);
+  cardsEventApi();
+  signUp(authorization);
+  signIn(authorization);
+  signOut(authorization);
+  authStateChanged(authorization, wholeDb);
 }
 
 init();

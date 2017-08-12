@@ -12,6 +12,7 @@
 }
 
 .card-columns {
+  display: none;
   margin-top: 20px;
   @include media-breakpoint-only(xs) {
     column-count: 1;
@@ -118,12 +119,21 @@ DASHBOARD
   margin-top:5px;
   margin-right:10px;
   float:left;
+  display: none;
 }
 
 .signInOutUpButtonsCont{
   margin-left: 10px;
   position:relative;
 }
+
+.signInButton,
+.signOutButton,
+.signUpButton{
+  display: none;
+}
+
+
 .form-list {
   list-style:none;
   margin:0px;
@@ -169,6 +179,9 @@ RECIPE CARDS
 /************************************
 RECIPE PROCEDURES
 ************************************/
+.recipe-container{
+  display: none;
+}
 
 .recipeInstructions{
   list-style: none;
