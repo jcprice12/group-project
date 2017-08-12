@@ -149,10 +149,10 @@
               &nbsp;-&nbsp;
               <input type="number" class="form-control" style="display:inline-block; width:45%" min="0" id="max-calories" aria-describedby="caloriesHelp" placeholder="Max">
             </div>
-            <div id="accordion2" role="tablist" aria-multiselectable="true">
+            <div id="accordion" role="tablist" aria-multiselectable="true">
               <div class="mb-2">
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                  Special Diet (+)
+                <a  class="collapse-menu" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                  Special Diet <span class="plus-minus">(+)</span>
                 </a>
               </div>
               <div id="collapseOne" class="collapse" role="tabpanel" aria-labelledby="headingOne">
@@ -204,12 +204,10 @@
 
                </div>
               </div>
-            </div>
-
-            <div id="accordion" role="tablist" aria-multiselectable="true">
+            
               <div class="mb-2">
-                <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                  Dietary Restrictions (+)
+                <a class="collapsed collapse-menu" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                  Dietary Restrictions <span class="plus-minus">(+)</span>
                 </a>
               </div>
               <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
