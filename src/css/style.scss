@@ -165,6 +165,10 @@ RECIPE CARDS
   padding-top: 0.5rem;
 }
 
+.card-recipe:hover {
+  cursor:pointer;
+}
+
 .card-footer i{
   color: $main;
 }
