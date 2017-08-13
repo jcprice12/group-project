@@ -163,10 +163,6 @@ MyLoadAnimation1.prototype.startAnimation = function(current, stop){
  END Load Animation Prototype
 ********************************************************************************************************************************************/
 
-//var elementsToAnimate = [document.getElementById("circle1"), document.getElementById("circle2"), document.getElementById("circle3"), document.getElementById("circle4")];
-//var loadAnimation1 = new MyLoadAnimation1(document.getElementById("mainContent"),75,12,4,["#2ECC71","#fdcb4e","#ff6876","#666ffd",]);
-//loadAnimation1.startAll();
-
 module.exports = {
   MyLoadAnimation1,
 };

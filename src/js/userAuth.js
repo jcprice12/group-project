@@ -71,12 +71,12 @@ function signOut(authorization){
 function authStateChanged(authorization, wholeDb){
 	authorization.onAuthStateChanged(function(myUser){
 		if(myUser){
-			var usersRef = wholeDb.ref("usersInformation/");
+			var usersRef = wholeDb.ref("usersInfo/");
 			usersRef.once("value", function(snap){
 				if(!(snap.hasChild(myUser.uid))){
-					var userRef = wholeDb.ref("usersInformation").child(myUser.uid);
+					var userRef = wholeDb.ref("usersInfo").child(myUser.uid);
 					userRef.set({
-						mostRecentRecipe: true,
+						state: {length:4},
 					});
 				}
 			});

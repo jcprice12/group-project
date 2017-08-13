@@ -21,14 +21,14 @@ function passAuth(myAuth) {
 function callState() {
   //you will need to get the auth token of the user and pass it in as part of the get URL for axios
   authorization.currentUser.getIdToken(true).then(function(idToken){
-    axios.get('https://project1-4f221.firebaseio.com/state.json?auth=' + idToken).then((res) => {
+    axios.get('https://project1-4f221.firebaseio.com/usersInfo/' + authorization.currentUser.uid + '/state.json?auth=' + idToken).then((res) => {
       let recipe = res.data.directions;
       console.log(recipe);
       $('.recipe-container').html(recipe);
       $('.recipeInstructions').addClass('mt-5');
       $('.recipeInstructions ol').addClass('list-group');
       $('.recipeInstructions ol li').addClass('list-group-item list-group-item-info justify-content-between');
-      return axios.get('https://project1-4f221.firebaseio.com/state/length.json?auth=' + idToken);//same here, you need the auth token
+      return axios.get('https://project1-4f221.firebaseio.com/usersInfo/' + authorization.currentUser.uid + '/state/length.json?auth=' + idToken);//same here, you need the auth token
     }).then((res) => {
       let length = res.data;
       console.log(res);
@@ -103,6 +103,7 @@ function cardsEventApi(){
 }
 
 function searchRecipes(url, config) {
+  $('.card-columns').html("");
   var parentContainer = document.getElementById("cardsLoadContainer");
   $(parentContainer).css("display", "block");
   var loadAnimation1 = new MyLoadAnimation1(parentContainer,75,12,4,["#2ECC71","#fdcb4e","#ff6876","#666ffd"]);
@@ -154,7 +155,7 @@ function getRecipe(url, config, state) {
 function recipeEventApi() {
   $('my-card').on('click', function () {
       if (authorization.currentUser) {
-        const state = firebase.database().ref(`usersInfo/state/${authorization.currentUser.uid}`);
+        const state = firebase.database().ref(`usersInfo/${authorization.currentUser.uid}/state/`);
         let sourceUrl = this.url;
         let head = {
           headers: {"X-Mashape-Key": "VftGeJE2qimshoNc94fZxoUiEp04p154Astjsn7Kuggh3FXLVw"}
