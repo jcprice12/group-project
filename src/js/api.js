@@ -116,10 +116,11 @@ function cardsEventApi(){
 }
 
 function searchRecipes(url, config) {
+  $('.recipe-container').html("");
   $('.card-columns').html("");
   var parentContainer = document.getElementById("cardsLoadContainer");
   $(parentContainer).css("display", "block");
-  var loadAnimation1 = new MyLoadAnimation1(parentContainer,75,12,4,["#2ECC71","#fdcb4e","#ff6876","#666ffd"]);
+  var loadAnimation1 = new MyLoadAnimation1(parentContainer,75,12,4,["#b7cb39","#f76f4d"]);
   axios.get(url, config)
     .then((res) => {
       let arr = res.data.results;
