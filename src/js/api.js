@@ -151,7 +151,54 @@ function searchRecipes(url, config) {
       $('.card-columns').html(html);
       $(".card-columns").css("display", "block");
       recipeEventApi();
-    });
+
+      var db = firebase.database();
+      var top50Ref = db.ref("/top50Recipes");
+
+      var top50Arr = [];
+       // Get top 50 array from Firebase
+      top50Ref.once("value", function(snap) {
+        function getTop50Arr() { 
+          if (snap.exists()) {
+            top50Arr = snap.val().recipesArray
+            return top50Arr;
+        } else {
+          console.log("I hate Firebase")
+          }
+        }
+        getTop50Arr();
+        // Merge arrays, delete duplicates (.unique())
+        if (typeof top50Arr !== "undefined"){
+          var allRecipes = recipes.concat(top50Arr).unique();
+         }
+
+        // Sort recipes high to low
+        allRecipes.sort(function(a, b){
+          if (a.aggregateLikes > b.aggregateLikes) {
+            return -1;
+          } else if (a.aggregateLikes < b.aggregateLikes) {
+            return 1;
+          } else {
+            return 0;
+          }
+        });
+
+        // Trim to only the top 50
+        allRecipes = allRecipes.slice(0, 50);
+        console.log(allRecipes);
+
+        // Set new top 50 array in Firebase
+        top50Ref.transaction(function(current) {
+          if (current !== null) {
+            current.recipesArray = allRecipes;
+            return current;
+          } else {
+            return 0;
+          }
+        }); // end transaction
+
+       }); // end top50Ref.once() 
+    }); // end axios.get().then()
   loadAnimation1.startAll();
 }
 
@@ -223,6 +270,18 @@ function recipeEventApi() {
     }
   )
 }
+
+// Delete duplicates while merging arrays
+Array.prototype.unique = function() {
+    var a = this.concat();
+    for(var i=0; i<a.length; ++i) {
+        for(var j=i+1; j<a.length; ++j) {
+            if(a[i].id === a[j].id)
+                a.splice(j--, 1);
+        }
+    }
+    return a;
+};
 
 module.exports = {
   cardsEventApi, passAuth
