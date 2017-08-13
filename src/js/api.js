@@ -160,18 +160,21 @@ function searchRecipes(url, config) {
       top50Ref.once("value", function(snap) {
         function getTop50Arr() { 
           if (snap.exists()) {
-            top50Arr = snap.val().recipesArray
+            top50Arr = snap.val().recipesArray;
             return top50Arr;
-        } else {
-          console.log("I hate Firebase")
+          } else {
+            console.log("I hate Firebase")
           }
         }
         getTop50Arr();
-        // Merge arrays, delete duplicates (.unique())
-        if (typeof top50Arr !== "undefined"){
-          var allRecipes = recipes.concat(top50Arr).unique();
-         }
 
+        // Merge arrays, delete duplicates (.unique())
+        var allRecipes = [];
+        if (typeof top50Arr !== "undefined"){
+          allRecipes = arr.concat(top50Arr).unique();// you were doing this: "recipes.concat(top50Arr).unique()"; recipes was never initialized, 'arr' has all the data from the api call
+        }
+
+        console.log(allRecipes);
         // Sort recipes high to low
         allRecipes.sort(function(a, b){
           if (a.aggregateLikes > b.aggregateLikes) {
@@ -188,12 +191,18 @@ function searchRecipes(url, config) {
         console.log(allRecipes);
 
         // Set new top 50 array in Firebase
+        // you need to use transaction to read AND write. You've already read the
+        //array from the DB outside of a transaction, so now when you use transaction to set the array of 50 recipes
+        //it's like you're using the set({~(^-^)~}) method.
         top50Ref.transaction(function(current) {
           if (current !== null) {
             current.recipesArray = allRecipes;
             return current;
           } else {
-            return 0;
+            //because current was null, we need to set it to an object with "recipesArray" as a key in it. Set recipes array to allRecipes
+            //if you just return current, you're always going to have 'null' as the value for the array in the DB bevause you never set it
+            current = {recipesArray: allRecipes};
+            return current;
           }
         }); // end transaction
 
