@@ -76,7 +76,7 @@ function authStateChanged(authorization, wholeDb){
 				if(!(snap.hasChild(myUser.uid))){
 					var userRef = wholeDb.ref("usersInfo").child(myUser.uid);
 					userRef.set({
-						state: {length:4},
+						state: {length:0},
 					});
 				}
 			});

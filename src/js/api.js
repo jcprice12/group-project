@@ -18,32 +18,45 @@ function passAuth(myAuth) {
   authorization = myAuth;
 }
 
+function showRecipe(recipe,length){
+  console.log("recipe html string is:");
+  console.log(recipe);
+  $('.recipe-container').html(recipe);
+  $('.recipeInstructions').addClass('mt-5');
+  $('.recipeInstructions ol').addClass('list-group');
+  $('.recipeInstructions ol li').addClass('list-group-item list-group-item-info justify-content-between');
+
+  for (let i = 0; i < length; i++) {
+    let item = $(`.list-group-item:nth-child(${i + 1})`);
+    let inner = item.html();
+    item.html('');
+    let p = `<p class="mb-0 col-10">${inner}</p>`;
+    p += `<span class="badge badge-success badge-pill">${i + 1}</span>`;
+    item.html(p);
+  }
+  $(".card-columns").css("display", "none");
+  $(".recipe-container").css("display", "block");
+}
+
 function callState() {
-  //you will need to get the auth token of the user and pass it in as part of the get URL for axios
-  authorization.currentUser.getIdToken(true).then(function(idToken){
-    axios.get('https://project1-4f221.firebaseio.com/usersInfo/' + authorization.currentUser.uid + '/state.json?auth=' + idToken).then((res) => {
-      let recipe = res.data.directions;
-      console.log(recipe);
-      $('.recipe-container').html(recipe);
-      $('.recipeInstructions').addClass('mt-5');
-      $('.recipeInstructions ol').addClass('list-group');
-      $('.recipeInstructions ol li').addClass('list-group-item list-group-item-info justify-content-between');
-      return axios.get('https://project1-4f221.firebaseio.com/usersInfo/' + authorization.currentUser.uid + '/state/length.json?auth=' + idToken);//same here, you need the auth token
-    }).then((res) => {
-      let length = res.data;
-      console.log(res);
-      for (let i = 0; i < length; i++) {
-        let item = $(`.list-group-item:nth-child(${i + 1})`);
-        let inner = item.html();
-        item.html('');
-        let p = `<p class="mb-0 col-10">${inner}</p>`;
-        p += `<span class="badge badge-success badge-pill">${i + 1}</span>`;
-        item.html(p);
-      }
-      $(".card-columns").css("display", "none");
-      $(".recipe-container").css("display", "block");
+  if(authorization.currentUser){
+    //you will need to get the auth token of the user and pass it in as part of the get URL for axios
+    authorization.currentUser.getIdToken(true).then(function(idToken){
+      let recipe;
+      axios.get('https://project1-4f221.firebaseio.com/usersInfo/' + authorization.currentUser.uid + '/state.json?auth=' + idToken).then((res) => {
+        recipe = res.data.directions;
+        console.log(recipe);
+        return axios.get('https://project1-4f221.firebaseio.com/usersInfo/' + authorization.currentUser.uid + '/state/length.json?auth=' + idToken);//same here, you need the auth token
+      }).then((res) => {
+        let length = res.data;
+        console.log(res);
+        showRecipe(recipe,length);
+      });
     });
-  });
+  } else {
+    var recentRecipe = JSON.parse(localStorage.getItem('MostRecentRecipe'));
+    showRecipe(recentRecipe.directions, recentRecipe.length);
+  }
 }
 
 function getCard(title, servings, time, img, url) {
@@ -132,6 +145,22 @@ function searchRecipes(url, config) {
   loadAnimation1.startAll();
 }
 
+function getRecipeWithLocalStorage(url,config){
+  axios.get(url, config)
+    .then((res) => {
+      let tempState = {};
+      let str = res.data.instructions;
+      str = str.replace(/[\uE000-\uF8FF]/g, '');
+      console.log($(str).find('li').length);
+      console.log(str);
+      tempState.length = $(str).find('li').length;
+      tempState.directions = str;
+      var objectString = JSON.stringify(tempState);
+      localStorage.setItem("MostRecentRecipe", objectString);
+      callState();
+    });
+}
+
 function getRecipe(url, config, state) {
   axios.get(url, config)
     .then((res) => {
@@ -142,6 +171,8 @@ function getRecipe(url, config, state) {
       console.log(str);
       tempState.length = $(str).find('li').length;
       tempState.directions = str;
+      var objectString = JSON.stringify(tempState);
+      localStorage.setItem("MostRecentRecipe", objectString);
       state.set(tempState, function(error){
         if(error){
           console.log(error.code);
@@ -154,19 +185,21 @@ function getRecipe(url, config, state) {
 
 function recipeEventApi() {
   $('my-card').on('click', function () {
+      let sourceUrl = this.url;
+      let head = {
+        headers: {"X-Mashape-Key": "VftGeJE2qimshoNc94fZxoUiEp04p154Astjsn7Kuggh3FXLVw"}
+      };
+      let obj = {
+        'forceExtraction': false,
+        url: sourceUrl
+      };
+      let url = `https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/extract?`;
+      url += $.param(obj);
       if (authorization.currentUser) {
         const state = firebase.database().ref(`usersInfo/${authorization.currentUser.uid}/state/`);
-        let sourceUrl = this.url;
-        let head = {
-          headers: {"X-Mashape-Key": "VftGeJE2qimshoNc94fZxoUiEp04p154Astjsn7Kuggh3FXLVw"}
-        };
-        let obj = {
-          'forceExtraction': false,
-          url: sourceUrl
-        };
-        let url = `https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/extract?`;
-        url += $.param(obj);
         getRecipe(url, head, state);
+      } else {
+        getRecipeWithLocalStorage(url,head);
       }
     }
   )
