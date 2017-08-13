@@ -1,6 +1,6 @@
 import '../css/style.scss';
 import 'jquery';
-import 'tether'
+import 'tether';
 import 'bootstrap';
 import axios from 'axios';
 import {cardsEventApi, passAuth} from './api.js';

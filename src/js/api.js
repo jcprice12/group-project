@@ -12,7 +12,7 @@ $(".collapse-menu").on("click", function(){
   else{
     $(this).find(".plus-minus").text("(-)");
   }
-})
+});
 
 function passAuth(myAuth) {
   authorization = myAuth;
@@ -33,11 +33,12 @@ function callState() {
       let length = res.data;
       console.log(res);
       for (let i = 0; i < length; i++) {
-        let inner = $(`.list-group-item:nth-child(${i + 1})`).html();
-        $(`.list-group-item:nth-child(${i + 1})`).html('');
+        let item = $(`.list-group-item:nth-child(${i + 1})`);
+        let inner = item.html();
+        item.html('');
         let p = `<p class="mb-0 col-10">${inner}</p>`;
         p += `<span class="badge badge-success badge-pill">${i + 1}</span>`;
-        $(`.list-group-item:nth-child(${i + 1})`).html(p);
+        item.html(p);
       }
       $(".card-columns").css("display", "none");
       $(".recipe-container").css("display", "block");
@@ -45,38 +46,16 @@ function callState() {
   });
 }
 
-function getCard(title, servings, img, time, source) {
-  let card = `<div id="${source}" class="card card-recipe">
-            <img class="card-img-top img-fluid"
-                 src="${img}"
-                 alt="Card image cap"
-                 style="width: 100%">
-            <div class="card-img-overlay" >
-              <div class="heart">
-                <i class="fa fa-heart-o"></i>
-              </div>
-            </div>
-            <div class="card-block">
-              <h4 class="card-title">${title}</h4>
-              <i class="fa fa-star"></i>
-              <i class="fa fa-star"></i>
-              <i class="fa fa-star"></i>
-              <i class="fa fa-star"></i>
-              <i class="fa fa-star-half"></i>
-            </div>
-            <div class="card-footer">
-              <div class="footer-icons d-flex flex-row justify-content-start">
-                <div class="card-cooktime mr-3 mr-sm-1 ">
-                  <i class="fa fa-clock-o"></i>
-                  <span class="icon-text"><small>${time} m</small></span>
-                </div>
-                <div class="card-yield mr-3 mr-sm-1 ">
-                  <i class="fa fa-pie-chart"></i>
-                  <span class="icon-text"><small>${servings} servings</small></span>
-                </div>
-              </div>
-            </div>
-          </div>`;
+function getCard(title, servings, time, img, url) {
+  let card = `
+    <my-card
+      url="${url}"
+      source="${img}"
+      title="${title}"
+      time="${time}"
+      servings="${servings}"    
+    ></my-card>
+`;
   return card;
 }
 
@@ -126,7 +105,7 @@ function cardsEventApi(){
 function searchRecipes(url, config) {
   var parentContainer = document.getElementById("cardsLoadContainer");
   $(parentContainer).css("display", "block");
-  var loadAnimation1 = new MyLoadAnimation1(parentContainer,75,12,4,["#2ECC71","#fdcb4e","#ff6876","#666ffd",]);
+  var loadAnimation1 = new MyLoadAnimation1(parentContainer,75,12,4,["#2ECC71","#fdcb4e","#ff6876","#666ffd"]);
   axios.get(url, config)
     .then((res) => {
       let arr = res.data.results;
@@ -135,12 +114,12 @@ function searchRecipes(url, config) {
       arr.forEach((recipe) => {
         if (recipe.aggregateLikes > 100) {
           console.log(recipe);
-          let source = recipe.sourceUrl ? recipe.sourceUrl : 'none';
+          let url = recipe.sourceUrl ? recipe.sourceUrl : 'none';
           let img = recipe.image;
           let title = recipe.title;
           let servings = recipe.servings;
           let time = recipe.preparationMinutes;
-          html += getCard(title, servings, img, time, source);
+          html += getCard(title, servings, time, img, url);
         }
       });
       $(parentContainer).css("display", "none");
@@ -173,10 +152,10 @@ function getRecipe(url, config, state) {
 }
 
 function recipeEventApi() {
-  $('.card-recipe').on('click', function () {
+  $('my-card').on('click', function () {
       if (authorization.currentUser) {
         const state = firebase.database().ref(`usersInfo/state/${authorization.currentUser.uid}`);
-        let sourceUrl = $(this).attr('id');
+        let sourceUrl = this.url;
         let head = {
           headers: {"X-Mashape-Key": "VftGeJE2qimshoNc94fZxoUiEp04p154Astjsn7Kuggh3FXLVw"}
         };
@@ -185,7 +164,7 @@ function recipeEventApi() {
           url: sourceUrl
         };
         let url = `https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/extract?`;
-        url += '?' + $.param(obj);
+        url += $.param(obj);
         getRecipe(url, head, state);
       }
     }
