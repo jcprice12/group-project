@@ -1,0 +1,92 @@
+Below is a database structure that I think will fit our needs. Please let me know if this works for you.
+I think we can do everything we set out to do at the beginning of our project with a structure like this.
+In the example below, I use terms such as "recipeKey3." The keys I am referring to will be the keys created
+by firebase when you use somehting like the "push" method. They won't be nicely formatted and will look something
+like: "4HDIJEj6weOSwQLtL3vom6Iemp33". The user keys will be the "uid" of users that have signed up in our application
+You can get the uid of the current user in JavaScript like so: "firebase.auth().currentUser.uid"
+
+root{
+
+	//@Annalisa: the popular recipes value is your thing so structure it however you want. However, I think it would be
+	//cool to have a structure like this:
+
+	popularRecipes : [recipeKey456, recipeKey123, recipeKey789, ... , recipeKey777]
+						0-index			1-index		2-index					50-index
+
+	//the first index corresponds to the recipe in recipes/ with the most 'aggregateLikesFromApi' and descends from there
+	//whatever you plan to do, let Pat and I know so we're all on the same page.
+
+	userRecipes{
+		userKey1 { //corresponds to the uid of a user defined by firebase.auth()
+			recipeKey1 : true //corresponds to the recipe key in recipes/
+
+			recipeKey6 : true // I have specified the value of this child as 'true'. The value can be anything, as long ass it's not null.
+
+			recipeKey24 : true
+
+		},
+
+		userKey2 {
+
+		},
+
+		.
+		.
+		.
+
+		userKeyN {
+
+		},
+	}
+
+	recipes{
+		recipeKey1 {
+
+			//recipe information goes here. can be something like:
+			numberOfFavorites: number,// every time someone clicks "like" for this recipe, this number goes up (can add in later if time allows)
+			rating: number,
+			title: nameOfRecipe,
+			ingredients: array of ingredients,
+			image: imageUrl,
+			directions: htmlString,
+			aggregateLikesFromApi: number
+
+			//can also just be the object returned by the API call, I'm not as familiar with the API as you guys
+		}
+
+		recipeKey2 {
+
+		},
+
+		.
+		.
+		.
+
+		recipeKeyN {
+
+		},
+	}
+
+	usersInfo{
+		userKey1 { //corresponds to the uid of a user defined by firebase.auth()
+			state{
+				length : number,
+				directions : "html string containing ordered list of directions",
+			},
+		},
+
+		userKey2 {
+
+		},
+
+		.
+		.
+		.
+
+		userKeyN {
+
+		},
+
+	}
+
+}
