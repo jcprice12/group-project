@@ -99,6 +99,7 @@ function authStateChanged(authorization, wholeDb){
 			$(".signOutButton").css("display","inline-block");
 			$(".signInButton").css("display","none");
 			$(".signUpButton").css("display","none");
+			$("#getMyRecipesButton").css("display", "inline-block");
 		} else {
 			console.log("a user is not logged in");
 			$(".userIdP").css("display", "none");
@@ -106,6 +107,7 @@ function authStateChanged(authorization, wholeDb){
 			$(".signOutButton").css("display","none");
 			$(".signInButton").css("display","inline-block");
 			$(".signUpButton").css("display","inline-block");
+			$("#getMyRecipesButton").css("display", "none");
 		}
 	});
 }

@@ -6,6 +6,7 @@ import axios from 'axios';
 import {cardsEventApi, passAuth} from './api.js';
 import {signIn, signUp, signOut, authStateChanged} from './userAuth.js';
 import {initMap} from './googleMaps.js';
+import {getMyRecipes} from './browseMyRecipes.js';
 
 var config = {
   apiKey: "AIzaSyAo2GM4PjdcCsGq-3detGaqYkG-C6r_4iw",
@@ -28,6 +29,7 @@ function init() {
   signIn(authorization);
   signOut(authorization);
   authStateChanged(authorization, wholeDb);
+  getMyRecipes();
 }
 
 init();
