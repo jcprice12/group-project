@@ -1,9 +1,11 @@
+/*
 Below is a database structure that I think will fit our needs. Please let me know if this works for you.
 I think we can do everything we set out to do at the beginning of our project with a structure like this.
-In the example below, I use terms such as "recipeKey3." The keys I am referring to will be the keys created
-by firebase when you use somehting like the "push" method. They won't be nicely formatted and will look something
+In the example below, I use terms such as "recipeKey3." The keys I am referring to will be the ids of the
+recipes returned back from the spoonacular api. They won't be nicely formatted and will look something
 like: "4HDIJEj6weOSwQLtL3vom6Iemp33". The user keys will be the "uid" of users that have signed up in our application
 You can get the uid of the current user in JavaScript like so: "firebase.auth().currentUser.uid"
+*/
 
 root{
 
@@ -20,7 +22,7 @@ root{
 		userKey1 { //corresponds to the uid of a user defined by firebase.auth()
 			recipeKey1 : true //corresponds to the recipe key in recipes/
 
-			recipeKey6 : true // I have specified the value of this child as 'true'. The value can be anything, as long ass it's not null.
+			recipeKey6 : true // I have specified the value of this child as 'true'. The value can be anything, as long as it's not null.
 
 			recipeKey24 : true
 
@@ -42,16 +44,15 @@ root{
 	recipes{
 		recipeKey1 {
 
-			//recipe information goes here. can be something like:
-			numberOfFavorites: number,// every time someone clicks "like" for this recipe, this number goes up (can add in later if time allows)
-			rating: number,
-			title: nameOfRecipe,
-			ingredients: array of ingredients,
-			image: imageUrl,
-			directions: htmlString,
-			aggregateLikesFromApi: number
-
-			//can also just be the object returned by the API call, I'm not as familiar with the API as you guys
+			//recipe information goes here. Can just be the object returned by the API call.
+			//you'll have recipe information such as:
+			aggregateLikes: Number,
+			title: String,
+			id: id (will be the same value as the recipe key),
+			sourceUrl: url of the source recipe
+			.
+			.
+			.			
 		}
 
 		recipeKey2 {
