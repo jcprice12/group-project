@@ -6,6 +6,7 @@ class Card extends HTMLElement {
     this._servings = '';
     this._title = '';
     this._url = '';
+    this._recipeId = '';
   }
   get source(){
     return this._source;
@@ -22,15 +23,19 @@ class Card extends HTMLElement {
   get url(){
     return this._url;
   }
+  get recipeId(){
+    return this._recipeId;
+  }
   connectedCallback() {
     this._source = this.getAttribute('source');
     this._time = this.getAttribute('time');
     this._servings = this.getAttribute('servings');
     this._title = this.getAttribute('title');
     this._url = this.getAttribute('url');
+    this._recipeId = this.getAttribute('recipeId')
     let template =
       `
-        <div class="card card-recipe">
+        <div data-recipeId="${this.recipeId}" class="card card-recipe">
           <img class="card-img-top img-fluid"
                src="${this.source}"
                alt="Card image cap"

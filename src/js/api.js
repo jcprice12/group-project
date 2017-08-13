@@ -45,11 +45,9 @@ function callState() {
       let recipe;
       axios.get('https://project1-4f221.firebaseio.com/usersInfo/' + authorization.currentUser.uid + '/state.json?auth=' + idToken).then((res) => {
         recipe = res.data.directions;
-        console.log(recipe);
         return axios.get('https://project1-4f221.firebaseio.com/usersInfo/' + authorization.currentUser.uid + '/state/length.json?auth=' + idToken);//same here, you need the auth token
       }).then((res) => {
         let length = res.data;
-        console.log(res);
         showRecipe(recipe,length);
       });
     });
@@ -59,14 +57,15 @@ function callState() {
   }
 }
 
-function getCard(title, servings, time, img, url) {
+function getCard(title, servings, time, img, url, recipeId) {
   let card = `
     <my-card
       url="${url}"
       source="${img}"
       title="${title}"
       time="${time}"
-      servings="${servings}"    
+      servings="${servings}"
+      recipeId="${recipeId}"    
     ></my-card>
 `;
   return card;
@@ -124,7 +123,6 @@ function searchRecipes(url, config) {
   axios.get(url, config)
     .then((res) => {
       let arr = res.data.results;
-      console.log(arr);
       let recipes = [];
       let html = '';
       arr.forEach((recipe) => {
@@ -137,13 +135,13 @@ function searchRecipes(url, config) {
               console.log("recipe has been stored in firebase with key: " + recipe.id);
             }
           });
-          console.log(recipe);
           let url = recipe.sourceUrl ? recipe.sourceUrl : 'none';
           let img = recipe.image;
           let title = recipe.title;
           let servings = recipe.servings;
           let time = recipe.preparationMinutes;
-          html += getCard(title, servings, time, img, url);
+          let recipeId = recipe.id;
+          html += getCard(title, servings, time, img, url, recipeId);
         }
       });
       $(parentContainer).css("display", "none");
@@ -161,8 +159,6 @@ function getRecipeWithLocalStorage(url,config){
       let tempState = {};
       let str = res.data.instructions;
       str = str.replace(/[\uE000-\uF8FF]/g, '');
-      console.log($(str).find('li').length);
-      console.log(str);
       tempState.length = $(str).find('li').length;
       tempState.directions = str;
       var objectString = JSON.stringify(tempState);
@@ -171,31 +167,42 @@ function getRecipeWithLocalStorage(url,config){
     });
 }
 
-function getRecipe(url, config, state) {
+function getRecipe(url, config, state, recipeId) {
+
   axios.get(url, config)
     .then((res) => {
       let tempState = {};
       let str = res.data.instructions;
       str = str.replace(/[\uE000-\uF8FF]/g, '');
-      console.log($(str).find('li').length);
-      console.log(str);
       tempState.length = $(str).find('li').length;
       tempState.directions = str;
+
+      var recipePath = "recipes/" + recipeId;
+
       var objectString = JSON.stringify(tempState);
       localStorage.setItem("MostRecentRecipe", objectString);
-      state.set(tempState, function(error){
-        if(error){
-          console.log(error.code);
-        } else {
-          callState();
-        }
+
+      var statePath = state.path.ct.join('/');
+      var updates = {};
+      updates[statePath] = tempState;
+      updates[recipePath + "/length"] = tempState.length;
+      updates[recipePath + "/directions"] = tempState.directions;
+
+      firebase.database().ref().update(updates).then(function(){
+        callState();
+      }).catch(function(val){
+        console.log("Error updating database under " + recipePath + " and " + statePath);
       });
+
+
     });
 }
 
 function recipeEventApi() {
   $('my-card').on('click', function () {
       let sourceUrl = this.url;
+      let myId = this.recipeId;
+      console.log("myId: " + myId);
       let head = {
         headers: {"X-Mashape-Key": "VftGeJE2qimshoNc94fZxoUiEp04p154Astjsn7Kuggh3FXLVw"}
       };
@@ -207,7 +214,7 @@ function recipeEventApi() {
       url += $.param(obj);
       if (authorization.currentUser) {
         const state = firebase.database().ref(`usersInfo/${authorization.currentUser.uid}/state/`);
-        getRecipe(url, head, state);
+        getRecipe(url, head, state, myId);
       } else {
         getRecipeWithLocalStorage(url,head);
       }
