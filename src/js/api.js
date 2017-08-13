@@ -151,7 +151,63 @@ function searchRecipes(url, config) {
       $('.card-columns').html(html);
       $(".card-columns").css("display", "block");
       recipeEventApi();
-    });
+
+      var db = firebase.database();
+      var top50Ref = db.ref("/top50Recipes");
+
+      var top50Arr = [];
+       // Get top 50 array from Firebase
+      top50Ref.once("value", function(snap) {
+        function getTop50Arr() { 
+          if (snap.exists()) {
+            top50Arr = snap.val().recipesArray;
+            return top50Arr;
+          } else {
+            console.log("I hate Firebase")
+          }
+        }
+        getTop50Arr();
+
+        // Merge arrays, delete duplicates (.unique())
+        var allRecipes = [];
+        if (typeof top50Arr !== "undefined"){
+          allRecipes = arr.concat(top50Arr).unique();// you were doing this: "recipes.concat(top50Arr).unique()"; recipes was never initialized, 'arr' has all the data from the api call
+        }
+
+        console.log(allRecipes);
+        // Sort recipes high to low
+        allRecipes.sort(function(a, b){
+          if (a.aggregateLikes > b.aggregateLikes) {
+            return -1;
+          } else if (a.aggregateLikes < b.aggregateLikes) {
+            return 1;
+          } else {
+            return 0;
+          }
+        });
+
+        // Trim to only the top 50
+        allRecipes = allRecipes.slice(0, 50);
+        console.log(allRecipes);
+
+        // Set new top 50 array in Firebase
+        // you need to use transaction to read AND write. You've already read the
+        //array from the DB outside of a transaction, so now when you use transaction to set the array of 50 recipes
+        //it's like you're using the set({~(^-^)~}) method.
+        top50Ref.transaction(function(current) {
+          if (current !== null) {
+            current.recipesArray = allRecipes;
+            return current;
+          } else {
+            //because current was null, we need to set it to an object with "recipesArray" as a key in it. Set recipes array to allRecipes
+            //if you just return current, you're always going to have 'null' as the value for the array in the DB bevause you never set it
+            current = {recipesArray: allRecipes};
+            return current;
+          }
+        }); // end transaction
+
+       }); // end top50Ref.once() 
+    }); // end axios.get().then()
   loadAnimation1.startAll();
 }
 
@@ -223,6 +279,18 @@ function recipeEventApi() {
     }
   )
 }
+
+// Delete duplicates while merging arrays
+Array.prototype.unique = function() {
+    var a = this.concat();
+    for(var i=0; i<a.length; ++i) {
+        for(var j=i+1; j<a.length; ++j) {
+            if(a[i].id === a[j].id)
+                a.splice(j--, 1);
+        }
+    }
+    return a;
+};
 
 module.exports = {
   cardsEventApi, passAuth
