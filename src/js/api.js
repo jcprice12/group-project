@@ -124,10 +124,19 @@ function searchRecipes(url, config) {
   axios.get(url, config)
     .then((res) => {
       let arr = res.data.results;
+      console.log(arr);
       let recipes = [];
       let html = '';
       arr.forEach((recipe) => {
         if (recipe.aggregateLikes > 100) {
+          firebase.database().ref("recipes/" + recipe.id).set(recipe, function(error){
+            if(error){
+              console.log(error.code);
+              console.log(error.message);
+            } else {
+              console.log("recipe has been stored in firebase with key: " + recipe.id);
+            }
+          });
           console.log(recipe);
           let url = recipe.sourceUrl ? recipe.sourceUrl : 'none';
           let img = recipe.image;
