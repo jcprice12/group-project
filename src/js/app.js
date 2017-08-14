@@ -6,7 +6,6 @@ import axios from 'axios';
 import {cardsEventApi, passAuth} from './api.js';
 import {signIn, signUp, signOut, authStateChanged} from './userAuth.js';
 import {initMap} from './googleMaps.js';
-import {RecipeForm} from './components/RecipeSearch.js'
 
 var config = {
   apiKey: "AIzaSyAo2GM4PjdcCsGq-3detGaqYkG-C6r_4iw",
@@ -30,18 +29,7 @@ function init() {
   signOut(authorization);
   authStateChanged(authorization, wholeDb);
 }
-
 init();
-
-$(function () {
-  $('[data-toggle="popover"]').popover({
-    html: true,
-    content: RecipeForm,
-    title: `Search`
-  })
-});
-
-
 module.exports = {
   authorization,
   wholeDb
