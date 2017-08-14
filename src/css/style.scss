@@ -92,14 +92,23 @@ nav  {
   font-size: 24px;
 }
 
-.navbar-toggler-icon {
-  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(247, 111, 77, 1.0)' stroke-width='1' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E")
-  !important;
+.sm-btn{
+  border-bottom-left-radius: 4px !important;
+  border-top-left-radius: 4px !important;
 }
 
-.navbar-toggler, .navbar-toggler:focus {
-  border: none !important;
-  outline: none !important;
+.navbar-toggler-icon, navbar-toggler-icon:hover {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(247, 111, 77, 1.0)' stroke-width='1' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E")
+  !important;
+  cursor: pointer;
+}
+
+.nav-dropdown {
+  color: $secondary;
+}
+
+.list-group-item:hover {
+  cursor: pointer;
 }
 
 #signInButtonIndex, #signOutButtonIndex, #signUpButtonIndex {
@@ -154,25 +163,14 @@ DASHBOARD
   border-bottom: 1px  solid rgba(0, 0, 0, 0.125);
 }
 
-.userIdP {
-  margin-right: 10px;
-  margin-top:5px;
-  margin-right:10px;
-  float:left;
+.myNavElement{
   display: none;
-}
-
-.signInOutUpButtonsCont{
   margin-left: 10px;
-  position:relative;
 }
 
-.signInButton,
-.signOutButton,
-.signUpButton{
-  display: none;
+.userIdP{
+  margin-top: 6px;
 }
-
 
 .form-list {
   list-style:none;
@@ -203,6 +201,10 @@ RECIPE CARDS
 
 .card-recipe .card-block{
   padding-top: 0.5rem;
+}
+
+.card-recipe:hover {
+  cursor:pointer;
 }
 
 .card-footer i{
@@ -276,7 +278,31 @@ GOOGLE MAPS
   border-radius:4px;
 }
 
+.card-img-overlay{
+  height: 50px;
+  box-sizing: content-box;
+}
 .heart {
-  display: flex;
-  justify-content: flex-end;
+  height: 100%;
+  width: 50px;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.fa-heart-o {
+  font-size: 30px;
+  color: rgba(255,255,255,0.7);
+}
+.fa-heart{
+  font-size: 30px;
+  color: rgba(255,255,255,0.7);
+  display: none;
+}
+
+.heart:hover .fa-heart-o{
+  display: none;
+}
+
+.heart:hover .fa-heart {
+  display: inline;
 }

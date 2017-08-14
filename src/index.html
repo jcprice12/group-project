@@ -9,55 +9,62 @@
   <script src="https://www.gstatic.com/firebasejs/4.2.0/firebase.js"></script>
 </head>
 <body>
-<nav class="navbar navbar-toggleable-md navbar-light navbar-inverse bg-primary">
-  <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
-          data-target="#navbarSupportedContent2" aria-controls="navbarSupportedContent2" aria-expanded="false"
-          aria-label="Toggle navigation">
+<nav class="navbar navbar-toggleable-md navbar-light flex-row align-items-center bg-faded">
+  <div class="flex-last ml-auto hidden-lg-up col-2 col-sm-2 col-md-2" data-toggle="collapse"
+          data-target="#navExample" style="display: flex; justify-content: flex-end">
     <span class="navbar-toggler-icon"></span>
-  </button>
-  <button class="navbar-toggler navbar-toggler-left" type="button" data-toggle="collapse"
-          data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-          aria-label="Toggle navigation">
-    <i class="fa fa-search" aria-hidden="true"></i>
-  </button>
-  <a class="navbar-brand col">
-    <img src="img/hippo.jpg" alt="" width="30" height="auto">
-  </a>
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <div class="input-group nav-search">
+  </div>
+  <a class="navbar-brand col-2 col-sm-2 col-md-2 flex-first" href="#"
+     style="margin:0"><img src="img/hippo.jpg" alt="" width="40" height="auto"></a>
+  <form class="form-inline col justify-content-center">
+    <div class="input-group nav-search" style="width: 100%;">
       <span class="input-group-btn">
-        <button class="btn btn-outline-secondary" type="button" data-toggle="collapse" data-target="#collapseExample"
-                aria-expanded="false" aria-controls="collapseExample">Refine <i class="fa fa-angle-down"
-                                                                                aria-hidden="true"></i></button>
+        <button class="btn btn-outline-secondary hidden-md-down" type="button" data-toggle="collapse"
+                data-target="#collapseExample"
+                aria-expanded="false" aria-controls="collapseExample">Refine <i class="fa fa-angle-down" aria-hidden="true"></i></button>
+        <button class="btn btn-outline-secondary hidden-lg-up sm-btn" type="button" data-toggle="collapse"
+                data-target="#collapseExample"
+                aria-expanded="false" aria-controls="collapseExample"><i class="fa fa-angle-down"
+                                                                          aria-hidden="true"></i></button>
       </span>
-      <input type="text" class="form-control" placeholder="Product name">
+      <input type="text" class="form-control" placeholder="Search Recipes">
       <span class="input-group-btn">
         <button class="btn btn-outline-secondary" type="button"><i class="fa fa-search" aria-hidden="true"></i></button>
       </span>
     </div>
-  </div>
-
-  <div class="collapse navbar-collapse col" id="navbarSupportedContent2"
-       style="justify-content: flex-end; align-items: center">
-    <div class="signInOutUpButtonsCont" id="signInOutUpButtonsContIndex" style="display: flex;align-items: center;
-    width: 100%; justify-content: flex-end">
-      <p class="userIdP whiteText"></p>
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a href="" id="signInButtonIndex" class="nav-link" data-toggle="modal"
-             data-target="#signInModal-index">Sign In</a>
-        </li>
-        <li class="nav-item">
-          <a href=""  id="signUpButtonIndex" class="nav-link" data-toggle="modal"
-             data-target="#signUpModal-index">Sign Up</a>
-        </li>
-        <li class="nav-item">
-          <a href=""  id="signOutButtonIndex" class="nav-link">Sign out</a>
-        </li>
-      </ul>
-    </div>
-  </div>
+  </form>
+  <ul class="navbar-nav ml-auto hidden-md-down col-md-3 justify-content-end">
+    <ul class="navbar-nav ">
+      <li class="nav-item">
+        <a href="" id="signInButtonIndex" class="nav-link signInButton" data-toggle="modal"
+           data-target="#signInModal-index">Sign In</a>
+      </li>
+      <li class="nav-item">
+        <a href="" id="signUpButtonIndex" class="nav-link signUpButton" data-toggle="modal"
+           data-target="#signUnModal-index">Sign Up</a>
+      </li>
+      <li class="nav-item">
+        <a href="" id="signOutButtonIndex" class="nav-link signOutButton">Sign out</a>
+      </li>
+    </ul>
+  </ul>
 </nav>
+<div class="collapse hidden-lg-up" id="navExample">
+  <ul class="navbar-nav ml-auto list-group">
+    <li class="list-group-item list-group-item-action signInButton">
+      <a href="" id="signInButtonIndex" class="nav-link  nav-dropdown" data-toggle="modal"
+         data-target="#signInModal-index">Sign In</a>
+    </li>
+    <li class="list-group-item list-group-item-action signUpButton">
+      <a href="" id="signUpButtonIndex" class="nav-link  nav-dropdown" data-toggle="modal"
+         data-target="#signUnModal-index">Sign Up</a>
+    </li>
+    <li class="list-group-item list-group-item-action signOutButton">
+      <a href="" id="signOutButtonIndex" class="nav-link nav-dropdown">Sign out</a>
+    </li>
+  </ul>
+</div>
+
 <div class="collapse" id="collapseExample">
   <div class="card">
     <div class="card-block">
@@ -137,10 +144,8 @@
                     </li>
                   </ul>
                 </div>
-
               </div>
             </div>
-
             <div class="mb-2">
               <a class="collapsed collapse-menu" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"
                  aria-expanded="false" aria-controls="collapseTwo">
@@ -223,6 +228,9 @@
     </div>
   </div>
 </div>
+<!-<!-- ***************************************************** End NAV
+******************************************************************************-->
+
 
 <!-- ***************************************************** Sign In ******************************************************************************-->
 <div class="modal fade signInUpModal signInModal" id="signInModal-index" tabindex="-1" role="dialog"
@@ -320,41 +328,44 @@
 </div>
 <!-- ***************************************************** End Sign Up ******************************************************************************-->
 
-<div class="container">
-  <div class="row mt-5">
-    <div class="col-sm-12">
-      <div class="card" style="width: 100%">
-        <h4 class="card-header">Popular Recipes</h4>
-        <div class="card-block dashboard-card">
-          <div id="popular-recipes">
-          </div>
-          <a href="#" id="see-more-popular">See more...</a>
-        </div>
-      </div>
+<!--<div class="container">-->
+  <!--<div class="row mt-5">-->
+    <!--<div class="col-sm-12">-->
+      <!--<div class="card" style="width: 100%">-->
+        <!--<h4 class="card-header">Popular Recipes</h4>-->
+        <!--<div class="card-block dashboard-card">-->
+          <!--<div id="popular-recipes">-->
+          <!--</div>-->
+          <!--<a href="#" id="see-more-popular">See more...</a>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
+  <!--</div>-->
+  <!--<div class="row mt-5">-->
+    <!--<div class="col-md-12">-->
+      <!--<div class="card dashboard-card">-->
+        <!--<h4 class="card-header">-->
+          <!--<p>Nearby Grocery Stores</p>-->
+          <!--<button id="findStoresButton" class="btn btn-secondary" type="button">Refresh</button>-->
+        <!--</h4>-->
+        <!--<div class="card-block">-->
+          <!--<div id="googleMapContainer">-->
+            <!--<div id="map"></div>-->
+          <!--</div>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
+  <!--</div> &lt;!&ndash; end row 2 &ndash;&gt;-->
+  <div class="container">
+    <div class="card-columns">
     </div>
   </div>
-  <div class="row mt-5">
-    <div class="col-md-12">
-      <div class="card dashboard-card">
-        <h4 class="card-header">
-          <p>Nearby Grocery Stores</p>
-          <button id="findStoresButton" class="btn btn-secondary" type="button">Refresh</button>
-        </h4>
-        <div class="card-block">
-          <div id="googleMapContainer">
-            <div id="map"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div> <!-- end row 2 -->
-  <div class="card-columns"></div>
   <div class="container recipe-container"></div>
   <div id="cardsLoadContainer"></div>
-</div>
-<script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBggUAvADsZsmy3v3WrWv2HAb_DlSkdF7Y&libraries=places">
-</script>
+<!--</div>-->
+<!--<script async defer-->
+        <!--src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBggUAvADsZsmy3v3WrWv2HAb_DlSkdF7Y&libraries=places">-->
+<!--</script>-->
 <script type="text/javascript" src="../components/components.js"></script>
 </body>
 </html>
