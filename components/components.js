@@ -7,6 +7,7 @@ class Card extends HTMLElement {
     this._title = '';
     this._url = '';
     this._recipeId = '';
+    this._stars = '';
   }
   get source(){
     return this._source;
@@ -26,13 +27,17 @@ class Card extends HTMLElement {
   get recipeId(){
     return this._recipeId;
   }
+  get stars(){
+    return this._stars;
+  }
   connectedCallback() {
     this._source = this.getAttribute('source');
     this._time = this.getAttribute('time');
     this._servings = this.getAttribute('servings');
     this._title = this.getAttribute('title');
     this._url = this.getAttribute('url');
-    this._recipeId = this.getAttribute('recipeId')
+    this._recipeId = this.getAttribute('recipeId');
+    this._stars = this.getAttribute('stars')
     let template =
       `
         <div data-recipeId="${this.recipeId}" class="card card-recipe">
@@ -48,11 +53,7 @@ class Card extends HTMLElement {
           <div class="card-block">
             <div class="card-block">
               <h4 class="card-title">${this.title}</h4>
-              <i class="fa fa-star"></i>
-              <i class="fa fa-star"></i>
-              <i class="fa fa-star"></i>
-              <i class="fa fa-star"></i>
-              <i class="fa fa-star-half"></i>
+              ${this.stars}
             </div>
           </div>
           <div class="card-footer">

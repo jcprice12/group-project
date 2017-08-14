@@ -7,6 +7,7 @@ import {cardsEventApi, passAuth} from './api.js';
 import {signIn, signUp, signOut, authStateChanged} from './userAuth.js';
 import {initMap} from './googleMaps.js';
 import {getMyRecipes} from './browseMyRecipes.js';
+import {printPopular} from './featured.js';
 
 var config = {
   apiKey: "AIzaSyAo2GM4PjdcCsGq-3detGaqYkG-C6r_4iw",
@@ -22,6 +23,7 @@ const wholeDb = firebase.database();
 
 //initialize page
 function init() {
+  printPopular();
   initMap();
   passAuth(authorization);
   cardsEventApi();

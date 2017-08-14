@@ -57,7 +57,7 @@ function callState() {
   }
 }
 
-function getCard(title, servings, time, img, url, recipeId) {
+function getCard(title, servings, time, img, url, recipeId, stars) {
   let card = `
     <my-card
       url="${url}"
@@ -65,7 +65,8 @@ function getCard(title, servings, time, img, url, recipeId) {
       title="${title}"
       time="${time}"
       servings="${servings}"
-      recipeId="${recipeId}"    
+      recipeId="${recipeId}" 
+      stars="${stars}"   
     ></my-card>
 `;
   return card;
@@ -137,13 +138,15 @@ function searchRecipes(url, config) {
               }
             });
           }
+          recipes.push(recipe);
           let url = recipe.sourceUrl ? recipe.sourceUrl : 'none';
           let img = recipe.image;
           let title = recipe.title;
           let servings = recipe.servings;
           let time = recipe.preparationMinutes;
           let recipeId = recipe.id;
-          html += getCard(title, servings, time, img, url, recipeId);
+          let stars = printStars(recipe.spoonacularScore);
+          html += getCard(title, servings, time, img, url, recipeId, stars);
         }
       });
       $(parentContainer).css("display", "none");
@@ -164,10 +167,9 @@ function searchRecipes(url, config) {
           // Merge arrays, delete duplicates (.unique())
           var allRecipes = [];
           if (typeof top50Arr !== "undefined"){
-            allRecipes = arr.concat(top50Arr).unique();// you were doing this: "recipes.concat(top50Arr).unique()"; recipes was never initialized, 'arr' has all the data from the api call
+            allRecipes = recipes.concat(top50Arr).unique();
           }
 
-          console.log(allRecipes);
           // Sort recipes high to low
           allRecipes.sort(function(a, b){
             if (a.aggregateLikes > b.aggregateLikes) {
@@ -181,7 +183,6 @@ function searchRecipes(url, config) {
 
           // Trim to only the top 50
           allRecipes = allRecipes.slice(0, 50);
-          console.log(allRecipes);
 
           // Set new top 50 array in Firebase
           // you need to use transaction to read AND write. You've already read the
@@ -191,17 +192,18 @@ function searchRecipes(url, config) {
             if (current !== null) {
               current.recipesArray = allRecipes;
               return current;
+
             } else {
               //because current was null, we need to set it to an object with "recipesArray" as a key in it. Set recipes array to allRecipes
               //if you just return current, you're always going to have 'null' as the value for the array in the DB bevause you never set it
-              current = {recipesArray: allRecipes};
-              return current;
+              // current = {recipesArray: allRecipes};
+              return 0;
             }
 
           }); // end transaction
         } else {
-          console.log("I hate Firebase")
-        }
+          console.log("Error: There is no data at location top50Ref")
+        };
 
        }); // end top50Ref.once() 
     }); // end axios.get().then()
@@ -281,6 +283,36 @@ function recipeEventApi() {
     }
   )
 }
+
+// Get html element for stars based on spoonacularScore
+function printStars(spoonScore){
+    let score = {
+      fullstars : (function(){
+        if (spoonScore%20 >15) {
+          return (Math.floor(spoonScore/20)+1)
+        } else {
+          return Math.floor(spoonScore/20)
+        }
+      }),
+      halfstar : (function(){
+          if (spoonScore%20 <= 15 && spoonScore%20 >= 5){
+            return 1;
+          } else {
+            return 0;
+          }
+        })
+   }
+   var starsStr = "";
+   for (var i=0; i < score.fullstars(); i++) {
+      if (score.fullstars() > 0){
+        starsStr += '<i class="fa fa-star">&nbsp;</i>'
+      }
+   };
+   if (score.halfstar() > 0) {
+    starsStr +=  '<i class="fa fa-star-half"></i>'
+   };
+   return starsStr;
+};
 
 // Delete duplicates while merging arrays
 Array.prototype.unique = function() {
