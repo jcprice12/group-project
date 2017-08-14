@@ -320,6 +320,7 @@ Array.prototype.unique = function() {
 module.exports = {
   cardsEventApi,
   passAuth,
-  recipeEventApi, 
+  recipeEventApi,
+  getCard, 
 };
 
