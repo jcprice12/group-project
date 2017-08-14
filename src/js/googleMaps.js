@@ -2,33 +2,52 @@ var map;
 var storeInfoWindow;
 var myInfoWindow;
 var findStoresButton;
+var myBounds;
 
-function finishMapSetup(myPos){
-	console.log(myPos);
-	map = new google.maps.Map(document.getElementById('map'), {
-	  center: myPos,
-	  zoom: 13,
-	});
+findStoresButton = document.getElementById("findStoresButton");
+findStoresButton.addEventListener("click", function(event){
+	event.preventDefault();
+	initMap();
+});
 
-	myInfoWindow = new google.maps.InfoWindow();
-	var myMarker = new google.maps.Marker({
-		map: map,
-	 	position: myPos,
-	 	icon: "https://maps.google.com/mapfiles/ms/icons/blue-dot.png",
-	});
-	google.maps.event.addListener(myMarker, 'click', function() {
-		myInfoWindow.setContent("You are here");
-		myInfoWindow.open(map, this);
-	});
+function finishMapSetup(myPos, addressUsed){
+
+	if(!map || addressUsed){
+		map = new google.maps.Map(document.getElementById('map'), {
+		  center: myPos,
+		  zoom: 13,
+		});
+		myInfoWindow = new google.maps.InfoWindow();
+		var myMarker = new google.maps.Marker({
+			map: map,
+		 	position: myPos,
+		 	icon: "https://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+		});
+		google.maps.event.addListener(myMarker, 'click', function() {
+			myInfoWindow.setContent("You are here");
+			myInfoWindow.open(map, this);
+		});
+	}
 
 	storeInfoWindow = new google.maps.InfoWindow();
 	var placesService = new google.maps.places.PlacesService(map);
-	placesService.nearbySearch({
-	  location: myPos,//put my current location here
-	  radius: 4000,
-	  type: ['grocery_or_supermarket'],//why is this deprecated? There's no alternative in the documentation.
-	  keyword: ['grocery'],
-	}, handleSearchResults);
+
+	var myBounds = map.getBounds();
+
+	if(myBounds){
+		placesService.nearbySearch({
+		  bounds: myBounds,
+		  type: ['grocery_or_supermarket'],//why is this deprecated? There's no alternative in the documentation.
+		  keyword: ['grocery'],
+		}, handleSearchResults);
+	} else {
+		placesService.nearbySearch({
+		  location: myPos,//put my current location here
+		  radius: 6000,
+		  type: ['grocery_or_supermarket'],//why is this deprecated? There's no alternative in the documentation.
+		  keyword: ['grocery'],
+		}, handleSearchResults);
+	}
 }
 
 function checkAndUseAutoLocation(){
@@ -39,7 +58,7 @@ function checkAndUseAutoLocation(){
               lat: position.coords.latitude,
               lng: position.coords.longitude
             };
-            finishMapSetup(myPos);
+            finishMapSetup(myPos, false);
 		}, function() {
             handleLocationError(true);
         });
@@ -50,12 +69,6 @@ function checkAndUseAutoLocation(){
 }
 
 function initMap() {
-
-	findStoresButton = document.getElementById("findStoresButton");
-	findStoresButton.addEventListener("click", function(event){
-		event.preventDefault();
-		initMap();
-	});
 
 	var myAddress = $("#myLocationInput").val().trim();
 	if(myAddress){
@@ -88,7 +101,7 @@ function geocodeAddress(address) {
 	  if (status === 'OK') {
 	  	console.log(results);
 	    var myLocation = results[0].geometry.location;
-	    finishMapSetup(myLocation);
+	    finishMapSetup(myLocation, true);
 	  } else {
 	    console.log('Geocode was not successful for the following reason: ' + status);
 	    checkAndUseAutoLocation();
