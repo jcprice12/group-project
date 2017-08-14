@@ -139,7 +139,7 @@ function searchRecipes(url, config) {
           let img = recipe.image;
           let title = recipe.title;
           let servings = recipe.servings;
-          let time = recipe.preparationMinutes;
+          let time = recipe.preparationMinutes ? recipe.preparationMinutes + ' m' : 'N/A';
           let recipeId = recipe.id;
           html += getCard(title, servings, time, img, url, recipeId);
         }
