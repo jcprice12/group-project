@@ -240,6 +240,15 @@ GOOGLE MAPS
   width:100%;
 }
 
+#myLocationInput{
+  float:right;
+
+  @include media-breakpoint-only(xs) {
+    margin-top:10px;
+  }
+}
+
+
 .placeContainer{
   width:400px;
   line-height: 2.0;

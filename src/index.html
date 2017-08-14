@@ -328,10 +328,15 @@
     <div class="col-md-12">
       <div class="card dashboard-card">
         <h4 class="card-header">
-          <p>Nearby Grocery Stores</p>
-          <button id="findStoresButton" class="btn btn-secondary" type="button">Refresh</button>
+          Nearby Grocery Stores
         </h4>
         <div class="card-block">
+          <form>
+            <div class="form-group">
+              <button id="findStoresButton" class="btn btn-secondary col-7 col-sm-3 col-md-2" type="submit">Find Stores</button>
+              <input type="text" class="form-control col-12 col-sm-8 col-md-9" id="myLocationInput" placeholder="Your Device's Location">
+            </div>
+          </form>
           <div id="googleMapContainer">
             <div id="map"></div>
           </div>
