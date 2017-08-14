@@ -305,12 +305,15 @@ function printStars(spoonScore){
    var starsStr = "";
    for (var i=0; i < score.fullstars(); i++) {
       if (score.fullstars() > 0){
-        starsStr += '<i class="fa fa-star">&nbsp;</i>'
+        starsStr += "<i class='fa fa-star'></i>&nbsp;"
       }
    };
    if (score.halfstar() > 0) {
-    starsStr +=  '<i class="fa fa-star-half"></i>'
+    starsStr +=  "<i class='fa fa-star-half'></i>"
    };
+   console.log("spoonScore: " + spoonScore)
+   console.log("fullstars: " + score.fullstars() + " | halfstar: " + score.halfstar());
+   console.log("starsStr: " + starsStr);
    return starsStr;
 };
 
@@ -327,6 +330,6 @@ Array.prototype.unique = function() {
 };
 
 module.exports = {
-  cardsEventApi, passAuth
+  cardsEventApi, passAuth, printStars, getCard, recipeEventApi
 };
 

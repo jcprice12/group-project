@@ -1,3 +1,6 @@
+import {printStars, getCard, recipeEventApi} from './api.js'
+import {MyLoadAnimation1} from './MyLoadAnimation1.js';
+
 function getPopularCard(title, servings, time, img, instructions, stars) {
   let card = `<div class="card featured-recipe">
 	            <div class="card-block row">
@@ -11,7 +14,7 @@ function getPopularCard(title, servings, time, img, instructions, stars) {
 		                <h4 class="card-title">${title}</h4>
 		                ${stars}
 		                <ol>${instructions}
-		                	<li>More instructions...</li>
+		                	<li style="list-style:none;"><br>More instructions...</li>
 		                </ol>
 		                <hr>
 		                <div class="featured-footer">
@@ -38,14 +41,13 @@ function printPopular() {
 	    	var top50Arr = snap.val().recipesArray;
 	    	var top3Recipes = top50Arr.slice(0, 3);
 	    	var html = "";
-	    	console.log(top3Recipes);
 	    	$(top3Recipes).each(function(index, value){
 				var recipe = top3Recipes[index]
 			    let img = recipe.image;
 			    let title = recipe.title;
 			    let servings = recipe.servings;
 			    let time = recipe.preparationMinutes;
-			    let stars = printStars(recipe.spoonacularScore)
+			    let stars = printStars(recipe.spoonacularScore);
 			    let instructions = ""
 			    $(recipe.analyzedInstructions[0].steps).each(function(index, value){
 			    	var instrNum = recipe.analyzedInstructions[0].steps[index].step;
@@ -59,7 +61,9 @@ function printPopular() {
 	    	});
 	    	$("#popular-recipes").html(html);
 	    	
-
+	    	$("#see-more-popular").on("click", function(){
+	    		seeMorePopular(top50Arr);
+	    	});
 		} // end if(snap.exists())
 		else {
 	  		console.log("Error with getting top50Ref from Firebase");
@@ -67,34 +71,28 @@ function printPopular() {
 	}); //end top50Ref.once()
 };
 
-function printStars(spoonScore){
-    let score = {
-	    fullstars : (function(){
-	    	if (spoonScore%20 >15) {
-	    		return (Math.floor(spoonScore/20)+1)
-	    	} else {
-	    		return Math.floor(spoonScore/20)
-	    	}
-	    }),
-	   	halfstar : (function(){
-	    		if (spoonScore%20 <= 15 && spoonScore%20 >= 5){
-	    			return 1;
-	    		} else {
-	    			return 0;
-	    		}
-	    	})
-   }
-   var starsStr = "";
-   for (var i=0; i < score.fullstars(); i++) {
-	   	if (score.fullstars() > 0){
-	   		starsStr += '<i class="fa fa-star">&nbsp;</i>'
-	   	}
-   };
-   if (score.halfstar() > 0) {
-   	starsStr +=  '<i class="fa fa-star-half"></i>'
-   };
-   return starsStr;
+function seeMorePopular(arr) {
+	var html = '';
+	$(arr).each(function(index, value){
+		var recipe = arr[index];
+		let url = recipe.sourceUrl ? recipe.sourceUrl : 'none';
+	    let img = recipe.image;
+	    let title = recipe.title;
+	    let servings = recipe.servings;
+	    let time = recipe.preparationMinutes;
+	    let recipeId = recipe.id;
+	    let stars = printStars(recipe.spoonacularScore);
+    	html += getCard(title, servings, time, img, url, recipeId, stars);
+	});
+	var parentContainer = document.getElementById("cardsLoadContainer");
+	$(parentContainer).css("display", "none");
+    // myLoadAnimation1.stopAndRemove();
+    $('.card-columns').html(html);
+    $(".card-columns").css("display", "block");
+    recipeEventApi();
 };
+
+
 
 module.exports = {
   printPopular,
