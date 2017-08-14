@@ -57,7 +57,7 @@ function callState() {
   }
 }
 
-function getCard(title, servings, time, img, url, recipeId) {
+function getCard(title, servings, time, img, url, recipeId, stars) {
   let card = `
     <my-card
       url="${url}"
@@ -65,7 +65,8 @@ function getCard(title, servings, time, img, url, recipeId) {
       title="${title}"
       time="${time}"
       servings="${servings}"
-      recipeId="${recipeId}"    
+      recipeId="${recipeId}" 
+      stars="${stars}"   
     ></my-card>
 `;
   return card;
@@ -138,7 +139,8 @@ function performCallToGetRecipes(url,config){
           let servings = recipe.servings;
           let time = recipe.preparationMinutes;
           let recipeId = recipe.id;
-          html += getCard(title, servings, time, img, url, recipeId);
+          let stars = printStars(recipe.spoonacularScore);
+          html += getCard(title, servings, time, img, url, recipeId, stars);
         }
       });
 
@@ -196,8 +198,6 @@ function setTop50Recipes(recipes){
 
       // Trim to only the top 50
       allRecipes = allRecipes.slice(0, 50);
-
-      console.log(allRecipes);
 
       top50Ref.transaction(function(current) {
         if (current !== null) {
@@ -305,6 +305,39 @@ function recipeEventApi() {
   )
 }
 
+// Get html element for stars based on spoonacularScore
+function printStars(spoonScore){
+    let score = {
+      fullstars : (function(){
+        if (spoonScore%20 >15) {
+          return (Math.floor(spoonScore/20)+1)
+        } else {
+          return Math.floor(spoonScore/20)
+        }
+      }),
+      halfstar : (function(){
+          if (spoonScore%20 <= 15 && spoonScore%20 >= 5){
+            return 1;
+          } else {
+            return 0;
+          }
+        })
+   }
+   var starsStr = "";
+   for (var i=0; i < score.fullstars(); i++) {
+      if (score.fullstars() > 0){
+        starsStr += "<i class='fa fa-star'></i>&nbsp;"
+      }
+   };
+   if (score.halfstar() > 0) {
+    starsStr +=  "<i class='fa fa-star-half'></i>"
+   };
+   console.log("spoonScore: " + spoonScore)
+   console.log("fullstars: " + score.fullstars() + " | halfstar: " + score.halfstar());
+   console.log("starsStr: " + starsStr);
+   return starsStr;
+};
+
 // Delete duplicates while merging arrays
 Array.prototype.unique = function() {
     var a = this.concat();
@@ -322,5 +355,6 @@ module.exports = {
   passAuth,
   recipeEventApi,
   getCard, 
+  printStars
 };
 
