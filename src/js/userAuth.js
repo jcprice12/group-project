@@ -42,8 +42,15 @@ function signUp(authorization){
 		var email = $("#up-email-input-" + file_id).val();
 		var password = $("#up-password-input-" + file_id).val();
 		if(authorization.currentUser){
-			console.log("a user is already signed in, cannot sign up");
-			$("#up-error-message-" + file_id).text("A user is already logged on, you must sign out to sign up");
+			if(authorization.currentUser.isAnonymous){
+				authorization.signInWithEmailAndPassword(email, password).catch(function(error){
+					console.log("Could not log in: " + error.code);
+					$("#in-error-message-" + file_id).text(error.message);
+				});
+			} else {
+				console.log("a user is already signed in, cannot sign up");
+				$("#up-error-message-" + file_id).text("A user is already logged on, you must sign out to sign up");
+			}
 		} else{
 			authorization.createUserWithEmailAndPassword(email, password).catch(function(error) {
 				console.log("Could not sign up");
@@ -60,8 +67,15 @@ function signIn(authorization){
 		var email = $("#in-email-input-" + file_id).val();
 		var password = $("#in-password-input-" + file_id).val();
 		if(authorization.currentUser){
-			console.log("a user is already signed in, cannot sign up");
-			$("#in-error-message-" + file_id).text("A user is already logged on, you must sign out to sign up");
+			if(authorization.currentUser.isAnonymous){
+				authorization.signInWithEmailAndPassword(email, password).catch(function(error){
+					console.log("Could not log in: " + error.code);
+					$("#in-error-message-" + file_id).text(error.message);
+				});
+			} else {
+				console.log("a user is already signed in");
+				$("#up-error-message-" + file_id).text("A user is already logged on, you must sign out to sign in again");
+			}
 		} else{
 			authorization.signInWithEmailAndPassword(email, password).catch(function(error){
 				console.log("Could not log in: " + error.code);
