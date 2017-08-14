@@ -31,9 +31,7 @@ function init() {
   authStateChanged(authorization, wholeDb);
   getMyRecipes();
 }
-
 init();
-
 module.exports = {
   authorization,
   wholeDb

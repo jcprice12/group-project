@@ -72,14 +72,14 @@ function getCard(title, servings, time, img, url, recipeId) {
 }
 
 function cardsEventApi(){
-  $('#search').on('click', (e) => {
+  $('body').on('click', '#search', (e) => {
     e.preventDefault();
     let search = $('#ingredients').val();
     let excludeIngredients = $('#exclude-ingredients').val();
     let maxCalories = $('#max-calories').val();
     let minCalories = $('#min-calories').val();
     let diet = $(".diet:checked").attr("id");
-    let allIntolerances = ""
+    let allIntolerances = "";
     $(".intolerance:checked").each(function() {
       allIntolerances += ($(this).attr("id") + " ");
     });
@@ -221,6 +221,7 @@ function getRecipeWithLocalStorage(url,config){
       tempState.directions = str;
       var objectString = JSON.stringify(tempState);
       localStorage.setItem("MostRecentRecipe", objectString);
+      localStorage.setItem("Current Page", 'Recipe');
       callState();
     });
 }
@@ -234,6 +235,7 @@ function getRecipe(url, config, state, recipeId) {
       str = str.replace(/[\uE000-\uF8FF]/g, '');
       tempState.length = $(str).find('li').length;
       tempState.directions = str;
+      tempState.currentPage = 'recipe';
 
       var recipePath = "recipes/" + recipeId;
 
@@ -245,6 +247,9 @@ function getRecipe(url, config, state, recipeId) {
       updates[statePath] = tempState;
       updates[recipePath + "/length"] = tempState.length;
       updates[recipePath + "/directions"] = tempState.directions;
+      updates[recipePath + "/currentPage"] = tempState.directions;
+      console.log(statePath);
+      console.log(updates);
 
       firebase.database().ref().update(updates).then(function(){
         callState();

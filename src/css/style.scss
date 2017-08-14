@@ -43,34 +43,68 @@
 GLOBAL
 ***********************************/
 
+textarea:focus,
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="datetime"]:focus,
+input[type="datetime-local"]:focus,
+input[type="date"]:focus,
+input[type="month"]:focus,
+input[type="time"]:focus,
+input[type="week"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="search"]:focus,
+input[type="tel"]:focus,
+input[type="color"]:focus,
+.uneditable-input:focus {
+  border-color: $main;
+  box-shadow: 0 0.5px 0.5px $main inset, 0 0 0.5px $main;
+  outline: 0 none;
+}
+
+input[type="text"]{
+  border-color: $secondary;
+}
+
 body{
   background: $background;
 }
 
 nav  {
+  background-color: white !important;
+}
+
+.popover {
+  max-width: 600px !important;
+}
+
+.popover-title{
   background-color: $main;
-}
-.navbar-brand {
-  color:#fff;
+  color: #FFF;
+  border-color: $main;
+  font-weight: normal;
+  font-size: 24px;
 }
 
-.btn-secondary {
-  color: #FFF;
-  background-color: $secondary;
-  border-color: $secondary;
-}
-
-.btn-secondary:hover {
-  color: #FFF;
-  background-color: #de6345;
-  border-color: #de6345;
-}
-
-.btn-secondary:focus {
-  color: #FFF;
-  background-color: #de6345;
-  border-color: #de6345;
-}
+//.btn-secondary {
+//  color: #FFF;
+//  background-color: $secondary;
+//  border-color: $secondary;
+//}
+//
+//.btn-secondary:hover {
+//  color: #FFF;
+//  background-color: #de6345;
+//  border-color: #de6345;
+//}
+//
+//.btn-secondary:focus {
+//  color: #FFF;
+//  background-color: #de6345;
+//  border-color: #de6345;
+//}
 
 .errorMessage{
   color:#C93838;
