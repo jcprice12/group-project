@@ -35,7 +35,9 @@ function buildRecipes(userId){
 function getMyRecipes(){
 	$("#getMyRecipesButton").on("click", function(event){
 		if(firebase.auth().currentUser){
-			buildRecipes(firebase.auth().currentUser.uid);
+			if(!firebase.auth().currentUser.isAnonymous){
+				buildRecipes(firebase.auth().currentUser.uid);
+			}
 		}
 	});
 }
@@ -43,5 +45,3 @@ function getMyRecipes(){
 module.exports = {
   getMyRecipes,
 };
-
-71359

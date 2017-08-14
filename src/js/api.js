@@ -114,12 +114,15 @@ function cardsEventApi(){
   });
 }
 
-function searchRecipes(url, config) {
+function performCallToGetRecipes(url,config){
+
   $('.recipe-container').html("");
   $('.card-columns').html("");
+
   var parentContainer = document.getElementById("cardsLoadContainer");
   $(parentContainer).css("display", "block");
   var loadAnimation1 = new MyLoadAnimation1(parentContainer,75,12,4,["#b7cb39","#f76f4d"]);
+
   axios.get(url, config)
     .then((res) => {
       let arr = res.data.results;
@@ -127,16 +130,8 @@ function searchRecipes(url, config) {
       let html = '';
       arr.forEach((recipe) => {
         if (recipe.aggregateLikes > 100) {
-          if(authorization.currentUser){
-            firebase.database().ref("recipes/" + recipe.id).set(recipe, function(error){
-              if(error){
-                console.log(error.code);
-                console.log(error.message);
-              } else {
-                console.log("recipe has been stored in firebase with key: " + recipe.id);
-              }
-            });
-          }
+          setRecipeInDb(recipe);
+          recipes.push(recipe);
           let url = recipe.sourceUrl ? recipe.sourceUrl : 'none';
           let img = recipe.image;
           let title = recipe.title;
@@ -146,69 +141,94 @@ function searchRecipes(url, config) {
           html += getCard(title, servings, time, img, url, recipeId);
         }
       });
+
+      setTop50Recipes(recipes);
+
       $(parentContainer).css("display", "none");
       loadAnimation1.stopAndRemove();
       $('.card-columns').html(html);
       $(".card-columns").css("display", "block");
+
+      //add event listener for clicking recipe card to get specific recipe information
       recipeEventApi();
 
-      var db = firebase.database();
-      var top50Ref = db.ref("/top50Recipes");
-
-      var top50Arr = [];
-       // Get top 50 array from Firebase
-      top50Ref.once("value", function(snap) {
-        function getTop50Arr() { 
-          if (snap.exists()) {
-            top50Arr = snap.val().recipesArray;
-            return top50Arr;
-          } else {
-            console.log("I hate Firebase")
-          }
-        }
-        getTop50Arr();
-
-        // Merge arrays, delete duplicates (.unique())
-        var allRecipes = [];
-        if (typeof top50Arr !== "undefined"){
-          allRecipes = arr.concat(top50Arr).unique();// you were doing this: "recipes.concat(top50Arr).unique()"; recipes was never initialized, 'arr' has all the data from the api call
-        }
-
-        console.log(allRecipes);
-        // Sort recipes high to low
-        allRecipes.sort(function(a, b){
-          if (a.aggregateLikes > b.aggregateLikes) {
-            return -1;
-          } else if (a.aggregateLikes < b.aggregateLikes) {
-            return 1;
-          } else {
-            return 0;
-          }
-        });
-
-        // Trim to only the top 50
-        allRecipes = allRecipes.slice(0, 50);
-        console.log(allRecipes);
-
-        // Set new top 50 array in Firebase
-        // you need to use transaction to read AND write. You've already read the
-        //array from the DB outside of a transaction, so now when you use transaction to set the array of 50 recipes
-        //it's like you're using the set({~(^-^)~}) method.
-        top50Ref.transaction(function(current) {
-          if (current !== null) {
-            current.recipesArray = allRecipes;
-            return current;
-          } else {
-            //because current was null, we need to set it to an object with "recipesArray" as a key in it. Set recipes array to allRecipes
-            //if you just return current, you're always going to have 'null' as the value for the array in the DB bevause you never set it
-            current = {recipesArray: allRecipes};
-            return current;
-          }
-        }); // end transaction
-
-       }); // end top50Ref.once() 
     }); // end axios.get().then()
   loadAnimation1.startAll();
+}
+
+function setRecipeInDb(recipe){
+  firebase.database().ref("recipes/" + recipe.id).set(recipe, function(error){
+    if(error){
+      console.log(error.code);
+      console.log(error.message);
+    } else {
+      console.log("recipe has been stored in firebase with key: " + recipe.id);
+    }
+  });
+}
+
+function setTop50Recipes(recipes){
+  var db = firebase.database();
+  var top50Ref = db.ref("/top50Recipes");
+
+  var top50Arr = [];
+   // Get top 50 array from Firebase
+  top50Ref.once("value", function(snap) {
+    if (snap.exists()) {
+      top50Arr = snap.val().recipesArray;
+
+      // Merge arrays, delete duplicates (.unique())
+      var allRecipes = [];
+      if (typeof top50Arr !== "undefined"){
+        allRecipes = recipes.concat(top50Arr).unique();
+      }
+
+      // Sort recipes high to low
+      allRecipes.sort(function(a, b){
+        if (a.aggregateLikes > b.aggregateLikes) {
+          return -1;
+        } else if (a.aggregateLikes < b.aggregateLikes) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
+
+      // Trim to only the top 50
+      allRecipes = allRecipes.slice(0, 50);
+
+      console.log(allRecipes);
+
+      top50Ref.transaction(function(current) {
+        if (current !== null) {
+          current.recipesArray = allRecipes;
+          return current;
+        } else {
+          current = {recipesArray: allRecipes};
+          return current;
+        }
+      }); // end transaction
+
+    } else {
+      console.log("Snapshot doesn't exist");
+    }
+
+  }, function(error){
+    console.log(error.code);
+  }); // end top50Ref.once() 
+}
+
+function searchRecipes(url, config) {
+  if(!authorization.currentUser){
+    var anonymousSignInPromise = authorization.signInAnonymously();
+    anonymousSignInPromise.then(function(){
+      performCallToGetRecipes(url, config);
+    }).catch(function(){
+      console.log("error signing in anonymously to perform search");
+    });
+  } else {
+    performCallToGetRecipes(url,config);
+  }
 }
 
 function getRecipeWithLocalStorage(url,config){
@@ -298,6 +318,8 @@ Array.prototype.unique = function() {
 };
 
 module.exports = {
-  cardsEventApi, passAuth
+  cardsEventApi,
+  passAuth,
+  recipeEventApi, 
 };
 
