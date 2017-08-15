@@ -37,6 +37,8 @@ function showRecipe(recipe, length) {
 function cardsEventApi(){
   $('#search, #general-search-btn').click( (e) => {
     e.preventDefault();
+    $("#search-message").css("display", "none")
+    $(".home").css("display", "none");
     $('.card-columns').css('display', 'block');
     $('#recipe-container').css('display', 'none');
     $('.card-columns').empty();
@@ -78,6 +80,7 @@ function cardsEventApi(){
         'ranking': 1,
         'addRecipeInformation': true
       };
+      displaySearchMessage(obj);
       for (var key in obj) {
         if (obj[key] === "") {
           delete obj[key];
@@ -135,6 +138,31 @@ function setTop50Recipes(recipes) {
     console.log(error.code);
   }); // end top50Ref.once()
 }
+
+function displaySearchMessage(obj){  
+  var searchText = ("Search: " + obj.query);
+  if (obj.query !== obj.ingredients && obj.ingredients !== "") {
+    searchText += ("; Ingredients: " + obj.ingredients);
+  }
+  if (obj.excludeIngredients !== "") {
+    searchText += ("; exclude ingredients: " + obj.excludeIngredients)
+  }
+  if (obj.maxCalories !== "") {
+    searchText += ("; max. calories: " + obj.maxCalories)
+  }
+  if (obj.minCalories !== "") {
+    searchText += ("; min. calories: " + obj.minCalories)
+  }
+  if (obj.diet !== "" && (typeof obj.diet !== 'undefined')) {
+    searchText += ("; special diet: " + obj.diet)
+  }
+  if (obj.intolerances !== "") {
+    $(obj.intolerances).each(function(index, value){
+      searchText += ("; intolerances: " + obj.intolerances[index])
+    })  
+  }
+  $("#search-message").html(searchText).css("display", "block");
+};
 
 function setRecipeInDb(recipes) {
   console.log(recipes);
