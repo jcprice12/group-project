@@ -61,11 +61,13 @@ function getCard(title, servings, time, img, url, recipeId, stars) {
   let card = `
     <my-card
       url="${url}"
+      data-url="${url}"
       source="${img}"
       title="${title}"
       time="${time}"
       servings="${servings}"
-      recipeId="${recipeId}" 
+      recipeId="${recipeId}"
+      data-recipeId="${recipeId}"
       stars="${stars}"   
     ></my-card>
 `;
@@ -198,7 +200,7 @@ function setTop50Recipes(recipes){
           return 1;
         } else {
           return 0;
-        }
+        };
       });
 
       // Trim to only the top 50
@@ -288,8 +290,8 @@ function getRecipe(url, config, state, recipeId) {
 
 function recipeEventApi() {
   $('my-card, #more-instructions').on('click', function () {
-      let sourceUrl = this.url;
-      let myId = this.recipeId;
+      let sourceUrl = $(this).attr("data-url");
+      let myId = $(this).attr("data-recipeId");
       console.log("myId: " + myId);
       let head = {
         headers: {"X-Mashape-Key": "VftGeJE2qimshoNc94fZxoUiEp04p154Astjsn7Kuggh3FXLVw"}
@@ -337,9 +339,6 @@ function printStars(spoonScore){
    if (score.halfstar() > 0) {
     starsStr +=  "<i class='fa fa-star-half'></i>"
    };
-   // console.log("spoonScore: " + spoonScore)
-   // console.log("fullstars: " + score.fullstars() + " | halfstar: " + score.halfstar());
-   // console.log("starsStr: " + starsStr);
    return starsStr;
 };
 

@@ -24,6 +24,9 @@ class Card extends HTMLElement {
   get url(){
     return this._url;
   }
+  get dataUrl(){
+    return this._url;
+  }
   get recipeId(){
     return this._recipeId;
   }

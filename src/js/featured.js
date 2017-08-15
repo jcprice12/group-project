@@ -14,7 +14,7 @@ function getPopularCard(title, servings, time, img, recipeId, url, stars, instru
 		                <h4 class="card-title">${title}</h4>
 		                ${stars}
 		                <ol style="padding-left:15px;">${instructions}
-		                	<li style="list-style:none;"><br><a href="#" id="more-instructions" url=${url} recipeid=${recipeId}>More instructions...</a></li>
+		                	<li style="list-style:none;"><br><a href="#" id="more-instructions" data-url=${url} data-recipeid=${recipeId}>More instructions...</a></li>
 		                </ol>
 		                <hr>
 		                <div class="featured-footer">
@@ -98,7 +98,6 @@ function seeMorePopular(arr) {
 	});
 	var parentContainer = document.getElementById("cardsLoadContainer");
 	$(parentContainer).css("display", "none");
-    // myLoadAnimation1.stopAndRemove();
     $('.card-columns').html(html);
     $(".card-columns").css("display", "block");
     recipeEventApi();
