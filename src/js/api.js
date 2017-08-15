@@ -245,10 +245,18 @@ function searchRecipes(url, config) {
             html += getCard(title, servings, time, img, url, recipeId, stars, likes);
           }
         });
-        $('.card-columns').css('display', 'block');
-        $('.card-columns').html(html);
-        // setTop50Recipes(recipes);
-        recipeEventApi();
+
+        console.log(arr[0])
+        if(typeof arr[0]==='undefined'){
+          $('#no-results').css('display', 'block');
+          cardsEventApi();
+        } else {
+          $('#no-results').css('display', 'none');
+          $('.card-columns').css('display', 'block');
+          $('.card-columns').html(html);
+          // setTop50Recipes(recipes);
+          recipeEventApi();
+        }
       });
       // // console.log(html);
       // // // $(parentContainer).css("display", "none")
