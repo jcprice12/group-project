@@ -60,7 +60,7 @@ class Card extends HTMLElement {
             <div class="footer-icons d-flex flex-row justify-content-start">
                 <div class="card-cooktime mr-3 mr-sm-1 ">
                   <i class="fa fa-clock-o"></i>
-                  <span class="icon-text"><small>${this.time} m</small></span>
+                  <span class="icon-text"><small>${this.time}</small></span>
                 </div>
                 <div class="card-yield mr-3 mr-sm-1 ">
                   <i class="fa fa-pie-chart"></i>

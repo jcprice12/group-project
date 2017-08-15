@@ -86,7 +86,12 @@ function seeMorePopular(arr) {
 	    let img = recipe.image;
 	    let title = recipe.title;
 	    let servings = recipe.servings;
-	    let time = recipe.preparationMinutes;
+	    let time = '';
+          if (typeof recipe.preparationMinutes !== 'undefined') {
+            time = recipe.preparationMinutes + ' m';
+          } else {
+            time = 'unknown';
+          };
 	    let recipeId = recipe.id;
 	    let stars = printStars(recipe.spoonacularScore);
     	html += getCard(title, servings, time, img, url, recipeId, stars);
