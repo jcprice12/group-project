@@ -1,7 +1,7 @@
 import {printStars, getCard, recipeEventApi} from './api.js'
 import {MyLoadAnimation1} from './MyLoadAnimation1.js';
 
-function getPopularCard(title, servings, time, img, instructions, stars) {
+function getPopularCard(title, servings, time, img, recipeId, url, stars, instructions) {
   let card = `<div class="card featured-recipe">
 	            <div class="card-block row">
 		            <div class="col-4">
@@ -13,14 +13,14 @@ function getPopularCard(title, servings, time, img, instructions, stars) {
 		            <div class="col-8">
 		                <h4 class="card-title">${title}</h4>
 		                ${stars}
-		                <ol>${instructions}
-		                	<li style="list-style:none;"><br>More instructions...</li>
+		                <ol style="padding-left:15px;">${instructions}
+		                	<li style="list-style:none;"><br><a href="#" id="more-instructions" url=${url} recipeid=${recipeId}>More instructions...</a></li>
 		                </ol>
 		                <hr>
 		                <div class="featured-footer">
 		                  <div class="card-cooktime mr-3 mr-sm-1 ">
 		                    <i class="fa fa-clock-o"></i>
-		                    <span class="icon-text"><small>45 m</small></span>
+		                    <span class="icon-text"><small>${time}</small></span>
 		                  </div>
 		                  <div class="card-yield mr-3 mr-sm-1 ">
 		                    <i class="fa fa-pie-chart"></i>
@@ -46,7 +46,14 @@ function printPopular() {
 			    let img = recipe.image;
 			    let title = recipe.title;
 			    let servings = recipe.servings;
-			    let time = recipe.preparationMinutes;
+			    let time ='';
+			    if (typeof recipe.preparationMinutes !== 'undefined') {
+				    time = recipe.preparationMinutes + ' m';
+				} else {
+					time = 'unknown';
+				}
+			    let recipeId = recipe.id;
+			    let url = recipe.sourceUrl ? recipe.sourceUrl : 'none';
 			    let stars = printStars(recipe.spoonacularScore);
 			    let instructions = ""
 			    $(recipe.analyzedInstructions[0].steps).each(function(index, value){
@@ -57,10 +64,10 @@ function printPopular() {
 			    	} 
 			    });
 
-			    html += getPopularCard(title, servings, time, img, instructions, stars);
+			    html += getPopularCard(title, servings, time, img, recipeId, url, stars, instructions);
 	    	});
 	    	$("#popular-recipes").html(html);
-	    	
+	    	recipeEventApi();
 	    	$("#see-more-popular").on("click", function(){
 	    		seeMorePopular(top50Arr);
 	    	});

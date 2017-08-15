@@ -137,7 +137,12 @@ function performCallToGetRecipes(url,config){
           let img = recipe.image;
           let title = recipe.title;
           let servings = recipe.servings;
-          let time = recipe.preparationMinutes;
+          let time = '';
+          if (typeof recipe.preparationMinutes !== 'undefined') {
+            time = recipe.preparationMinutes + ' m';
+          } else {
+            time = 'unknown';
+          }
           let recipeId = recipe.id;
           let stars = printStars(recipe.spoonacularScore);
           html += getCard(title, servings, time, img, url, recipeId, stars);
@@ -282,7 +287,7 @@ function getRecipe(url, config, state, recipeId) {
 }
 
 function recipeEventApi() {
-  $('my-card').on('click', function () {
+  $('my-card, #more-instructions').on('click', function () {
       let sourceUrl = this.url;
       let myId = this.recipeId;
       console.log("myId: " + myId);
@@ -332,9 +337,9 @@ function printStars(spoonScore){
    if (score.halfstar() > 0) {
     starsStr +=  "<i class='fa fa-star-half'></i>"
    };
-   console.log("spoonScore: " + spoonScore)
-   console.log("fullstars: " + score.fullstars() + " | halfstar: " + score.halfstar());
-   console.log("starsStr: " + starsStr);
+   // console.log("spoonScore: " + spoonScore)
+   // console.log("fullstars: " + score.fullstars() + " | halfstar: " + score.halfstar());
+   // console.log("starsStr: " + starsStr);
    return starsStr;
 };
 
