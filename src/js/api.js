@@ -319,19 +319,47 @@ function likeRecipe(myRecipe) {
   return myRecipe;
 }
 
+var amLiking = false;
 function recipeEventApi() {
   console.log("added heart and my card listeners");
   $('.heart').on('click', function () {
     let id = $(this).attr('heart-id');
-    let transactionRef = firebase.database().ref(`recipes/${id}`);
-    transactionRef.transaction(function (recipe) {
-      if(recipe) {
-        recipe = likeRecipe(recipe);
-        return recipe;
-      } else {
-        return recipe;
+    if(!amLiking){
+      amLiking = true;
+      if(authorization.currentUser){
+        if(!authorization.currentUser.isAnonymous){
+          firebase.database().ref("userRecipes/" + authorization.currentUser.uid).once("value", function(snap){
+            if(!snap.hasChild(id)){
+              firebase.database().ref("userRecipes/" + authorization.currentUser.uid + "/" + id).set(true, function(error){
+                amLiking = false;
+                if(error){
+                  console.log(error.code);
+                } else {
+                  let transactionRef = firebase.database().ref(`recipes/${id}`);
+                  transactionRef.transaction(function (recipe) {
+                    if(recipe) {
+                      recipe = likeRecipe(recipe);
+                      return recipe;
+                    } else {
+                      return recipe;
+                    }
+                  });
+                }
+              });
+            } else {
+              amLiking = false;
+            }
+          }, function(error){
+            amLiking = false;
+            console.log(error.code);
+          });
+        } else {
+          amLiking = false;
       }
-    });
+      } else {
+        amLiking = false;
+      }
+    }
   });
   $('my-card','#more-instructions').on('click', function () {
       console.log("click my card");
