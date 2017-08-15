@@ -60,12 +60,16 @@ input[type="tel"]:focus,
 input[type="color"]:focus,
 .uneditable-input:focus {
   border-color: $main;
-  box-shadow: 0 0.5px 0.5px $main inset, 0 0 0.5px $main;
+  box-shadow: 0 0 0 0 $main, 0 0 0 0 $main;
   outline: 0 none;
 }
 
 input[type="text"]{
   border-color: $secondary;
+}
+
+button:focus {
+  outline: none !important;
 }
 
 body{
@@ -88,26 +92,37 @@ nav  {
   font-size: 24px;
 }
 
-//.btn-secondary {
-//  color: #FFF;
-//  background-color: $secondary;
-//  border-color: $secondary;
-//}
-//
-//.btn-secondary:hover {
-//  color: #FFF;
-//  background-color: #de6345;
-//  border-color: #de6345;
-//}
-//
-//.btn-secondary:focus {
-//  color: #FFF;
-//  background-color: #de6345;
-//  border-color: #de6345;
-//}
+.sm-btn{
+  border-bottom-left-radius: 4px !important;
+  border-top-left-radius: 4px !important;
+}
+
+.navbar-toggler-icon, navbar-toggler-icon:hover {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(247, 111, 77, 1.0)' stroke-width='1' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E")
+  !important;
+  cursor: pointer;
+}
+
+.nav-dropdown {
+  color: $secondary;
+}
+
+.list-group-item:hover {
+  cursor: pointer;
+}
+
+#signInButtonIndex, #signOutButtonIndex, #signUpButtonIndex {
+  font-weight: 400 !important;
+  text-transform: uppercase;
+}
 
 .errorMessage{
   color:#C93838;
+}
+
+a:focus, a:visited, a:hover {
+  outline: none !important;
+  border: none !important;
 }
 
 a {
@@ -194,12 +209,21 @@ RECIPE CARDS
   padding-top: 0.5rem;
 }
 
+.card-recipe .card-title {
+  color: #3c3f41 !important;
+  font-weight: 400 !important;
+}
+
 .card-recipe:hover {
   cursor:pointer;
 }
 
 .card-footer i{
   color: $main;
+}
+
+.icon-text {
+  color: black !important;
 }
 
 .card-footer {
@@ -212,7 +236,7 @@ RECIPE CARDS
 /************************************
 RECIPE PROCEDURES
 ************************************/
-.recipe-container{
+.instr-container{
   display: none;
 }
 
@@ -278,7 +302,35 @@ GOOGLE MAPS
   border-radius:4px;
 }
 
+.card-img-overlay{
+  height: 50px;
+  box-sizing: content-box;
+}
 .heart {
-  display: flex;
-  justify-content: flex-end;
+  height: 100%;
+  width: 50px;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.fa-heart-o {
+  font-size: 30px;
+  color: rgba(255,255,255,0.7);
+}
+.heart .fa-heart{
+  font-size: 30px;
+  color: rgba(255,255,255,0.7);
+  display: none;
+}
+
+.likes {
+  color: $secondary !important;
+}
+
+.heart:hover .fa-heart-o{
+  display: none;
+}
+
+.heart:hover .fa-heart {
+  display: inline;
 }

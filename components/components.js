@@ -6,6 +6,7 @@ class Card extends HTMLElement {
     this._servings = '';
     this._title = '';
     this._url = '';
+    this._likes = '';
     this._recipeId = '';
     this._stars = '';
   }
@@ -30,6 +31,10 @@ class Card extends HTMLElement {
   get recipeId(){
     return this._recipeId;
   }
+  get likes() {
+    return this._likes;
+  }
+
   get stars(){
     return this._stars;
   }
@@ -40,34 +45,42 @@ class Card extends HTMLElement {
     this._title = this.getAttribute('title');
     this._url = this.getAttribute('url');
     this._recipeId = this.getAttribute('recipeId');
-    this._stars = this.getAttribute('stars')
+    this._stars = this.getAttribute('stars');
+    this._likes = this.getAttribute('likes');
     let template =
       `
-        <div data-recipeId="${this.recipeId}" class="card card-recipe">
+        <div  class="card card-recipe">
           <img class="card-img-top img-fluid"
                src="${this.source}"
                alt="Card image cap"
                style="width: 100%">
           <div class="card-img-overlay" >
-            <div class="heart">
+            <div heart-id="${this.recipeId}" class="heart ml-auto d-flex align-items-center justify-content-center" >
               <i class="fa fa-heart-o"></i>
+              <i class="fa fa-heart"></i>
             </div>
           </div>
           <div class="card-block">
-            <div class="card-block">
               <h4 class="card-title">${this.title}</h4>
               ${this.stars}
-            </div>
           </div>
           <div class="card-footer">
-            <div class="footer-icons d-flex flex-row justify-content-start">
-                <div class="card-cooktime mr-3 mr-sm-1 ">
-                  <i class="fa fa-clock-o"></i>
-                  <span class="icon-text"><small>${this.time}</small></span>
+            <div class="footer-icons d-flex flex-row justify-content-between">
+                <div>
+                   <div class="card-likes mr-3">
+                    <i class="fa fa-heart likes"></i>
+                    <span class="icon-text"><small>${this.likes}</small></span>
+                  </div>
                 </div>
-                <div class="card-yield mr-3 mr-sm-1 ">
-                  <i class="fa fa-pie-chart"></i>
-                  <span class="icon-text"><small>${this.servings} servings</small></span>
+                <div class="d-flex flex-row justify-content-end">
+                  <div class="card-cooktime mr-3">
+                    <i class="fa fa-clock-o"></i>
+                    <span class="icon-text"><small>${this.time}</small></span>
+                  </div>
+                  <div class="card-yield mr-3">
+                    <i class="fa fa-pie-chart"></i>
+                    <span class="icon-text"><small>${this.servings} servings</small></span>
+                  </div>
                 </div>
               </div>
           </div>
