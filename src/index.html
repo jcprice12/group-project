@@ -6,6 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Hungry Hippo</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="shortcut icon" type="image/jpg" href="img/hippo.jpg">
   <script src="https://www.gstatic.com/firebasejs/4.2.0/firebase.js"></script>
 </head>
 <body>
@@ -146,6 +147,7 @@
                 </div>
               </div>
             </div>
+
             <div class="mb-2">
               <a class="collapsed collapse-menu" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"
                  aria-expanded="false" aria-controls="collapseTwo">
@@ -328,44 +330,46 @@
 </div>
 <!-- ***************************************************** End Sign Up ******************************************************************************-->
 
-<!--<div class="container">-->
-  <!--<div class="row mt-5">-->
-    <!--<div class="col-sm-12">-->
-      <!--<div class="card" style="width: 100%">-->
-        <!--<h4 class="card-header">Popular Recipes</h4>-->
-        <!--<div class="card-block dashboard-card">-->
-          <!--<div id="popular-recipes">-->
-          <!--</div>-->
-          <!--<a href="#" id="see-more-popular">See more...</a>-->
-        <!--</div>-->
-      <!--</div>-->
-    <!--</div>-->
-  <!--</div>-->
-  <!--<div class="row mt-5">-->
-    <!--<div class="col-md-12">-->
-      <!--<div class="card dashboard-card">-->
-        <!--<h4 class="card-header">-->
-          <!--<p>Nearby Grocery Stores</p>-->
-          <!--<button id="findStoresButton" class="btn btn-secondary" type="button">Refresh</button>-->
-        <!--</h4>-->
-        <!--<div class="card-block">-->
-          <!--<div id="googleMapContainer">-->
-            <!--<div id="map"></div>-->
-          <!--</div>-->
-        <!--</div>-->
-      <!--</div>-->
-    <!--</div>-->
-  <!--</div> &lt;!&ndash; end row 2 &ndash;&gt;-->
-  <div class="container">
-    <div class="card-columns">
+<div class="container">
+  <div class="row mt-5">
+    <div class="col-sm-12">
+      <div class="card" style="width: 100%">
+        <h4 class="card-header">Popular Recipes</h4>
+        <div class="card-block dashboard-card">
+          <div id="popular-recipes">
+          </div>
+          <a href="#" id="see-more-popular">See more...</a>
+        </div>
+      </div>
     </div>
   </div>
-  <div class="container recipe-container"></div>
+  <div class="row mt-5">
+    <div class="col-md-12">
+      <div class="card dashboard-card">
+        <h4 class="card-header">
+          Nearby Grocery Stores
+        </h4>
+        <div class="card-block">
+          <form>
+            <div class="form-group">
+              <button id="findStoresButton" class="btn btn-secondary col-7 col-sm-3 col-md-2" type="submit">Find Stores</button>
+              <input type="text" class="form-control col-12 col-sm-8 col-md-9" id="myLocationInput" placeholder="Your Device's Location">
+            </div>
+          </form>
+          <div id="googleMapContainer">
+            <div id="map"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> <!-- end row 2 -->
+  <div class="card-columns"></div>
+  <div class="container recipe-container" id="recipe-container"></div>
   <div id="cardsLoadContainer"></div>
-<!--</div>-->
-<!--<script async defer-->
-        <!--src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBggUAvADsZsmy3v3WrWv2HAb_DlSkdF7Y&libraries=places">-->
-<!--</script>-->
+</div>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBggUAvADsZsmy3v3WrWv2HAb_DlSkdF7Y&libraries=places">
+</script>
 <script type="text/javascript" src="../components/components.js"></script>
 </body>
 </html>

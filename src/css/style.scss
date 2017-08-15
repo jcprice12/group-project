@@ -203,12 +203,21 @@ RECIPE CARDS
   padding-top: 0.5rem;
 }
 
+.card-recipe .card-title {
+  color: #3c3f41 !important;
+  font-weight: 400 !important;
+}
+
 .card-recipe:hover {
   cursor:pointer;
 }
 
 .card-footer i{
   color: $main;
+}
+
+.icon-text {
+  color: black !important;
 }
 
 .card-footer {
@@ -221,7 +230,7 @@ RECIPE CARDS
 /************************************
 RECIPE PROCEDURES
 ************************************/
-.recipe-container{
+.instr-container{
   display: none;
 }
 
@@ -254,6 +263,15 @@ GOOGLE MAPS
   height: 100%;
   width:100%;
 }
+
+#myLocationInput{
+  float:right;
+
+  @include media-breakpoint-only(xs) {
+    margin-top:10px;
+  }
+}
+
 
 .placeContainer{
   width:400px;
@@ -293,10 +311,14 @@ GOOGLE MAPS
   font-size: 30px;
   color: rgba(255,255,255,0.7);
 }
-.fa-heart{
+.heart .fa-heart{
   font-size: 30px;
   color: rgba(255,255,255,0.7);
   display: none;
+}
+
+.likes {
+  color: $secondary !important;
 }
 
 .heart:hover .fa-heart-o{
