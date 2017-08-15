@@ -56,11 +56,13 @@ function callState() {
 
 
 function cardsEventApi(){
-  $('body').on('click', '#search, #general-search-btn', (e) => {
+  $('#search, #general-search-btn').click( (e) => {
     e.preventDefault();
     let search = '';
+    console.log("hey1")
     if (typeof $('#general-search').val() !== 'undefined' && $('#general-search').val() !== "") {
       search = $('#general-search').val();
+      console.log("hey2")
     } else {
       search = $('#ingredients').val();
     };
