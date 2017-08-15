@@ -72,6 +72,10 @@
             &nbsp;-&nbsp;
             <input type="number" class="form-control" style="display:inline-block; width:45%" min="0"
                    id="max-calories" aria-describedby="caloriesHelp" placeholder="Max">
+            <br>
+            <small>Enter maximum and/or minumum calories for the entire dish.
+              <br><span id="calories-error" style="display:none;">**Maximum calories must be larger than minumum calories.**</span>
+            </small>
           </div>
           <div id="accordion" role="tablist" aria-multiselectable="true">
             <div class="mb-2">
@@ -347,6 +351,7 @@
           </div>
         </div>
       </div>
+      <h2 id="no-results" style="display:none;">Sorry, that search didn't match any results.</h2>
     </div>
   </div> <!-- end row 2 -->
   <div class="card-columns"></div>

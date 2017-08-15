@@ -86,39 +86,46 @@ function cardsEventApi(){
     let excludeIngredients = $('#exclude-ingredients').val();
     let maxCalories = $('#max-calories').val();
     let minCalories = $('#min-calories').val();
-    let diet = $(".diet:checked").attr("id");
-    let allIntolerances = "";
-    $(".intolerance:checked").each(function() {
-      allIntolerances += ($(this).attr("id") + " ");
-    });
-    allIntolerances = allIntolerances.trim();
+    if (maxCalories < minCalories) {
+        $("#calories-error").css("display", "inline")
+        cardsEventApi()
+        console.log("hi")
+    } else{
+      $("#calories-error").css("display", "none")
+      let diet = $(".diet:checked").attr("id");
+      let allIntolerances = "";
+      $(".intolerance:checked").each(function() {
+        allIntolerances += ($(this).attr("id") + " ");
+      });
+      allIntolerances = allIntolerances.trim();
 
-    var head = {
-      headers: {"X-Mashape-Key": "VftGeJE2qimshoNc94fZxoUiEp04p154Astjsn7Kuggh3FXLVw"}
-    };
-    var obj = {
-      'limitLicence': false,
-      'number': 300,
-      'query': search,
-      'ingredients': search,
-      'excludeIngredients': excludeIngredients,
-      'maxCalories': maxCalories,
-      'minCalories': minCalories,
-      'diet': diet,
-      'intolerances' : allIntolerances,
-      'ranking': 1,
-      'addRecipeInformation': true
-    };
+      var head = {
+        headers: {"X-Mashape-Key": "VftGeJE2qimshoNc94fZxoUiEp04p154Astjsn7Kuggh3FXLVw"}
+      };
+      var obj = {
+        'limitLicence': false,
+        'number': 300,
+        'query': search,
+        'ingredients': search,
+        'excludeIngredients': excludeIngredients,
+        'maxCalories': maxCalories,
+        'minCalories': minCalories,
+        'diet': diet,
+        'intolerances' : allIntolerances,
+        'ranking': 1,
+        'addRecipeInformation': true
+      };
 
-    for(var key in obj) {
-      if(obj[key] === "") {
-         delete obj[key];
-       };
-    };
+      for(var key in obj) {
+        if(obj[key] === "") {
+           delete obj[key];
+         };
+      };
 
-    var url = 'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/searchComplex?';
-    url += '?' + $.param(obj);
-    searchRecipes(url, head);
+      var url = 'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/searchComplex?';
+      url += '?' + $.param(obj);
+      searchRecipes(url, head);
+    };
   });
 }
 
@@ -160,12 +167,17 @@ function performCallToGetRecipes(url,config){
 
       $(parentContainer).css("display", "none");
       loadAnimation1.stopAndRemove();
-      $('.card-columns').html(html);
-      $(".card-columns").css("display", "block");
+      if (typeof recipes[0] === 'undefined') {
+        console.log("hi")
+        $('#no-results').css("display", "block");
+      } else {
+        $('#no-results').css("display", "none");
+        $('.card-columns').html(html);
+        $(".card-columns").css("display", "block");
 
-      //add event listener for clicking recipe card to get specific recipe information
-      recipeEventApi();
-
+        //add event listener for clicking recipe card to get specific recipe information
+        recipeEventApi();
+      }
     }); // end axios.get().then()
   loadAnimation1.startAll();
 }
@@ -228,7 +240,7 @@ function setTop50Recipes(recipes){
   }, function(error){
     console.log(error.code);
   }); // end top50Ref.once() 
-}
+};
 
 function searchRecipes(url, config) {
   if(!authorization.currentUser){
@@ -241,7 +253,7 @@ function searchRecipes(url, config) {
   } else {
     performCallToGetRecipes(url,config);
   }
-}
+};
 
 function getRecipeWithLocalStorage(url,config){
   axios.get(url, config)
@@ -256,7 +268,7 @@ function getRecipeWithLocalStorage(url,config){
       localStorage.setItem("Current Page", 'Recipe');
       callState();
     });
-}
+};
 
 function getRecipe(url, config, state, recipeId) {
 
@@ -291,7 +303,7 @@ function getRecipe(url, config, state, recipeId) {
 
 
     });
-}
+};
 
 function recipeEventApi() {
   $('my-card, #more-instructions').on('click', function () {
