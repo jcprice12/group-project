@@ -28,9 +28,9 @@
                 aria-expanded="false" aria-controls="collapseExample"><i class="fa fa-angle-down"
                                                                           aria-hidden="true"></i></button>
       </span>
-      <input type="text" class="form-control" placeholder="Search Recipes">
+      <input type="text" class="form-control" placeholder="Search Recipes" id="general-search">
       <span class="input-group-btn">
-        <button class="btn btn-outline-secondary" type="button"><i class="fa fa-search" aria-hidden="true"></i></button>
+        <button class="btn btn-outline-secondary" type="button"><i class="fa fa-search" aria-hidden="true" id="general-search-btn"></i></button>
       </span>
     </div>
   </form>
@@ -87,6 +87,10 @@
             &nbsp;-&nbsp;
             <input type="number" class="form-control" style="display:inline-block; width:45%" min="0"
                    id="max-calories" aria-describedby="caloriesHelp" placeholder="Max">
+            <br>
+            <small>Enter maximum and/or minumum calories for the entire dish.
+              <br><span id="calories-error" style="display:none;">**Maximum calories must be larger than minumum calories.**</span>
+            </small>
           </div>
           <div id="accordion" role="tablist" aria-multiselectable="true">
             <div class="mb-2">
@@ -365,6 +369,7 @@
           </div>
         </div>
       </div>
+      <h2 id="no-results" style="display:none;">Sorry, that search didn't match any results.</h2>
     </div>
   </div> <!-- end row 2 -->
   <div class="card-columns"></div>

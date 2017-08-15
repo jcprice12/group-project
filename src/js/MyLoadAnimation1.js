@@ -142,7 +142,6 @@ MyLoadAnimation1.prototype.animate = function(elementToAnimate, elementToAnimate
 
 //should be called when initially starting the animation
 MyLoadAnimation1.prototype.startAll = function(){
-	//console.log("hey");
 	this.canPlay = true;
 	$(this.parentContainer).append(this.buildHTML());
 	this.startAnimation(0,this.elementsToAnimate.length);
