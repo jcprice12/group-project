@@ -4,11 +4,11 @@ import {MyLoadAnimation1} from './MyLoadAnimation1.js';
 var authorization;
 
 /***** Collapse Animation ********/
-$(".collapse-menu").on("click", function () {
+$(".collapse-menu").on("click", function(){
   if ($(this).find(".plus-minus").text() === "(-)") {
     $(this).find(".plus-minus").text("(+)")
   }
-  else {
+  else{
     $(this).find(".plus-minus").text("(-)");
   }
 });
@@ -56,10 +56,15 @@ function callState() {
 }
 
 
-function cardsEventApi() {
-  $('body').on('click', '#search', (e) => {
+function cardsEventApi(){
+  $('body').on('click', '#search, #general-search-btn', (e) => {
     e.preventDefault();
-    let search = $('#ingredients').val();
+    let search = '';
+    if (typeof $('#general-search').val() !== 'undefined' && $('#general-search').val() !== "") {
+      search = $('#general-search').val();
+    } else {
+      search = $('#ingredients').val();
+    };
     let excludeIngredients = $('#exclude-ingredients').val();
     let maxCalories = $('#max-calories').val();
     let minCalories = $('#min-calories').val();
@@ -165,7 +170,7 @@ function setTop50Recipes(recipes) {
           return 1;
         } else {
           return 0;
-        }
+        };
       });
       // Trim to only the top 50
       allRecipes = allRecipes.slice(0, 50);
@@ -330,6 +335,27 @@ function recipeEventApi() {
       }
     });
   });
+  $('my-card, #more-instructions').on('click', function () {
+      let sourceUrl = $(this).attr("data-url");
+      let myId = $(this).attr("data-recipeId");
+      console.log("myId: " + myId);
+      let head = {
+        headers: {"X-Mashape-Key": "VftGeJE2qimshoNc94fZxoUiEp04p154Astjsn7Kuggh3FXLVw"}
+      };
+      let obj = {
+        'forceExtraction': false,
+        url: sourceUrl
+      };
+      let url = `https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/extract?`;
+      url += $.param(obj);
+      if (authorization.currentUser) {
+        const state = firebase.database().ref(`usersInfo/${authorization.currentUser.uid}/state/`);
+        getRecipe(url, head, state, myId);
+      } else {
+        getRecipeWithLocalStorage(url,head);
+      }
+    }
+  )
   // $('my-card').on('click', function () {
   //     let sourceUrl = this.url;
   //     let myId = this.recipeId;
@@ -355,54 +381,48 @@ function recipeEventApi() {
   //     // }
   //   }
   // )
-
 }
 
 // Get html element for stars based on spoonacularScore
-function printStars(spoonScore) {
-  let score = {
-    fullstars: (function () {
-      if (spoonScore % 20 > 15) {
-        return (Math.floor(spoonScore / 20) + 1)
-      } else {
-        return Math.floor(spoonScore / 20)
+function printStars(spoonScore){
+    let score = {
+      fullstars : (function(){
+        if (spoonScore%20 >15) {
+          return (Math.floor(spoonScore/20)+1)
+        } else {
+          return Math.floor(spoonScore/20)
+        }
+      }),
+      halfstar : (function(){
+          if (spoonScore%20 <= 15 && spoonScore%20 >= 5){
+            return 1;
+          } else {
+            return 0;
+          }
+        })
+   }
+   var starsStr = "";
+   for (var i=0; i < score.fullstars(); i++) {
+      if (score.fullstars() > 0){
+        starsStr += "<i class='fa fa-star'></i>&nbsp;"
       }
-    }),
-    halfstar: (function () {
-      if (spoonScore % 20 <= 15 && spoonScore % 20 >= 5) {
-        return 1;
-      } else {
-        return 0;
-      }
-    })
-  }
-  var starsStr = "";
-  for (var i = 0; i < score.fullstars(); i++) {
-    if (score.fullstars() > 0) {
-      starsStr += "<i class='fa fa-star'></i>&nbsp;"
-    }
-  }
-  ;
-  if (score.halfstar() > 0) {
-    starsStr += "<i class='fa fa-star-half'></i>"
-  }
-  ;
-  // console.log("spoonScore: " + spoonScore)
-  // console.log("fullstars: " + score.fullstars() + " | halfstar: " + score.halfstar());
-  // console.log("starsStr: " + starsStr);
-  return starsStr;
+   };
+   if (score.halfstar() > 0) {
+    starsStr +=  "<i class='fa fa-star-half'></i>"
+   };
+   return starsStr;
 };
 
 // Delete duplicates while merging arrays
-Array.prototype.unique = function () {
-  var a = this.concat();
-  for (var i = 0; i < a.length; ++i) {
-    for (var j = i + 1; j < a.length; ++j) {
-      if (a[i].id === a[j].id)
-        a.splice(j--, 1);
+Array.prototype.unique = function() {
+    var a = this.concat();
+    for(var i=0; i<a.length; ++i) {
+        for(var j=i+1; j<a.length; ++j) {
+            if(a[i].id === a[j].id)
+                a.splice(j--, 1);
+        }
     }
-  }
-  return a;
+    return a;
 };
 
 module.exports = {
