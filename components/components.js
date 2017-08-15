@@ -50,21 +50,23 @@ class Card extends HTMLElement {
     let template =
       `
         <div  class="card card-recipe">
-          <img class="card-img-top img-fluid card-img"
+          <img class="card-img-top img-fluid recipe-img"
                src="${this.source}"
                alt="Card image cap"
-               style="width: 100%">
-          <div class="card-img-overlay" >
+               style="width: 100%" 
+               source-url="${this.url}" 
+               data-recipeId="${this.recipeId}">
+          <div  class="card-img-overlay" >
             <div heart-id="${this.recipeId}" class="heart ml-auto d-flex align-items-center justify-content-center" >
               <i class="fa fa-heart-o"></i>
               <i class="fa fa-heart"></i>
             </div>
           </div>
-          <div class="card-block recipe-block">
+          <div  source-url="${this.url}" data-recipeId="${this.recipeId}" class="card-block recipe-block">
               <h4 class="card-title">${this.title}</h4>
               ${this.stars}
           </div>
-          <div class="card-footer recipe-footer">
+          <div  source-url="${this.url}" data-recipeId="${this.recipeId}" class="card-footer recipe-footer">
             <div class="footer-icons d-flex flex-row justify-content-between">
                 <div>
                    <div class="card-likes mr-3">
