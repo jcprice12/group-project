@@ -50,7 +50,7 @@ class Card extends HTMLElement {
     let template =
       `
         <div  class="card card-recipe">
-          <img class="card-img-top img-fluid"
+          <img class="card-img-top img-fluid card-img"
                src="${this.source}"
                alt="Card image cap"
                style="width: 100%">
@@ -60,11 +60,11 @@ class Card extends HTMLElement {
               <i class="fa fa-heart"></i>
             </div>
           </div>
-          <div class="card-block">
+          <div class="card-block recipe-block">
               <h4 class="card-title">${this.title}</h4>
               ${this.stars}
           </div>
-          <div class="card-footer">
+          <div class="card-footer recipe-footer">
             <div class="footer-icons d-flex flex-row justify-content-between">
                 <div>
                    <div class="card-likes mr-3">

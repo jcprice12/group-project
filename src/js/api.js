@@ -21,7 +21,6 @@ function showRecipe(recipe, length) {
   console.log("recipe html string is:");
   console.log(recipe);
   $("#recipe-container").css("display", "block").html(recipe);
-  ;
   $('.recipeInstructions').addClass('mt-5');
   $('.recipeInstructions ol').addClass('list-group');
   $('.recipeInstructions ol li').addClass('list-group-item list-group-item-info justify-content-between');
@@ -112,7 +111,7 @@ function performCallToGetRecipes(url, config) {
     .then((res) => {
       let arr = res.data.results;
       return arr;
-    }); // end axios.get().then()
+    }); // end axios.get().then(
 }
 
 function setRecipeInDb(recipe) {
@@ -120,6 +119,7 @@ function setRecipeInDb(recipe) {
     if (snap.val()) {
       if (snap.val().ourLikes) {
         recipe.ourLikes = snap.val().ourLikes;
+        recipe.aggregateLikes += recipe.ourLikes;
         firebase.database().ref("recipes/" + recipe.id).set(recipe, function (error) {
           if (error) {
             console.log(error.code);
@@ -193,6 +193,8 @@ function setTop50Recipes(recipes) {
     console.log(error.code);
   }); // end top50Ref.once()
 }
+let promises = [];
+
 
 function searchRecipes(url, config) {
   // let parentContainer = document.getElementById("cardsLoadContainer");
@@ -208,7 +210,6 @@ function searchRecipes(url, config) {
       console.log("error signing in anonymously to perform search");
     });
   } else {
-    let promises = [];
     performCallToGetRecipes(url, config).then((res) => {
       res.forEach((recipe) => {
         console.log('hello');
@@ -315,7 +316,6 @@ function getRecipe(url, config, state, recipeId) {
 
 function likeRecipe(myRecipe) {
   myRecipe.ourLikes += 1;
-  myRecipe.aggregateLikes += myRecipe.ourLikes;
   return myRecipe;
 }
 
@@ -335,7 +335,7 @@ function recipeEventApi() {
       }
     });
   });
-  $('my-card, #more-instructions').on('click', function () {
+  $('my-card','#more-instructions').on('click', function () {
       let sourceUrl = $(this).attr("data-url");
       let myId = $(this).attr("data-recipeId");
       console.log("myId: " + myId);
