@@ -4,11 +4,11 @@ import {MyLoadAnimation1} from './MyLoadAnimation1.js';
 var authorization;
 
 /***** Collapse Animation ********/
-$(".collapse-menu").on("click", function () {
+$(".collapse-menu").on("click", function(){
   if ($(this).find(".plus-minus").text() === "(-)") {
     $(this).find(".plus-minus").text("(+)")
   }
-  else {
+  else{
     $(this).find(".plus-minus").text("(-)");
   }
 });
@@ -37,8 +37,8 @@ function showRecipe(recipe, length) {
 //
 
 
-function cardsEventApi() {
-  $('body').on('click', '#search, #general-search-btn', (e) => {
+function cardsEventApi(){
+  $('#search, #general-search-btn').click( (e) => {
     e.preventDefault();
     $('.card-columns').css('display', 'block');
     $('#recipe-container').css('display', 'none');
@@ -114,8 +114,7 @@ function setTop50Recipes(recipes) {
           return 1;
         } else {
           return 0;
-        }
-        ;
+        };
       });
       // Trim to only the top 50
       allRecipes = allRecipes.slice(0, 50);
