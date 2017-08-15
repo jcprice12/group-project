@@ -58,12 +58,15 @@ function callState() {
 function cardsEventApi(){
   $('#search, #general-search-btn').click( (e) => {
     e.preventDefault();
+    $("#search-message").css("display", "none")
+    $(".home").css("display", "none");
     let search = '';
     if (typeof $('#general-search').val() !== 'undefined' && $('#general-search').val() !== "") {
       search = $('#general-search').val();
     } else {
       search = $('#ingredients').val();
     };
+    let ingredients = $('#ingredients').val();
     let excludeIngredients = $('#exclude-ingredients').val();
     let maxCalories = $('#max-calories').val();
     let minCalories = $('#min-calories').val();
@@ -86,7 +89,7 @@ function cardsEventApi(){
         'limitLicence': false,
         'number': 300,
         'query': search,
-        'ingredients': search,
+        'ingredients': ingredients,
         'excludeIngredients': excludeIngredients,
         'maxCalories': maxCalories,
         'minCalories': minCalories,
@@ -95,16 +98,17 @@ function cardsEventApi(){
         'ranking': 1,
         'addRecipeInformation': true
       };
+      displaySearchMessage(obj);
 
       for (var key in obj) {
         if (obj[key] === "") {
           delete obj[key];
         }
       }
-
-        var url = 'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/searchComplex?';
-        url += '?' + $.param(obj);
-        searchRecipes(url, head);
+        
+      var url = 'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/searchComplex?';
+      url += '?' + $.param(obj);
+      searchRecipes(url, head);
       }
     });
 }
@@ -188,7 +192,7 @@ function performCallToGetRecipes(url, config) {
   }).catch(function(){
     $(parentContainer).css("display", "none");
     loadAnimation1.stopAndRemove();
-  }); // end axios.get().then()
+  }); 
 
   loadAnimation1.startAll();
 }
@@ -240,6 +244,32 @@ function setTop50Recipes(recipes) {
 }
 let promises = [];
 
+function displaySearchMessage(obj){
+  // Pass in a key and value pair; if empty, do nothing. If not empty, print something. But printing depends on what I want to print
+  
+  var searchText = ("Search: " + obj.query);
+  if (obj.query !== obj.ingredients && obj.ingredients !== "") {
+    searchText += ("; Ingredients: " + obj.ingredients);
+  }
+  if (obj.excludeIngredients !== "") {
+    searchText += ("; exclude ingredients: " + obj.excludeIngredients)
+  }
+  if (obj.maxCalories !== "") {
+    searchText += ("; max. calories: " + obj.maxCalories)
+  }
+  if (obj.minCalories !== "") {
+    searchText += ("; min. calories: " + obj.minCalories)
+  }
+  if (obj.diet !== "" && (typeof obj.diet !== 'undefined')) {
+    searchText += ("; special diet: " + obj.diet)
+  }
+  if (obj.intolerances !== "") {
+    $(obj.intolerances).each(function(index, value){
+      searchText += ("; intolerances: " + obj.intolerances[index])
+    })  
+  }
+  $("#search-message").html(searchText).css("display", "block");
+};
 
 function searchRecipes(url, config) {
   if (!authorization.currentUser) {
