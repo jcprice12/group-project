@@ -75,9 +75,14 @@ function getCard(title, servings, time, img, url, recipeId, stars) {
 }
 
 function cardsEventApi(){
-  $('body').on('click', '#search', (e) => {
+  $('body').on('click', '#search, #general-search-btn', (e) => {
     e.preventDefault();
-    let search = $('#ingredients').val();
+    let search = '';
+    if (typeof $('#general-search').val() !== 'undefined' && $('#general-search').val() !== "") {
+      search = $('#general-search').val();
+    } else {
+      search = $('#ingredients').val();
+    };
     let excludeIngredients = $('#exclude-ingredients').val();
     let maxCalories = $('#max-calories').val();
     let minCalories = $('#min-calories').val();
