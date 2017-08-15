@@ -4,13 +4,13 @@ import {MyLoadAnimation1} from './MyLoadAnimation1.js';
 function getPopularCard(title, servings, time, img, recipeId, url, stars, instructions) {
   let card = `<div class="card featured-recipe">
 	            <div class="card-block row">
-		            <div class="col-4">
+		            <div class="col-lg-3 col-md-4 col-12 mb-sm-2 mb-xs-2">
 		                <img class="img-fluid"
 		                 src=${img}
 		                 alt="Card image cap"
 		                 style="width: 100%">
 		            </div>
-		            <div class="col-8">
+		            <div class="col-lg-9 col-md-8 col-12">
 		                <h4 class="card-title">${title}</h4>
 		                ${stars}
 		                <ol style="padding-left:15px;">${instructions}
@@ -59,7 +59,7 @@ function printPopular() {
 			    $(recipe.analyzedInstructions[0].steps).each(function(index, value){
 			    	var instrNum = recipe.analyzedInstructions[0].steps[index].step;
 			    	var instrListItem = ("<li>" + instrNum + "</li>");
-			    	if (instructions.length < 100){
+			    	if (instructions.length < 300){
 			    		instructions += instrListItem;
 			    	} 
 			    });
