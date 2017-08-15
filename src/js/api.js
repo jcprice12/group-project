@@ -34,9 +34,6 @@ function showRecipe(recipe, length) {
   }
 }
 
-//
-
-
 function cardsEventApi(){
   $('#search, #general-search-btn').click( (e) => {
     e.preventDefault();
@@ -138,8 +135,6 @@ function setTop50Recipes(recipes) {
   }); // end top50Ref.once()
 }
 
-let promises = [];
-
 function setRecipeInDb(recipes) {
   console.log(recipes);
   let arr = [];
@@ -222,6 +217,7 @@ function searchRecipes(url, config) {
     var anonymousSignInPromise = authorization.signInAnonymously();
     anonymousSignInPromise.then(function () {
       performCallToGetRecipes(url, config).then((res) => {
+        setRecipeInDb(res);
         console.log(res);
       });
     }).catch(function () {
