@@ -59,10 +59,8 @@ function cardsEventApi(){
   $('#search, #general-search-btn').click( (e) => {
     e.preventDefault();
     let search = '';
-    console.log("hey1")
     if (typeof $('#general-search').val() !== 'undefined' && $('#general-search').val() !== "") {
       search = $('#general-search').val();
-      console.log("hey2")
     } else {
       search = $('#ingredients').val();
     };
@@ -111,49 +109,88 @@ function cardsEventApi(){
     });
 }
 
+function setRecipeInDb(oLikes, myRecipe, array, counter, recipesIWant, htmlString, parentContainer, loadAnimation1){
+  myRecipe.ourLikes = oLikes;
+  myRecipe.aggregateLikes += myRecipe.ourLikes;
+  firebase.database().ref("recipes/" + myRecipe.id).set(myRecipe, function (error) {
+    if (error) {
+      console.log(error.code);
+      recipesIWant.push(myRecipe);
+      forceSynchronization(array, (counter + 1), recipesIWant, htmlString, parentContainer, loadAnimation1);
+    } else {
+      console.log("recipe has been stored in firebase with key: " + myRecipe.id);
+      recipesIWant.push(myRecipe);
+      let url = myRecipe.sourceUrl ? myRecipe.sourceUrl : 'none';
+      let img = myRecipe.image;
+      let title = myRecipe.title;
+      let servings = myRecipe.servings;
+      let time = myRecipe.preparationMinutes;
+      let recipeId = myRecipe.id;
+      let stars = printStars(myRecipe.spoonacularScore);
+      let likes = myRecipe.aggregateLikes;
+      htmlString += getCard(title, servings, time, img, url, recipeId, stars, likes);
+      forceSynchronization(array, (counter + 1), recipesIWant, htmlString, parentContainer, loadAnimation1);
+    }
+  });
+}
+
+function forceSynchronization(array, counter, recipesIWant, htmlString, parentContainer, loadAnimation1){
+  if(counter < array.length){
+    var myRecipe = array[counter];
+    if(myRecipe.aggregateLikes > 100){
+      firebase.database().ref(`recipes/${myRecipe.id}`).once('value', (snap) => {
+        if (snap.val()) {
+          if (snap.val().ourLikes) {
+            setRecipeInDb(snap.val().ourLikes, myRecipe, array, counter, recipesIWant, htmlString, parentContainer, loadAnimation1);
+          } else {
+            setRecipeInDb(0, myRecipe, array, counter, recipesIWant, htmlString, parentContainer, loadAnimation1);
+          }
+        } else {
+          setRecipeInDb(0, myRecipe, array, counter, recipesIWant, htmlString, parentContainer, loadAnimation1);
+        }
+      }, function(error){
+        console.log(error);
+        forceSynchronization(array, (counter + 1), recipesIWant, htmlString, parentContainer, loadAnimation1);
+      });
+    } else {
+      forceSynchronization(array, (counter + 1), recipesIWant, htmlString, parentContainer, loadAnimation1);
+    }
+  } else {
+    //execute end code
+    $(parentContainer).css("display", "none");
+    loadAnimation1.stopAndRemove();
+    if(recipesIWant.length > 0){
+      $('.card-columns').css('display', 'block');
+      $('.card-columns').html(htmlString);
+      setTop50Recipes(recipesIWant);
+      recipeEventApi();
+    } else {
+      $('#no-results').css('display', 'block');
+      cardsEventApi();
+    }
+  }
+}
+
 
 function performCallToGetRecipes(url, config) {
   $('.recipe-container').html("");
   $('.card-columns').html("");
-  return axios.get(url, config)
-    .then((res) => {
-      let arr = res.data.results;
-      return arr;
-    }); // end axios.get().then(
-}
 
-function setRecipeInDb(recipe) {
-  firebase.database().ref(`recipes/${recipe.id}`).once('value', (snap) => {
-    if (snap.val()) {
-      if (snap.val().ourLikes) {
-        recipe.ourLikes = snap.val().ourLikes;
-        recipe.aggregateLikes += recipe.ourLikes;
-        firebase.database().ref("recipes/" + recipe.id).set(recipe, function (error) {
-          if (error) {
-            console.log(error.code);
-            console.log(error.message);
-          } else {
-            console.log("recipe has been stored in firebase with key: " + recipe.id);
-          }
-        });
-      }
-    } else {
-      recipe.ourLikes = 0;
+  var parentContainer = document.getElementById("cardsLoadContainer");
+  $(parentContainer).css("display", "block");
+  var loadAnimation1 = new MyLoadAnimation1(parentContainer,75,12,4,["#b7cb39","#f76f4d"]);
 
-      firebase.database().ref("recipes/" + recipe.id).set(recipe, function (error) {
-        if (error) {
-          console.log(error.code);
-          console.log(error.message);
-        } else {
-          console.log("recipe has been stored in firebase with key: " + recipe.id);
-          console.log('hello3');
-        }
-      });
+  axios.get(url, config).then((res) => {
+    let arr = res.data.results;
+    if(arr){
+      forceSynchronization(res.data.results, 0, [], '', parentContainer, loadAnimation1);
     }
+  }).catch(function(){
+    $(parentContainer).css("display", "none");
+    loadAnimation1.stopAndRemove();
+  }); // end axios.get().then()
 
-  });
-
-
+  loadAnimation1.startAll();
 }
 
 function setTop50Recipes(recipes) {
@@ -205,68 +242,15 @@ let promises = [];
 
 
 function searchRecipes(url, config) {
-  // let parentContainer = document.getElementById("cardsLoadContainer");
-  // $(parentContainer).css("display", "block");
-  // var loadAnimation1 = new MyLoadAnimation1(parentContainer,75,12,4,["#b7cb39","#f76f4d"]);
   if (!authorization.currentUser) {
     var anonymousSignInPromise = authorization.signInAnonymously();
     anonymousSignInPromise.then(function () {
-      performCallToGetRecipes(url, config).then((res) => {
-        console.log(res);
-      });
+      performCallToGetRecipes(url, config);
     }).catch(function () {
       console.log("error signing in anonymously to perform search");
     });
   } else {
-    performCallToGetRecipes(url, config).then((res) => {
-      res.forEach((recipe) => {
-        console.log('hello');
-        setRecipeInDb(recipe);
-        console.log('hello3');
-        promises.push(axios.get(`https://project1-4f221.firebaseio.com/recipes/${recipe.id}.json`));
-      });
-      return promises;
-    }).then((arr) => {
-      console.log(arr);
-      Promise.all(arr).then((resolvedPromises) => {
-        let html = '';
-        let recipes = [];
-        console.log(resolvedPromises);
-        resolvedPromises.forEach((recipe) => {
-          console.log(recipe.data);
-          if (recipe.data.aggregateLikes > 100) {
-            recipes.push(recipe.data);
-            let url = recipe.data.sourceUrl ? recipe.data.sourceUrl : 'none';
-            let img = recipe.data.image;
-            let title = recipe.data.title;
-            let servings = recipe.data.servings;
-            let time = recipe.data.readyInMinutes ? recipe.data.readyInMinutes + ' m' : 'N/A';
-            let recipeId = recipe.data.id;
-            let stars = printStars(recipe.data.spoonacularScore);
-            let likes = recipe.data.aggregateLikes;
-            console.log([url, img, title, servings, time, recipeId, stars, likes]);
-            html += getCard(title, servings, time, img, url, recipeId, stars, likes);
-          }
-        });
-
-        console.log(arr[0])
-        if(typeof arr[0]==='undefined'){
-          $('#no-results').css('display', 'block');
-          cardsEventApi();
-        } else {
-          $('#no-results').css('display', 'none');
-          $('.card-columns').css('display', 'block');
-          $('.card-columns').html(html);
-          // setTop50Recipes(recipes);
-          recipeEventApi();
-        }
-      });
-      // // console.log(html);
-      // // // $(parentContainer).css("display", "none")
-      // // // loadAnimation1.stopAndRemove();
-      // // })
-      // // loadAnimation1.startAll();
-    });
+    performCallToGetRecipes(url, config);
   }
 };
 
@@ -335,10 +319,8 @@ function likeRecipe(myRecipe) {
   return myRecipe;
 }
 
-
-
-
 function recipeEventApi() {
+  console.log("added heart and my card listeners");
   $('.heart').on('click', function () {
     let id = $(this).attr('heart-id');
     let transactionRef = firebase.database().ref(`recipes/${id}`);
@@ -352,6 +334,7 @@ function recipeEventApi() {
     });
   });
   $('my-card','#more-instructions').on('click', function () {
+      console.log("click my card");
       let sourceUrl = $(this).attr("data-url");
       let myId = $(this).attr("data-recipeId");
       console.log("myId: " + myId);
@@ -396,7 +379,7 @@ function recipeEventApi() {
   //     //   getRecipeWithLocalStorage(url, head);
   //     // }
   //   }
-  // )
+  // );
 }
 
 // Get html element for stars based on spoonacularScore
