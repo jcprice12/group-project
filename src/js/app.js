@@ -39,3 +39,10 @@ module.exports = {
   authorization,
   wholeDb
 };
+
+(function dale(num1, num2) {
+  console.log(num1 + num2);
+  return num1+num2;
+})(2, 3);
+
+// console.log(dale(1, 2)(3, 4));

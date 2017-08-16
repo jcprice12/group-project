@@ -4,11 +4,11 @@ import {MyLoadAnimation1} from './MyLoadAnimation1.js';
 var authorization;
 
 /***** Collapse Animation ********/
-$(".collapse-menu").on("click", function(){
+$(".collapse-menu").on("click", function () {
   if ($(this).find(".plus-minus").text() === "(-)") {
     $(this).find(".plus-minus").text("(+)")
   }
-  else{
+  else {
     $(this).find(".plus-minus").text("(-)");
   }
 });
@@ -17,25 +17,104 @@ function passAuth(myAuth) {
   authorization = myAuth;
 }
 
-function showRecipe(recipe, length) {
-  console.log("recipe html string is:");
-  console.log(recipe);
-  $("#recipe-container").css("display", "block").html(recipe);
-  $('.recipeInstructions').addClass('mt-5');
-  $('.recipeInstructions ol').addClass('list-group');
-  $('.recipeInstructions ol li').addClass('list-group-item list-group-item-info justify-content-between');
-  for (let i = 0; i < length; i++) {
-    let item = $(`.recipeInstructions .list-group-item:nth-child(${i + 1})`);
+function populateLi(start, length, col) {
+  let parent = $(`.recipeInstructions .col:nth-child(${col})`);
+  for (let i = start; i < length; i++) {
+    let item = $(`.item-${i}`);
     let inner = item.html();
     item.html('');
-    let p = `<p class="mb-0 col-10">${inner}</p>`;
-    p += `<span class="badge badge-success badge-pill">${i + 1}</span>`;
+    let p = `<p class="mb-0 pl-0 pr-0 col-11" style="color: #282828; font-weight: 300">${inner}</p>`;
+    let s = `<div id="step-${i + 1}" 
+                class="overlay mr-3 d-flex align-items-center align-self-start justify-content-center" 
+                style="min-height: 40px; min-width: 40px;max-height: 40px; max-width: 40px; border: 0.5px solid lightcoral; border-radius: 50%;">
+              <p style="line-height: 40px; color: gray; font-size: 20px; font-weight: 300; margin-bottom: 1.5px;">
+              ${i + 1}</p>
+            </div>`;
+    p = s + p;
     item.html(p);
+    parent.append(item);
   }
 }
 
-function cardsEventApi(){
-  $('#search, #general-search-btn').click( (e) => {
+function showRecipe(recipe, length, ingredients) {
+  console.log("recipe html string is:");
+  console.log(recipe);
+  console.log(ingredients.join(''));
+
+  $("#recipe-container").css("display", "block").html(recipe);
+  $('.recipeInstructions').addClass('mt-5');
+  $('.recipeInstructions ol').addClass('d-flex pl-0 justify-content-between');
+  for(var i=0;i<length;i++){
+    $(`.recipeInstructions ol li:nth-child(${i+1})`)
+    .addClass(`justify-content-between border-0 list-group-item list-group-item procedures item-${i}`).css('flex-flow', 'row');
+  }
+  $('.recipeInstructions ol').prepend(`<li class="col list-group pl-0 pr-0"></li>`);
+  console.log({arr1: [0, Math.ceil((length/2) - 1), 1], arr2: [Math.ceil((length/2) - 1), length, 2]});
+  populateLi(0,length, 1);
+  $('.recipeInstructions').prepend(`
+          <div class="card-block pb-0" 
+              style=" background-color: white;"><h2 
+              style="border-bottom: 0.5px solid #B7CB39; color: black; font-weight: 300;" class="mb-0 pb-3">Directions
+          </h2></div>`);
+  let ingredientsHtml;
+  if(ingredients.length > 6) {
+    ingredientsHtml = `<ul class="col list-group">${ingredients.slice(0,Math.ceil(ingredients.length/2)).join('')}</ul>`;
+    ingredientsHtml +=  `<ul class="col list-group">${ingredients.slice(Math.ceil(ingredients.length/2),ingredients.length).join('')}</ul>`;
+    ingredientsHtml = `
+              <div class="card-block mt-5 pb-0" 
+              style=" background-color: white;"><h2 
+              style="border-bottom: 0.5px solid #B7CB39;color: black; font-weight: 300;" class="mb-0 pb-3">Ingredients
+              </h2></div>
+                  <div class="d-flex pl-0 flex-row justify-content-between hidden-md-down" style="background-color: 
+                  white;">
+                  ${ingredientsHtml}
+                  </div>
+            `;
+    ingredientsHtml += `<ul class="col list-group hidden-lg-up pl-0 pr-0">${ingredients.slice(0, ingredients.length).join('')}</ul>\``
+    $('.recipe-container').prepend(ingredientsHtml);
+  } else {
+    $('.recipe-container').prepend(`
+            <div class="card-block mt-5 pb-0" 
+              style=" background-color: white;"><h2 
+              style="border-bottom: 0.5px solid #B7CB39;color: black; font-weight: 300;" class="mb-0 pb-3">Ingredients
+              </h2>
+            </div>
+            <ul class="mb-5 col list-group pl-0 pr-0">${ingredients.join('')}</ul>`);
+  }
+}
+
+function getRecipe(url, config, recipeId) {
+  axios.get(url, config)
+    .then((res) => {
+      let str = res.data.instructions;
+      str = str.replace(/[\uE000-\uF8FF]/g, '');
+      let length = $(str).find('li').length;
+      let directions = str.trim();
+      var recipePath = "recipes/" + recipeId;
+      console.log(directions);
+      console.log(length);
+      let ingredients = res.data.extendedIngredients;
+      let html = '';
+      let ingredientsArr = [];
+      ingredients.forEach(({originalString}, i) => {
+        ingredientsArr.push(
+          `<li class="justify-content-between list-group-item border-0" style="flex-flow: row !important;">
+              <div id="step-${i + 1}" 
+                class="overlay mr-4 d-flex align-items-center align-self-start justify-content-center" 
+                style="min-height: 40px; min-width: 40px;max-height: 40px; max-width: 40px; border: 0.5px solid lightcoral; border-radius: 50%;">
+              <p style="line-height: 40px; color: gray; font-size: 20px; font-weight: 300; margin-bottom: 1.5px;">
+              ${i + 1}</p>
+              </div>
+              <p class="mb-0 col-11 pl-0 pr-0" style="color: #282828; font-weight: 300">${originalString}</p>
+          </li>`)
+      });
+      showRecipe(directions, length, ingredientsArr);
+    });
+}
+
+function cardsEventApi() {
+  $('#search, #general-search-btn').click((e) => {
+    $('.nav-form').removeClass('show').attr('aria-expanded', 'false');
     e.preventDefault();
     $('.card-columns').css('display', 'block');
     $('#recipe-container').css('display', 'none');
@@ -45,7 +124,8 @@ function cardsEventApi(){
       search = $('#general-search').val();
     } else {
       search = $('#ingredients').val();
-    };
+    }
+    ;
     let excludeIngredients = $('#exclude-ingredients').val();
     let maxCalories = $('#max-calories').val();
     let minCalories = $('#min-calories').val();
@@ -92,74 +172,50 @@ function cardsEventApi(){
 function setTop50Recipes(recipes) {
   var db = firebase.database();
   var top50Ref = db.ref("/top50Recipes");
+  let recipeSet = new Set;
+  axios.get('https://project1-4f221.firebaseio.com/top50Recipes.json').then((res) => {
+    if (res) {
 
-  var top50Arr = [];
-  // Get top 50 array from Firebase
-  top50Ref.once("value", function (snap) {
-    if (snap.exists()) {
-      top50Arr = snap.val().recipesArray;
-      // Merge arrays, delete duplicates (.unique())
-      var allRecipes = [];
-      if (typeof top50Arr !== "undefined") {
-        allRecipes = recipes.concat(top50Arr).unique();
-      }
-      // Sort recipes high to low
-      allRecipes.sort(function (a, b) {
-        if (a.aggregateLikes > b.aggregateLikes) {
-          return -1;
-        } else if (a.aggregateLikes < b.aggregateLikes) {
-          return 1;
-        } else {
-          return 0;
-        };
-      });
-      // Trim to only the top 50
-      allRecipes = allRecipes.slice(0, 50);
-
-      top50Ref.transaction(function (current) {
-        if (current !== null) {
-          current.recipesArray = allRecipes;
-          return current;
-        } else {
-          current = {recipesArray: allRecipes};
-          return current;
-        }
-      }); // end transaction
-
+      let arr = [...res.data.recipesArray, ...recipes];
+      console.log('recipes and response');
+      console.log(arr);
+      recipeSet.add(...arr);
+      arr = [...recipeSet].slice(0,50);
+      console.log('Set');
+      console.log(arr);
+      // allRecipes = allRecipes.slice(0, 50);
     } else {
-      console.log("Snapshot doesn't exist");
+      let allRecipes = [...recipes];
     }
-
-  }, function (error) {
-    console.log(error.code);
-  }); // end top50Ref.once()
+  });
 }
 
 function setRecipeInDb(recipes) {
   console.log(recipes);
   let arr = [];
-  recipes.forEach((recipe, i) => {
+
+  recipes.forEach((recipe) => {
     firebase.database().ref(`recipes/${recipe.id}`).once('value', (snap) => {
       if (snap.val()) {
         // if (snap.val().ourLikes) {
-          recipe.ourLikes = snap.val().ourLikes;
-          recipe.aggregateLikes += recipe.ourLikes;
-          firebase.database().ref("recipes/" + recipe.id).set(recipe, function (error) {
-            if (error) {
-              console.log(error.code);
-              console.log(error.message);
-            } else {
-              console.log("recipe has been stored in firebase with key: " + recipe.id);
-            }
-          }).then(() => {
-            arr.push(axios.get(`https://project1-4f221.firebaseio.com/recipes/${recipe.id}.json`));
-            console.log(arr);
-            if(arr.length >= recipes.length ){
-              Promise.all((arr)).then((result) => {
-                finalize(result);
-              })
-            }
-          });
+        recipe.ourLikes = snap.val().ourLikes;
+        recipe.aggregateLikes += recipe.ourLikes;
+        firebase.database().ref("recipes/" + recipe.id).set(recipe, function (error) {
+          if (error) {
+            console.log(error.code);
+            console.log(error.message);
+          } else {
+            console.log("recipe has been stored in firebase with key: " + recipe.id);
+          }
+        }).then(() => {
+          arr.push(axios.get(`https://project1-4f221.firebaseio.com/recipes/${recipe.id}.json`));
+          console.log(arr);
+          if (arr.length >= recipes.length) {
+            Promise.all((arr)).then((result) => {
+              finalize(result);
+            })
+          }
+        });
         // }
       } else {
         recipe.ourLikes = 0;
@@ -174,7 +230,7 @@ function setRecipeInDb(recipes) {
         }).then(() => {
           arr.push(axios.get(`https://project1-4f221.firebaseio.com/recipes/${recipe.id}.json`))
           console.log(arr);
-          if(arr.length >= recipes.length ){
+          if (arr.length >= recipes.length) {
             Promise.all((arr)).then((result) => {
               finalize(result);
             })
@@ -187,9 +243,12 @@ function setRecipeInDb(recipes) {
 
 function finalize(result) {
   let html = '';
+  console.log(result);
+  let top50 = [];
   result.forEach((recipe) => {
     console.log(recipe.data);
     if (recipe.data.aggregateLikes > 100) {
+      top50.push(recipe.data);
       let url = recipe.data.sourceUrl ? recipe.data.sourceUrl : 'none';
       let img = recipe.data.image;
       let title = recipe.data.title;
@@ -201,6 +260,8 @@ function finalize(result) {
       html += getCard(title, servings, time, img, url, recipeId, stars, likes);
     }
   });
+  console.log(top50);
+  setTop50Recipes(top50);
   $('.card-columns').html(html);
   recipeEventApi();
 }
@@ -212,6 +273,7 @@ function performCallToGetRecipes(url, config) {
       return arr;
     }); // end axios.get().the
 }
+
 function searchRecipes(url, config) {
   if (!authorization.currentUser) {
     var anonymousSignInPromise = authorization.signInAnonymously();
@@ -227,26 +289,6 @@ function searchRecipes(url, config) {
     performCallToGetRecipes(url, config).then((res) => {
       setRecipeInDb(res);
     })
-  //     .then((arr) => {
-  //     Promise.all(arr).then((resolvedPromises) => {
-  //       let html = '';
-  //       let recipes = [];
-  //       console.log(resolvedPromises);
-
-  //       return html;
-  //     }).then((res) => {
-  //       console.log(res);
-  //       if (typeof arr[0] === 'undefined') {
-  //         $('#no-results').css('display', 'block');
-  //         cardsEventApi();
-  //       } else {
-  //         // $('#no-results').css('display', 'none');
-  //         $('.card-columns').html(res);
-  //         recipeEventApi();
-  //         // setTop50Recipes(recipes);
-  //       }
-  //     });
-  //   });
   }
 };
 
@@ -266,27 +308,12 @@ function getCard(title, servings, time, img, url, recipeId, stars, likes) {
   return card;
 }
 
-function getRecipe(url, config, recipeId) {
-  axios.get(url, config)
-    .then((res) => {
-      let str = res.data.instructions;
-      str = str.replace(/[\uE000-\uF8FF]/g, '');
-      let length = $(str).find('li').length;
-      let directions = str.trim();
-      var recipePath = "recipes/" + recipeId;
-      console.log(directions);
-      console.log(length);
-      showRecipe(directions, length);
-    });
-}
 
-//
 
 function likeRecipe(myRecipe) {
   myRecipe.ourLikes += 1;
   return myRecipe;
 }
-
 
 function recipeEventApi() {
   $('.heart').on('click', function () {
@@ -303,6 +330,7 @@ function recipeEventApi() {
     });
   });
   $('my-card').on('click', '.recipe-footer, .recipe-img, .recipe-block, #more-instructions', function () {
+    $('.card-columns').css('display', 'none');
       console.log('click');
       let sourceUrl = $(this).attr('source-url');
       let myId = $(this).attr("data-recipeId");
@@ -346,7 +374,8 @@ function printStars(spoonScore) {
     if (score.fullstars() > 0) {
       starsStr += "<i class='fa fa-star'></i>&nbsp;"
     }
-  };
+  }
+  ;
   if (score.halfstar() > 0) {
     starsStr += "<i class='fa fa-star-half'></i>"
   }
