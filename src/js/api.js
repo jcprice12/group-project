@@ -18,12 +18,7 @@ $(".collapse-menu").on("click", function () {
 function passAuth(myAuth) {
   authorization = myAuth;
 }
-$(".navbar-brand").click(function(){
-  $(".home").css("display", "block");
-  $("#search-message, #no-results, #recipe-container, .recipeInstructions, .card-columns, #calories-error, #query-error").css("display", "none");
-  $("form").trigger("reset");
-  $("#collapseExample").removeClass("show");
-});
+
 
 function populateLi(start, length, col) {
   let parent = $(`.recipeInstructions .col:nth-child(${col})`);
@@ -120,6 +115,7 @@ function getRecipe(url, config, recipeId) {
 
 function cardsEventApi() {
   $('#search, #general-search-btn').click((e) => {
+    $('#no-results').css('display', 'none');
     $('.nav-form').removeClass('show').attr('aria-expanded', 'false');
     e.preventDefault();
     if($('#general-search').val() === "" && $('#ingredients').val()===""){
@@ -275,11 +271,16 @@ function displaySearchMessage(obj){
 function setRecipeInDb(recipes) {
   console.log(recipes);
   let arr = [];
+  if(typeof recipes[0] == 'undefined'){
+    loadAnimation1.stopAndRemove();
+    $('#no-results').css('display', 'block');
+    return;
+  }
 
   recipes.forEach((recipe) => {
     firebase.database().ref(`recipes/${recipe.id}`).once('value', (snap) => {
       if (snap.val()) {
-        // if (snap.val().ourLikes) {
+        // if (snap.val().ourLikes)
         recipe.ourLikes = snap.val().ourLikes;
         recipe.aggregateLikes += recipe.ourLikes;
         firebase.database().ref("recipes/" + recipe.id).set(recipe, function (error) {
@@ -407,6 +408,14 @@ function likeRecipe(myRecipe) {
 
 var amLiking = false;
 function recipeEventApi() {
+  $("#nav-brand").click(function(){
+    $('#no-results').css('display', 'none');
+    $(".home").css("display", "block");
+    $("#search-message, #no-results, #recipe-container, .recipeInstructions, .card-columns, #calories-error, #query-error").css("display", "none");
+    $("form").trigger("reset");
+    $("#collapseExample").removeClass("show");
+  });
+
   $('.heart').on('click', function () {
     let id = $(this).attr('heart-id');
     if(!amLiking){
@@ -446,10 +455,29 @@ function recipeEventApi() {
       }
     }
   });
-  $(document).on('click', '.recipe-footer, .recipe-img, .recipe-block, #more-instructions', function () {
+  $(document).on('click', '#more-instructions', function () {
     $('.card-columns').css('display', 'none');
       console.log('click');
       let sourceUrl = $(this).attr('data-url');
+      let myId = $(this).attr("data-recipeId");
+      console.log("myId: " + myId);
+      console.log(sourceUrl);
+      let head = {
+        headers: {"X-Mashape-Key": "VftGeJE2qimshoNc94fZxoUiEp04p154Astjsn7Kuggh3FXLVw"}
+      };
+      let obj = {
+        'forceExtraction': false,
+        url: sourceUrl
+      };
+      let url = `https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/extract?`;
+      url += $.param(obj);
+      getRecipe(url, head, myId);
+    });
+
+  $('my-card').on('click', '.recipe-footer, .recipe-img, .recipe-block', function () {
+    $('.card-columns').css('display', 'none');
+      console.log('click');
+      let sourceUrl = $(this).attr('source-url');
       let myId = $(this).attr("data-recipeId");
       console.log("myId: " + myId);
       console.log(sourceUrl);
