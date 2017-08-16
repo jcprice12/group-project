@@ -287,11 +287,13 @@ function getCard(title, servings, time, img, url, recipeId, stars, likes) {
   let card = `
     <my-card
       url="${url}"
+      data-url="${url}"
       source="${img}"
       title="${title}"
       time="${time}"
       servings="${servings}"
       recipeId="${recipeId}" 
+      data-recipeId="${recipeId}"
       likes="${likes}"   
       stars="${stars}"   
     ></my-card>
@@ -361,9 +363,9 @@ function recipeEventApi() {
       }
     }
   });
-  $('my-card').on('click', '.recipe-footer, .recipe-img, .recipe-block, #more-instructions', function () {
+  $(document).on("click", "my-card, #more-instructions", function () {
       console.log('click');
-      let sourceUrl = $(this).attr('source-url');
+      let sourceUrl = $(this).attr('data-url');
       let myId = $(this).attr("data-recipeId");
       console.log("myId: " + myId);
       console.log(sourceUrl);
@@ -377,8 +379,7 @@ function recipeEventApi() {
       let url = `https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/extract?`;
       url += $.param(obj);
       getRecipe(url, head, myId);
-    }
-  )
+    });
 }
 
 // Get html element for stars based on spoonacularScore
