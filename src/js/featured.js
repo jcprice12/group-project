@@ -86,6 +86,7 @@ function seeMorePopular(arr) {
 	    let img = recipe.image;
 	    let title = recipe.title;
 	    let servings = recipe.servings;
+	    let likes = recipe.aggregateLikes;
 	    let time = '';
           if (typeof recipe.preparationMinutes !== 'undefined') {
             time = recipe.preparationMinutes + ' m';
@@ -94,7 +95,7 @@ function seeMorePopular(arr) {
           };
 	    let recipeId = recipe.id;
 	    let stars = printStars(recipe.spoonacularScore);
-    	html += getCard(title, servings, time, img, url, recipeId, stars);
+    	html += getCard(title, servings, time, img, url, recipeId, stars, likes);
 	});
 	var parentContainer = document.getElementById("cardsLoadContainer");
 	$(parentContainer).css("display", "none");

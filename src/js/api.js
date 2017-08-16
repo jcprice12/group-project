@@ -39,54 +39,62 @@ function showRecipe(recipe, length) {
 function cardsEventApi(){
   $('#search, #general-search-btn').click( (e) => {
     e.preventDefault();
-    $('.card-columns').css('display', 'block');
-    $('#recipe-container').css('display', 'none');
-    $('.card-columns').empty();
-    let search = '';
-    if (typeof $('#general-search').val() !== 'undefined' && $('#general-search').val() !== "") {
-      search = $('#general-search').val();
-    } else {
-      search = $('#ingredients').val();
-    };
-    let excludeIngredients = $('#exclude-ingredients').val();
-    let maxCalories = $('#max-calories').val();
-    let minCalories = $('#min-calories').val();
-    if (maxCalories < minCalories) {
-      $("#calories-error").css("display", "block");
+    if($('#general-search').val() === "" && $('#ingredients').val()===""){
+      $("#query-error").css("display", "block");
       cardsEventApi();
     } else {
-      $("#calories-error").css("display", "none");
-      let diet = $(".diet:checked").attr("id");
-      let allIntolerances = "";
-      $(".intolerance:checked").each(function () {
-        allIntolerances += ($(this).attr("id") + " ");
-      });
-      allIntolerances = allIntolerances.trim();
+      let search = '';
+      if (typeof $('#general-search').val() !== 'undefined' && $('#general-search').val() !== "") {
+        search = $('#general-search').val();
+      } else {
+        search = $('#ingredients').val();
+      };
 
-      var head = {
-        headers: {"X-Mashape-Key": "VftGeJE2qimshoNc94fZxoUiEp04p154Astjsn7Kuggh3FXLVw"}
-      };
-      var obj = {
-        'limitLicence': false,
-        'number': 300,
-        'query': search,
-        'ingredients': search,
-        'excludeIngredients': excludeIngredients,
-        'maxCalories': maxCalories,
-        'minCalories': minCalories,
-        'diet': diet,
-        'intolerances': allIntolerances,
-        'ranking': 1,
-        'addRecipeInformation': true
-      };
-      for (var key in obj) {
-        if (obj[key] === "") {
-          delete obj[key];
+      let ingredients = $('#ingredients').val();
+      let excludeIngredients = $('#exclude-ingredients').val();
+      let maxCalories = $('#max-calories').val();
+      let minCalories = $('#min-calories').val();
+      if (maxCalories < minCalories) {
+        $("#calories-error").css("display", "block");
+        cardsEventApi();
+      } else {
+        $("#search-message, .home, #calories-error").css("display", "none");
+        $('.card-columns').css('display', 'block');
+        $('#recipe-container').css('display', 'none');
+        $('.card-columns').empty();
+        let diet = $(".diet:checked").attr("id");
+        let allIntolerances = "";
+        $(".intolerance:checked").each(function () {
+          allIntolerances += ($(this).attr("id") + " ");
+        });
+        allIntolerances = allIntolerances.trim();
+
+        var head = {
+          headers: {"X-Mashape-Key": "VftGeJE2qimshoNc94fZxoUiEp04p154Astjsn7Kuggh3FXLVw"}
+        };
+        var obj = {
+          'limitLicence': false,
+          'number': 300,
+          'query': search,
+          'ingredients': ingredients,
+          'excludeIngredients': excludeIngredients,
+          'maxCalories': maxCalories,
+          'minCalories': minCalories,
+          'diet': diet,
+          'intolerances': allIntolerances,
+          'ranking': 1,
+          'addRecipeInformation': true
+        };
+        displaySearchMessage(obj);
+        for (var key in obj) {
+          if (obj[key] === "") {
+            delete obj[key];
+          }
         }
+        var url = 'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/searchComplex?';
+        url += '?' + $.param(obj);
+        searchRecipes(url, head);
       }
-      var url = 'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/searchComplex?';
-      url += '?' + $.param(obj);
-      searchRecipes(url, head);
     }
   });
 }
@@ -157,6 +165,31 @@ function setTop50Recipes(recipes) {
     console.log(error.code);
   }); // end top50Ref.once()
 }
+
+function displaySearchMessage(obj){  
+  var searchText = ("Search: " + obj.query);
+  if (obj.query !== obj.ingredients && obj.ingredients !== "") {
+    searchText += ("; Ingredients: " + obj.ingredients);
+  }
+  if (obj.excludeIngredients !== "") {
+    searchText += ("; exclude ingredients: " + obj.excludeIngredients)
+  }
+  if (obj.maxCalories !== "") {
+    searchText += ("; max. calories: " + obj.maxCalories)
+  }
+  if (obj.minCalories !== "") {
+    searchText += ("; min. calories: " + obj.minCalories)
+  }
+  if (obj.diet !== "" && (typeof obj.diet !== 'undefined')) {
+    searchText += ("; special diet: " + obj.diet)
+  }
+  if (obj.intolerances !== "") {
+    $(obj.intolerances).each(function(index, value){
+      searchText += ("; intolerances: " + obj.intolerances[index])
+    })  
+  }
+  $("#search-message").html(searchText).css("display", "block");
+};
 
 function setRecipeInDb(recipes) {
   console.log(recipes);
@@ -276,7 +309,7 @@ function searchRecipes(url, config) {
   //         // $('#no-results').css('display', 'none');
   //         $('.card-columns').html(res);
   //         recipeEventApi();
-  //         // setTop50Recipes(recipes);
+  //         // 
   //       }
   //     });
   //   });
@@ -287,11 +320,13 @@ function getCard(title, servings, time, img, url, recipeId, stars, likes) {
   let card = `
     <my-card
       url="${url}"
+      data-url="${url}"
       source="${img}"
       title="${title}"
       time="${time}"
       servings="${servings}"
       recipeId="${recipeId}" 
+      data-recipeId="${recipeId}"
       likes="${likes}"   
       stars="${stars}"   
     ></my-card>
@@ -361,9 +396,9 @@ function recipeEventApi() {
       }
     }
   });
-  $('my-card').on('click', '.recipe-footer, .recipe-img, .recipe-block, #more-instructions', function () {
+  $(document).on("click", "my-card, #more-instructions", function () {
       console.log('click');
-      let sourceUrl = $(this).attr('source-url');
+      let sourceUrl = $(this).attr('data-url');
       let myId = $(this).attr("data-recipeId");
       console.log("myId: " + myId);
       console.log(sourceUrl);
@@ -377,8 +412,7 @@ function recipeEventApi() {
       let url = `https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/extract?`;
       url += $.param(obj);
       getRecipe(url, head, myId);
-    }
-  )
+    });
 }
 
 // Get html element for stars based on spoonacularScore
