@@ -19,6 +19,14 @@ function passAuth(myAuth) {
   authorization = myAuth;
 }
 
+// Reset page when home button is clicked
+$(".navbar-brand").click(function(){
+  $(".home").css("display", "block");
+  $("#search-message, #no-results, #recipe-container, .recipeInstructions, .card-columns, #calories-error, #query-error").css("display", "none");
+  $("form").trigger("reset");
+  $("#collapseExample").removeClass("show");
+});
+
 function showRecipe(recipe, length) {
   console.log("recipe html string is:");
   console.log(recipe);
@@ -184,9 +192,7 @@ function displaySearchMessage(obj){
     searchText += ("; special diet: " + obj.diet)
   }
   if (obj.intolerances !== "") {
-    $(obj.intolerances).each(function(index, value){
-      searchText += ("; intolerances: " + obj.intolerances[index])
-    })  
+    searchText += ("; dietary restrictions: " + obj.intolerances)
   }
   $("#search-message").html(searchText).css("display", "block");
 };

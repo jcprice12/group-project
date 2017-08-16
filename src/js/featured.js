@@ -99,8 +99,13 @@ function seeMorePopular(arr) {
 	});
 	var parentContainer = document.getElementById("cardsLoadContainer");
 	$(parentContainer).css("display", "none");
+	$(".home, #calories-error").css("display", "none");
+	$('#recipe-container').css('display', 'none');
+	$("#search-message").css("display", "block").html("Popular Recipes");
+	$('.card-columns').empty();
     $('.card-columns').html(html);
     $(".card-columns").css("display", "block");
+
     recipeEventApi();
 };
 
