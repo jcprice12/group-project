@@ -26,7 +26,7 @@ function populateLi(start, length, col) {
     let item = $(`.item-${i}`);
     let inner = item.html();
     item.html('');
-    let p = `<p class="mb-0 pl-0 pr-0 col-11" style="color: #282828; font-weight: 300">${inner}</p>`;
+    let p = `<p class="mb-0 pl-0 pr-0 col" style="color: #282828; font-weight: 300">${inner}</p>`;
     let s = `<div id="step-${i + 1}" 
                 class="overlay mr-3 d-flex align-items-center align-self-start justify-content-center" 
                 style="min-height: 40px; min-width: 40px;max-height: 40px; max-width: 40px; border: 0.5px solid lightcoral; border-radius: 50%;">
@@ -106,7 +106,7 @@ function getRecipe(url, config, recipeId) {
               <p style="line-height: 40px; color: gray; font-size: 20px; font-weight: 300; margin-bottom: 1.5px;">
               ${i + 1}</p>
               </div>
-              <p class="mb-0 col-11 pl-0 pr-0" style="color: #282828; font-weight: 300">${originalString}</p>
+              <p class="mb-0 col pl-0 pr-0" style="color: #282828; font-weight: 300">${originalString}</p>
           </li>`)
       });
       showRecipe(directions, length, ingredientsArr);

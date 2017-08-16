@@ -48,7 +48,8 @@ function buildRecipes(userId){
 
 
 function getMyRecipes(){
-	$("#getMyRecipesButton, #getMyRecipesButtonHidden").on("click", function(event){
+	$("#getMyRecipesButton, .my-rec").on("click", function(event){
+		$('.home').css('display', 'none');
 		if(firebase.auth().currentUser){
 			if(!firebase.auth().currentUser.isAnonymous){
 				buildRecipes(firebase.auth().currentUser.uid);
