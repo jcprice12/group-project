@@ -26,12 +26,10 @@ function clearUserInput(){
 }
 
 function noAccount(){
-	$(".userIdP").css("display", "none");
-	$(".userIdP").html("");
 	$(".signOutButton").css("display","none");
 	$(".signInButton").css("display","inline-block");
 	$(".signUpButton").css("display","inline-block");
-	$("#getMyRecipesButton").css("display", "none");
+	$(".myRecipesButton").css("display", "none");
 }
 
 var file_id;
@@ -108,22 +106,17 @@ function authStateChanged(authorization, wholeDb){
 				console.log(myUser.email + " is signed in ");
 				if(modalInIsOpen){
 					clearUserInput();
-					$("#signInModal-" + file_id).modal("hide");
+					$(".signInModal").modal("hide");
 				}
 				if(modalUpIsOpen){
 					clearUserInput();
-					$("#signUpModal-" + file_id).modal("hide");
+					$(".signUpModal").modal("hide");
 				}
-				if(myUser.displayName){
-					$(".userIdP").text(myUser.displayName);
-				} else {
-					$(".userIdP").text(myUser.email);
-				}
-				$(".userIdP").css("display", "inline-block");
+
 				$(".signOutButton").css("display","inline-block");
 				$(".signInButton").css("display","none");
 				$(".signUpButton").css("display","none");
-				$("#getMyRecipesButton").css("display", "inline-block");
+				$(".myRecipesButton").css("display", "inline-block");
 			} else {
 				console.log("a user is signed in anonymously with uid: " + myUser.uid);
 				noAccount();

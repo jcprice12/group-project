@@ -58,7 +58,7 @@
   display: none;
 }
 
-/********************************
+/***********************************
 GLOBAL
 ***********************************/
 
@@ -137,6 +137,11 @@ nav {
   font-weight: 400 !important;
   text-transform: uppercase;
 }
+
+#getMyRecipesButtonHidden{
+  text-align: left;
+}
+
 
 .dropdown-item {
   box-sizing: border-box;

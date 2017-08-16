@@ -19,7 +19,7 @@
     <form class="form-inline col  justify-content-center">
       <div class="input-group nav-search" style="width: 100%;">
       <span class="input-group-btn">
-        <button class="btn btn-outline-secondary hidden-md-down" type="button" data-toggle="collapse"
+        <button class="btn btn-outline-secondary hidden-md-down refine" type="button" data-toggle="collapse"
                 data-target="#collapseExample"
                 aria-expanded="false" aria-controls="collapseExample">Refine <i class="fa fa-angle-down" aria-hidden="true"></i></button>
         <button class="btn btn-outline-secondary hidden-lg-up sm-btn" type="button" data-toggle="collapse"
@@ -56,6 +56,7 @@
           <div class="form-group">
             <label for="ingredients">Ingredients</label>
             <input type="text" class="form-control" id="ingredients" placeholder="Ex: chicken, rice, broccoli">
+            <small id="query-error" style="display:none;">**You must enter either a search term or ingredients to search for.**</small>
           </div>
           <div class="form-group">
             <label for="ingredients">Exclude ingredients</label>
@@ -312,8 +313,9 @@
   </div>
 </div>
 <!-- ***************************************************** End Sign Up ******************************************************************************-->
+
 <div class="container">
-  <div class="row mt-5" style="display: none">
+  <div class="row mt-5 home">
     <div class="col-sm-12">
       <div class="card" style="width: 100%">
         <h4 class="card-header">Popular Recipes</h4>
@@ -329,9 +331,9 @@
       </div>
     </div>
   </div>
-  <div class="row mt-5" style="display: none">
+  <div class="row mt-5">
     <div class="col-md-12">
-      <div class="card dashboard-card">
+      <div class="card dashboard-card home">
         <h4 class="card-header">
           Nearby Grocery Stores
         </h4>
@@ -350,7 +352,7 @@
       <h2 id="no-results" style="display:none;">Sorry, that search didn't match any results.</h2>
     </div>
   </div> <!-- end row 2 -->
-
+  <h2 id="search-message"  style="display:none;"></h2>
   <div class="card-columns"></div>
   <div class="recipe-container" id="recipe-container"></div>
   <div id="cardsLoadContainer"></div>

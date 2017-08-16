@@ -2,6 +2,8 @@ import axios from 'axios';
 import {MyLoadAnimation1} from './MyLoadAnimation1.js';
 
 var authorization;
+var parentContainer = document.getElementById("cardsLoadContainer");
+var loadAnimation1 = new MyLoadAnimation1(parentContainer,75,12,4,["#b7cb39","#f76f4d"]);
 
 /***** Collapse Animation ********/
 $(".collapse-menu").on("click", function () {
@@ -16,6 +18,12 @@ $(".collapse-menu").on("click", function () {
 function passAuth(myAuth) {
   authorization = myAuth;
 }
+$(".navbar-brand").click(function(){
+  $(".home").css("display", "block");
+  $("#search-message, #no-results, #recipe-container, .recipeInstructions, .card-columns, #calories-error, #query-error").css("display", "none");
+  $("form").trigger("reset");
+  $("#collapseExample").removeClass("show");
+});
 
 function populateLi(start, length, col) {
   let parent = $(`.recipeInstructions .col:nth-child(${col})`);
@@ -39,8 +47,6 @@ function populateLi(start, length, col) {
 function showRecipe(recipe, length, ingredients) {
   console.log("recipe html string is:");
   console.log(recipe);
-  console.log(ingredients.join(''));
-
   $("#recipe-container").css("display", "block").html(recipe);
   $('.recipeInstructions').addClass('mt-5');
   $('.recipeInstructions ol').addClass('d-flex pl-0 justify-content-between');
@@ -116,79 +122,155 @@ function cardsEventApi() {
   $('#search, #general-search-btn').click((e) => {
     $('.nav-form').removeClass('show').attr('aria-expanded', 'false');
     e.preventDefault();
-    $('.card-columns').css('display', 'block');
-    $('#recipe-container').css('display', 'none');
-    $('.card-columns').empty();
-    let search = '';
-    if (typeof $('#general-search').val() !== 'undefined' && $('#general-search').val() !== "") {
-      search = $('#general-search').val();
-    } else {
-      search = $('#ingredients').val();
-    }
-    ;
-    let excludeIngredients = $('#exclude-ingredients').val();
-    let maxCalories = $('#max-calories').val();
-    let minCalories = $('#min-calories').val();
-    if (maxCalories < minCalories) {
-      $("#calories-error").css("display", "block");
+    if($('#general-search').val() === "" && $('#ingredients').val()===""){
+      $("#query-error").css("display", "block");
       cardsEventApi();
     } else {
-      $("#calories-error").css("display", "none");
-      let diet = $(".diet:checked").attr("id");
-      let allIntolerances = "";
-      $(".intolerance:checked").each(function () {
-        allIntolerances += ($(this).attr("id") + " ");
-      });
-      allIntolerances = allIntolerances.trim();
+      let search = '';
+      if (typeof $('#general-search').val() !== 'undefined' && $('#general-search').val() !== "") {
+        search = $('#general-search').val();
+      } else {
+        search = $('#ingredients').val();
+      };
 
-      var head = {
-        headers: {"X-Mashape-Key": "VftGeJE2qimshoNc94fZxoUiEp04p154Astjsn7Kuggh3FXLVw"}
-      };
-      var obj = {
-        'limitLicence': false,
-        'number': 300,
-        'query': search,
-        'ingredients': search,
-        'excludeIngredients': excludeIngredients,
-        'maxCalories': maxCalories,
-        'minCalories': minCalories,
-        'diet': diet,
-        'intolerances': allIntolerances,
-        'ranking': 1,
-        'addRecipeInformation': true
-      };
-      for (var key in obj) {
-        if (obj[key] === "") {
-          delete obj[key];
+      let ingredients = $('#ingredients').val();
+      let excludeIngredients = $('#exclude-ingredients').val();
+      let maxCalories = $('#max-calories').val();
+      let minCalories = $('#min-calories').val();
+      if (maxCalories < minCalories) {
+        $("#calories-error").css("display", "block");
+        cardsEventApi();
+      } else {
+        $("#search-message, .home, #calories-error").css("display", "none");
+        $('.card-columns').css('display', 'block');
+        $('#recipe-container').css('display', 'none');
+        $('.card-columns').empty();
+        let diet = $(".diet:checked").attr("id");
+        let allIntolerances = "";
+        $(".intolerance:checked").each(function () {
+          allIntolerances += ($(this).attr("id") + " ");
+        });
+        allIntolerances = allIntolerances.trim();
+
+        var head = {
+          headers: {"X-Mashape-Key": "VftGeJE2qimshoNc94fZxoUiEp04p154Astjsn7Kuggh3FXLVw"}
+        };
+        var obj = {
+          'limitLicence': false,
+          'number': 300,
+          'query': search,
+          'ingredients': ingredients,
+          'excludeIngredients': excludeIngredients,
+          'maxCalories': maxCalories,
+          'minCalories': minCalories,
+          'diet': diet,
+          'intolerances': allIntolerances,
+          'ranking': 1,
+          'addRecipeInformation': true
+        };
+        displaySearchMessage(obj);
+        for (var key in obj) {
+          if (obj[key] === "") {
+            delete obj[key];
+          }
         }
+        var url = 'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/searchComplex?';
+        url += '?' + $.param(obj);
+        searchRecipes(url, head);
       }
-      var url = 'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/searchComplex?';
-      url += '?' + $.param(obj);
-      searchRecipes(url, head);
     }
   });
+}
+
+function getGoodTop50(top50Arr, recipes){
+  // Merge arrays, delete duplicates (.unique())
+  var allRecipes = [];
+  if (typeof top50Arr !== "undefined") {
+    allRecipes = recipes.concat(top50Arr).unique();
+  }
+  // Sort recipes high to low
+  allRecipes.sort(function (a, b) {
+    if (a.aggregateLikes > b.aggregateLikes) {
+      return -1;
+    } else if (a.aggregateLikes < b.aggregateLikes) {
+      return 1;
+    } else {
+      return 0;
+    };
+  });
+  // Trim to only the top 50
+  allRecipes = allRecipes.slice(0, 50);
+  console.log(allRecipes);
+
+  return allRecipes;
 }
 
 function setTop50Recipes(recipes) {
+
   var db = firebase.database();
   var top50Ref = db.ref("/top50Recipes");
-  let recipeSet = new Set;
-  axios.get('https://project1-4f221.firebaseio.com/top50Recipes.json').then((res) => {
-    if (res) {
 
-      let arr = [...res.data.recipesArray, ...recipes];
-      console.log('recipes and response');
-      console.log(arr);
-      recipeSet.add(...arr);
-      arr = [...recipeSet].slice(0,50);
-      console.log('Set');
-      console.log(arr);
-      // allRecipes = allRecipes.slice(0, 50);
+  var top50Arr = [];
+  // Get top 50 array from Firebase
+  top50Ref.once("value", function (snap) {
+    if (snap.exists()) {
+      top50Arr = snap.val().recipesArray;
+
+      var allRecipes = getGoodTop50(top50Arr, recipes);
+
+      top50Ref.transaction(function (current) {
+        if (current !== null) {
+          current.recipesArray = allRecipes;
+          return current;
+        } else {
+          current = {recipesArray: allRecipes};
+          return current;
+        }
+      }); // end transaction
+
     } else {
-      let allRecipes = [...recipes];
+      console.log("Snapshot doesn't exist");
+
+      var allRecipes = getGoodTop50([], recipes);
+
+      top50Ref.transaction(function (current) {
+        if (current !== null) {
+          current.recipesArray = allRecipes;
+          return current;
+        } else {
+          current = {recipesArray: allRecipes};
+          return current;
+        }
+      }); // end transaction
     }
-  });
+
+  }, function (error) {
+    console.log(error.code);
+  }); // end top50Ref.once()
 }
+
+function displaySearchMessage(obj){
+  var searchText = ("Search: " + obj.query);
+  if (obj.query !== obj.ingredients && obj.ingredients !== "") {
+    searchText += ("; Ingredients: " + obj.ingredients);
+  }
+  if (obj.excludeIngredients !== "") {
+    searchText += ("; exclude ingredients: " + obj.excludeIngredients)
+  }
+  if (obj.maxCalories !== "") {
+    searchText += ("; max. calories: " + obj.maxCalories)
+  }
+  if (obj.minCalories !== "") {
+    searchText += ("; min. calories: " + obj.minCalories)
+  }
+  if (obj.diet !== "" && (typeof obj.diet !== 'undefined')) {
+    searchText += ("; special diet: " + obj.diet)
+  }
+  if (obj.intolerances !== "") {
+    searchText += ("; dietary restrictions: " + obj.intolerances)
+  }
+  $("#search-message").html(searchText).css("display", "block");
+};
 
 function setRecipeInDb(recipes) {
   console.log(recipes);
@@ -243,12 +325,11 @@ function setRecipeInDb(recipes) {
 
 function finalize(result) {
   let html = '';
-  console.log(result);
-  let top50 = [];
+  var recipes = [];
   result.forEach((recipe) => {
     console.log(recipe.data);
     if (recipe.data.aggregateLikes > 100) {
-      top50.push(recipe.data);
+      recipes.push(recipe.data);
       let url = recipe.data.sourceUrl ? recipe.data.sourceUrl : 'none';
       let img = recipe.data.image;
       let title = recipe.data.title;
@@ -260,18 +341,24 @@ function finalize(result) {
       html += getCard(title, servings, time, img, url, recipeId, stars, likes);
     }
   });
-  console.log(top50);
-  setTop50Recipes(top50);
+  $(parentContainer).css("display", "none");
+  loadAnimation1.stopAndRemove();
   $('.card-columns').html(html);
   recipeEventApi();
+  setTop50Recipes(recipes);
 }
 
 function performCallToGetRecipes(url, config) {
+  $(parentContainer).css("display", "block");
+  loadAnimation1.startAll();
   return axios.get(url, config)
     .then((res) => {
       let arr = res.data.results;
       return arr;
-    }); // end axios.get().the
+    }).catch(function(){
+      $(parentContainer).css("display", "none");
+      loadAnimation1.stopAndRemove();
+    }); // end axios
 }
 
 function searchRecipes(url, config) {
@@ -296,11 +383,13 @@ function getCard(title, servings, time, img, url, recipeId, stars, likes) {
   let card = `
     <my-card
       url="${url}"
+      data-url="${url}"
       source="${img}"
       title="${title}"
       time="${time}"
       servings="${servings}"
       recipeId="${recipeId}" 
+      data-recipeId="${recipeId}"
       likes="${likes}"   
       stars="${stars}"   
     ></my-card>
@@ -309,30 +398,58 @@ function getCard(title, servings, time, img, url, recipeId, stars, likes) {
 }
 
 
+//
 
 function likeRecipe(myRecipe) {
   myRecipe.ourLikes += 1;
   return myRecipe;
 }
 
+var amLiking = false;
 function recipeEventApi() {
   $('.heart').on('click', function () {
     let id = $(this).attr('heart-id');
-    console.log(id);
-    let transactionRef = firebase.database().ref(`recipes/${id}`);
-    transactionRef.transaction(function (recipe) {
-      if (recipe) {
-        recipe = likeRecipe(recipe);
-        return recipe;
+    if(!amLiking){
+      amLiking = true;
+      if(authorization.currentUser){
+        if(!authorization.currentUser.isAnonymous){
+          firebase.database().ref("userRecipes/" + authorization.currentUser.uid).once("value", function(snap){
+            if(!snap.hasChild(id)){
+              firebase.database().ref("userRecipes/" + authorization.currentUser.uid + "/" + id).set(true, function(error){
+                amLiking = false;
+                if(error){
+                  console.log(error.code);
+                } else {
+                  let transactionRef = firebase.database().ref(`recipes/${id}`);
+                  transactionRef.transaction(function (recipe) {
+                    if(recipe) {
+                      recipe = likeRecipe(recipe);
+                      return recipe;
+                    } else {
+                      return recipe;
+                    }
+                  });
+                }
+              });
+            } else {
+              amLiking = false;
+            }
+          }, function(error){
+            amLiking = false;
+            console.log(error.code);
+          });
+        } else {
+          amLiking = false;
+        }
       } else {
-        return recipe;
+        amLiking = false;
       }
-    });
+    }
   });
-  $('my-card').on('click', '.recipe-footer, .recipe-img, .recipe-block, #more-instructions', function () {
+  $(document).on('click', '.recipe-footer, .recipe-img, .recipe-block, #more-instructions', function () {
     $('.card-columns').css('display', 'none');
       console.log('click');
-      let sourceUrl = $(this).attr('source-url');
+      let sourceUrl = $(this).attr('data-url');
       let myId = $(this).attr("data-recipeId");
       console.log("myId: " + myId);
       console.log(sourceUrl);
@@ -346,8 +463,7 @@ function recipeEventApi() {
       let url = `https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/extract?`;
       url += $.param(obj);
       getRecipe(url, head, myId);
-    }
-  )
+    });
 }
 
 // Get html element for stars based on spoonacularScore
