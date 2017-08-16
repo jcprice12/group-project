@@ -2,6 +2,8 @@ import axios from 'axios';
 import {MyLoadAnimation1} from './MyLoadAnimation1.js';
 
 var authorization;
+var parentContainer = document.getElementById("cardsLoadContainer");
+var loadAnimation1 = new MyLoadAnimation1(parentContainer,75,12,4,["#b7cb39","#f76f4d"]);
 
 /***** Collapse Animation ********/
 $(".collapse-menu").on("click", function(){
@@ -89,7 +91,31 @@ function cardsEventApi(){
   });
 }
 
+function getGoodTop50(top50Arr, recipes){
+  // Merge arrays, delete duplicates (.unique())
+  var allRecipes = [];
+  if (typeof top50Arr !== "undefined") {
+    allRecipes = recipes.concat(top50Arr).unique();
+  }
+  // Sort recipes high to low
+  allRecipes.sort(function (a, b) {
+    if (a.aggregateLikes > b.aggregateLikes) {
+      return -1;
+    } else if (a.aggregateLikes < b.aggregateLikes) {
+      return 1;
+    } else {
+      return 0;
+    };
+  });
+  // Trim to only the top 50
+  allRecipes = allRecipes.slice(0, 50);
+  console.log(allRecipes);
+
+  return allRecipes;
+}
+
 function setTop50Recipes(recipes) {
+
   var db = firebase.database();
   var top50Ref = db.ref("/top50Recipes");
 
@@ -98,23 +124,8 @@ function setTop50Recipes(recipes) {
   top50Ref.once("value", function (snap) {
     if (snap.exists()) {
       top50Arr = snap.val().recipesArray;
-      // Merge arrays, delete duplicates (.unique())
-      var allRecipes = [];
-      if (typeof top50Arr !== "undefined") {
-        allRecipes = recipes.concat(top50Arr).unique();
-      }
-      // Sort recipes high to low
-      allRecipes.sort(function (a, b) {
-        if (a.aggregateLikes > b.aggregateLikes) {
-          return -1;
-        } else if (a.aggregateLikes < b.aggregateLikes) {
-          return 1;
-        } else {
-          return 0;
-        };
-      });
-      // Trim to only the top 50
-      allRecipes = allRecipes.slice(0, 50);
+      
+      var allRecipes = getGoodTop50(top50Arr, recipes);
 
       top50Ref.transaction(function (current) {
         if (current !== null) {
@@ -128,6 +139,18 @@ function setTop50Recipes(recipes) {
 
     } else {
       console.log("Snapshot doesn't exist");
+
+      var allRecipes = getGoodTop50([], recipes);
+
+      top50Ref.transaction(function (current) {
+        if (current !== null) {
+          current.recipesArray = allRecipes;
+          return current;
+        } else {
+          current = {recipesArray: allRecipes};
+          return current;
+        }
+      }); // end transaction
     }
 
   }, function (error) {
@@ -187,9 +210,11 @@ function setRecipeInDb(recipes) {
 
 function finalize(result) {
   let html = '';
+  var recipes = [];
   result.forEach((recipe) => {
     console.log(recipe.data);
     if (recipe.data.aggregateLikes > 100) {
+      recipes.push(recipe.data);
       let url = recipe.data.sourceUrl ? recipe.data.sourceUrl : 'none';
       let img = recipe.data.image;
       let title = recipe.data.title;
@@ -201,16 +226,24 @@ function finalize(result) {
       html += getCard(title, servings, time, img, url, recipeId, stars, likes);
     }
   });
+  $(parentContainer).css("display", "none");
+  loadAnimation1.stopAndRemove();
   $('.card-columns').html(html);
   recipeEventApi();
+  setTop50Recipes(recipes);
 }
 
 function performCallToGetRecipes(url, config) {
+  $(parentContainer).css("display", "block");
+  loadAnimation1.startAll();
   return axios.get(url, config)
     .then((res) => {
       let arr = res.data.results;
       return arr;
-    }); // end axios.get().the
+    }).catch(function(){
+      $(parentContainer).css("display", "none");
+      loadAnimation1.stopAndRemove();
+    }); // end axios
 }
 function searchRecipes(url, config) {
   if (!authorization.currentUser) {
@@ -226,7 +259,7 @@ function searchRecipes(url, config) {
   } else {
     performCallToGetRecipes(url, config).then((res) => {
       setRecipeInDb(res);
-    })
+    });
   //     .then((arr) => {
   //     Promise.all(arr).then((resolvedPromises) => {
   //       let html = '';
