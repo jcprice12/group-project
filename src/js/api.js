@@ -456,6 +456,7 @@ function recipeEventApi() {
     }
   });
   $(document).on('click', '#more-instructions', function () {
+    $('.home').css('display', 'none');
     $('.card-columns').css('display', 'none');
       console.log('click');
       let sourceUrl = $(this).attr('data-url');
